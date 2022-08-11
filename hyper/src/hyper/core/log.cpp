@@ -10,7 +10,7 @@ namespace hp
 {
 	std::shared_ptr<spdlog::logger> log::logger_ = nullptr;
 
-	void log::initialize()
+	void log::init()
 	{
 		std::vector<spdlog::sink_ptr> log_sinks{};
 		log_sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
