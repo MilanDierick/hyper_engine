@@ -20,7 +20,7 @@ jobs:
             cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
             archiver: "7z a",
-            generators: "Ninja"
+            generators: "Visual Studio 17 2022"
           }
           - {
             name: "Ubuntu Latest GCC",
@@ -42,19 +42,30 @@ jobs:
             archiver: "7z a",
             generators: "Ninja"
           }
+          - {
+            name: "macOS Latest Clang",
+            os: macos-latest,
+            artifact: "macos_clang.7z",
+            build_type: "Release",
+            cc: "clang",
+            cxx: "clang++",
+            archiver: "7z a",
+            generators: "Ninja"
+          }
+
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: 'true'
 
-      - name: Install dependencies on windows
+      - name: Install dependencies on Windows
         if: startsWith(matrix.config.os, 'windows')
         run: |
           choco install ninja cmake
           ninja --version
           cmake --version
 
-      - name: Install dependencies on ubuntu GCC
+      - name: Install dependencies on Ubuntu GCC
         if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
         run: |
           sudo apt-get update
@@ -63,7 +74,7 @@ jobs:
           cmake --version
           gcc --version
 
-      - name: Install dependencies on ubuntu Clang
+      - name: Install dependencies on Ubuntu Clang
         if: startsWith(matrix.config.name, 'Ubuntu Latest Clang')
         run: |
           sudo apt-get update
@@ -71,6 +82,13 @@ jobs:
           ninja --version
           cmake --version
           clang --version
+
+      - name: Install dependencies on macOS
+        if: startsWith(matrix.config.os, 'macos')
+        run: |
+          brew install p7zip cmake ninja
+          ninja --version
+          cmake --version
 
       - name: Configure
         shell: bash
