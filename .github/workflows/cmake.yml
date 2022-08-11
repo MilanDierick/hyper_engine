@@ -23,16 +23,6 @@ jobs:
             generators: "Ninja"
           }
           - {
-            name: "Windows Latest MinGW",
-            os: windows-latest,
-            artifact: "windows_mingw.7z",
-            build_type: "Release",
-            cc: "gcc",
-            cxx: "g++",
-            archiver: "7z a",
-            generators: "Ninja"
-          }
-          - {
             name: "Ubuntu Latest GCC",
             os: ubuntu-latest,
             artifact: "ubuntu_gcc.7z",
@@ -65,7 +55,7 @@ jobs:
           cmake --version
 
       - name: Install dependencies on ubuntu GCC
-        if: startsWith(matrix.config.name, 'Ubuntu_Latest_GCC')
+        if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
         run: |
           sudo apt-get update
           sudo apt-get install ninja-build cmake
@@ -74,7 +64,7 @@ jobs:
           gcc --version
 
       - name: Install dependencies on ubuntu Clang
-        if: startsWith(matrix.config.name, 'Ubuntu_Latest_Clang')
+        if: startsWith(matrix.config.name, 'Ubuntu Latest Clang')
         run: |
           sudo apt-get update
           sudo apt-get install ninja-build cmake clang
