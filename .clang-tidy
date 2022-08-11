@@ -1,0 +1,38 @@
+Checks: "
+  bugprone-*,
+  -bugprone-reserved-identifier,
+  
+  -clang-diagnostic-reserved-macro-identifier,
+  clang-analyzer-*,
+  concurrency-*,
+  
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-avoid-non-const-global-variables,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
+  -cppcoreguidelines-pro-type-vararg,
+  
+  google-*,
+  -google-readability-braces-around-statements,
+  
+  hicpp-*,
+  -hicpp-braces-around-statements,
+  -hicpp-signed-bitwise,
+  -hicpp-vararg,
+  
+  misc-*,
+  
+  modernize-*,
+  -modernize-avoid-bind,
+  -modernize-use-trailing-return-type,
+  
+  performance-*,
+  
+  readability-*,
+  -readability-braces-around-statements,
+  -readability-convert-member-functions-to-static,
+  -readability-magic-numbers,
+  
+  -cert-err58-cpp
+  "

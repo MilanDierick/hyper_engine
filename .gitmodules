@@ -1,0 +1,6 @@
+[submodule "hyper/thirdparty/spdlog"]
+	path = hyper/thirdparty/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "hyper/thirdparty/fmt"]
+	path = hyper/thirdparty/fmt
+	url = https://github.com/fmtlib/fmt
