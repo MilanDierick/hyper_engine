@@ -3,7 +3,6 @@
 
 # User-specific stuff
 .idea/*
-!.idea/cmake.xml
 
 # AWS User-specific
 .idea/**/aws.xml

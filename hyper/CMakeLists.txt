@@ -4,6 +4,10 @@ project(hyper C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE) # This is needed for FMT to successfully link
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+
 set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Build shared library" FORCE)
 set(SPDLOG_ENABLE_PCH ON CACHE BOOL "Build static or shared library using precompiled header to speed up compilation time" FORCE)
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Use external fmt library instead of bundled" FORCE)
@@ -11,9 +15,20 @@ set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Use external fmt library instead of bundl
 add_subdirectory(thirdparty/fmt)
 add_subdirectory(thirdparty/spdlog)
 
-add_library(hyper SHARED src/base/entrypoint.h src/base/application.cpp src/base/application.h include/hyper.h src/base/log.cpp src/base/log.h)
+add_library(hyper SHARED
+            include/hyper.h
+            src/base/application.cpp
+            src/base/application.h
+            src/base/config.h
+            src/base/entrypoint.h
+            src/base/log.cpp
+            src/base/log.h
+            )
 
-target_precompile_headers(hyper PRIVATE src/hppch.cpp src/hppch.h)
+target_precompile_headers(hyper PRIVATE
+                          src/hppch.cpp
+                          src/hppch.h
+                          )
 
 target_include_directories(hyper PUBLIC
                            include
@@ -25,10 +40,7 @@ target_include_directories(hyper PUBLIC
 
 target_link_libraries(hyper PRIVATE
                       spdlog::spdlog
-                      )
-
-target_link_libraries(hyper PUBLIC
-                      fmt::fmt # Any client library also needs to link to fmt for some reason
+                      fmt::fmt
                       )
 
 target_compile_options(hyper PRIVATE
@@ -37,6 +49,6 @@ target_compile_options(hyper PRIVATE
                        )
 
 target_compile_definitions(hyper PRIVATE
-                           HL_DEBUG
-                           BUILD_SHARED_LIBS
+                           HP_DEBUG
+                           DLL_EXPORT
                            )

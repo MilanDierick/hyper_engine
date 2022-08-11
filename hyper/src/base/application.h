@@ -4,9 +4,11 @@
 #ifndef HYPER_APPLICATION_H
 #define HYPER_APPLICATION_H
 
+#include "config.h"
+
 namespace hyper
 {
-	class application
+	class HP_API application
 	{
 	public:
 		application();
