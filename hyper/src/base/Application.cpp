@@ -1,34 +1,34 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#include "application.h"
-#include "log.h"
+#include "Application.h"
+#include "Log.h"
 
 namespace hyper
 {
-	application* application::m_instance = nullptr;
+	Application* Application::m_instance = nullptr;
 
-	application::application()
+	Application::Application()
 	{
 		m_instance = this;
 	}
 
-	void application::execute()
+	void Application::execute()
 	{
 	}
 
-	void application::terminate()
+	void Application::terminate()
 	{
-		log::info("Application termination requested...");
+		Log::info("Application termination requested...");
 		m_is_running = false;
 	}
 
-	application* application::instance()
+	Application* Application::instance()
 	{
 		return m_instance;
 	}
 
-	application* application::instance() const
+	Application* Application::instance() const
 	{
 		return m_instance;
 	}

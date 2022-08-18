@@ -1,17 +1,17 @@
-#include "log.h"
+#include "Log.h"
 
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 namespace hyper
 {
-	std::shared_ptr<spdlog::logger> log::logger_ = nullptr;
+	std::shared_ptr<spdlog::logger> Log::logger_ = nullptr;
 
-	void log::initialize()
+	void Log::initialize()
 	{
 		std::vector<spdlog::sink_ptr> log_sinks{};
 		log_sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-		log_sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Hyper.log", true));
+		log_sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Hyper.Log", true));
 
 		log_sinks[0]->set_pattern("[%T] [%^%l%$] %v");
 		log_sinks[1]->set_pattern("[%T] [%l] %v");
