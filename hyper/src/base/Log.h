@@ -1,3 +1,6 @@
+// Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
+// A copy of this license has been included in this project's root directory.
+
 #ifndef HYPER_LOG_H
 #define HYPER_LOG_H
 
@@ -10,15 +13,6 @@ namespace hyper
 	class HP_API Log final
 	{
 	public:
-		enum class level
-		{
-			trace,
-			info,
-			warning,
-			error,
-			fatal
-		};
-
 		static void initialize();
 
 		template<typename T>
