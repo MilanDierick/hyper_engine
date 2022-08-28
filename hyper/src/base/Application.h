@@ -20,9 +20,8 @@ namespace hyper
 		Application& operator=(const Application& other) = delete;
 		Application& operator=(Application&& other) = delete;
 		
-		__declspec(noinline) void execute();
+		void execute();
 		void terminate();
-		
 
 		[[nodiscard]] Application* instance();
 		[[nodiscard]] Application* instance() const;
