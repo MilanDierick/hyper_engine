@@ -4,7 +4,7 @@
 #ifndef HYPER_LOG_H
 #define HYPER_LOG_H
 
-#include "config.h"
+#include "Config"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 

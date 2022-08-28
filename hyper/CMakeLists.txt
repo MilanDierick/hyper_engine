@@ -22,7 +22,7 @@ add_library(hyper SHARED
             include/hyper.h
             src/base/Application.cpp
             src/base/Application.h
-            src/base/config.h
+            src/base/Config
             src/base/Entrypoint.h
             src/base/Log.cpp
             src/base/Log.h

@@ -4,7 +4,7 @@
 #ifndef HYPER_APPLICATION_H
 #define HYPER_APPLICATION_H
 
-#include "config.h"
+#include "Config"
 #include "Settings.h"
 
 namespace hyper
