@@ -11,8 +11,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Build shared library" FORCE)
 set(SPDLOG_ENABLE_PCH ON CACHE BOOL "Build static or shared library using precompiled header to speed up compilation time" FORCE)
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Use external fmt library instead of bundled" FORCE)
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+set(JSON_Install OFF CACHE INTERNAL "")
 
 add_subdirectory(thirdparty/fmt)
+add_subdirectory(thirdparty/json)
 add_subdirectory(thirdparty/spdlog)
 
 add_library(hyper SHARED
@@ -23,7 +26,7 @@ add_library(hyper SHARED
             src/base/Entrypoint.h
             src/base/Log.cpp
             src/base/Log.h
-            )
+            src/base/Parser.cpp src/base/Parser.h src/base/Settings.cpp src/base/Settings.h)
 
 target_precompile_headers(hyper PRIVATE
                           src/hppch.cpp
@@ -35,12 +38,14 @@ target_include_directories(hyper PUBLIC
                            src
                            src/base
                            thirdparty/fmt/include
+                           thirdparty/json/include
                            thirdparty/spdlog/include
                            )
 
 target_link_libraries(hyper PRIVATE
-                      spdlog::spdlog
                       fmt::fmt
+                      nlohmann_json::nlohmann_json
+                      spdlog::spdlog
                       )
 
 target_compile_options(hyper PRIVATE
@@ -52,3 +57,10 @@ target_compile_definitions(hyper PRIVATE
                            HP_DEBUG
                            DLL_EXPORT
                            )
+
+add_custom_command(
+		TARGET hyper POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy
+		${CMAKE_SOURCE_DIR}/hyper/assets/settings.json
+		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/settings.json
+)

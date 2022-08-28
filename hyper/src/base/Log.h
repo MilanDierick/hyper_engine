@@ -101,12 +101,14 @@ namespace hyper
 	constexpr void Log::critical(const T& message)
 	{
 		logger_->critical(message);
+		throw;
 	}
 
 	template<typename ... Args>
 	constexpr void Log::critical(spdlog::format_string_t<Args...> fmt, Args&& ...args)
 	{
 		logger_->critical(std::forward < spdlog::format_string_t < Args... >> (fmt), std::forward<Args>(args)...);
+		throw;
 	}
 }
 

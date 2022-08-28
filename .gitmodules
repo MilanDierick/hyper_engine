@@ -4,3 +4,6 @@
 [submodule "hyper/thirdparty/fmt"]
 	path = hyper/thirdparty/fmt
 	url = https://github.com/fmtlib/fmt
+[submodule "hyper/thirdparty/json"]
+	path = hyper/thirdparty/json
+	url = https://github.com/nlohmann/json.git

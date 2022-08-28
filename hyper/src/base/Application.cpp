@@ -8,19 +8,22 @@ namespace hyper
 {
 	Application* Application::m_instance = nullptr;
 
-	Application::Application()
+	Application::Application() : m_is_running(true), m_settings_path("settings.json"), m_settings()
 	{
 		m_instance = this;
+		m_settings.read_settings_from_file(m_settings_path);
 	}
 
 	void Application::execute()
 	{
+	
 	}
 
 	void Application::terminate()
 	{
 		Log::info("Application termination requested...");
 		m_is_running = false;
+		m_settings.write_settings_to_file(m_settings_path); // Settings changed after this point won't be saved.
 	}
 
 	Application* Application::instance()

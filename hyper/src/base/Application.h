@@ -5,6 +5,7 @@
 #define HYPER_APPLICATION_H
 
 #include "config.h"
+#include "Settings.h"
 
 namespace hyper
 {
@@ -18,9 +19,10 @@ namespace hyper
 		Application(Application&& other) noexcept = delete;
 		Application& operator=(const Application& other) = delete;
 		Application& operator=(Application&& other) = delete;
-
-		void execute();
+		
+		__declspec(noinline) void execute();
 		void terminate();
+		
 
 		[[nodiscard]] Application* instance();
 		[[nodiscard]] Application* instance() const;
@@ -28,6 +30,8 @@ namespace hyper
 	private:
 		static Application* m_instance;
 		bool m_is_running;
+		std::string m_settings_path;
+		Settings m_settings;
 	};
 
 	extern Application* create_application();

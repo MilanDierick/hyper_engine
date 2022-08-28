@@ -3,17 +3,18 @@
 
 #include "Application.h"
 #include "Log.h"
+#include <iostream>
 
 int main() // NOLINT(misc-definitions-in-headers)
 {
 	hyper::Log::initialize();
-
+	
 	hyper::Log::trace("Hello Hyper!");
-
+	
 	hyper::Application* application = hyper::create_application();
-
+	
 	application->execute();
 	application->terminate();
-
+	
 	return 0;
 }
