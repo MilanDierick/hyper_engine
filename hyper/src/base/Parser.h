@@ -7,7 +7,6 @@
 #include "Log.h"
 #include "nlohmann/json.hpp"
 #include "Settings.h"
-#include <ranges>
 
 namespace hyper::parser
 {
