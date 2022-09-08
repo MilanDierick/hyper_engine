@@ -7,3 +7,6 @@
 [submodule "hyper/thirdparty/json"]
 	path = hyper/thirdparty/json
 	url = https://github.com/nlohmann/json.git
+[submodule "hyper/thirdparty/glfw"]
+	path = hyper/thirdparty/glfw
+	url = https://github.com/glfw/glfw.git
