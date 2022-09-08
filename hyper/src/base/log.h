@@ -4,13 +4,13 @@
 #ifndef HYPER_LOG_H
 #define HYPER_LOG_H
 
-#include "Config"
+#include "config.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
 namespace hyper
 {
-	class HP_API Log final
+	class HP_API log final
 	{
 	public:
 		static void initialize();
@@ -50,65 +50,63 @@ namespace hyper
 	};
 
 	template<typename T>
-	constexpr void Log::trace(const T& message)
+	constexpr void log::trace(const T& message)
 	{
 		logger_->trace(message);
 	}
 
 	template<typename ... Args>
-	constexpr void Log::trace(spdlog::format_string_t<Args...> fmt, Args&& ...args)
+	constexpr void log::trace(spdlog::format_string_t<Args...> fmt, Args&& ...args)
 	{
 		logger_->trace(std::forward < spdlog::format_string_t < Args... >> (fmt), std::forward<Args>(args)...);
 	}
 
 	template<typename T>
-	constexpr void Log::info(const T& message)
+	constexpr void log::info(const T& message)
 	{
 		logger_->info(message);
 	}
 
 	template<typename ... Args>
-	constexpr void Log::info(spdlog::format_string_t<Args...> fmt, Args&& ...args)
+	constexpr void log::info(spdlog::format_string_t<Args...> fmt, Args&& ...args)
 	{
 		logger_->info(std::forward < spdlog::format_string_t < Args... >> (fmt), std::forward<Args>(args)...);
 	}
 
 	template<typename T>
-	constexpr void Log::warning(const T& message)
+	constexpr void log::warning(const T& message)
 	{
 		logger_->warn(message);
 	}
 
 	template<typename ... Args>
-	constexpr void Log::warning(spdlog::format_string_t<Args...> fmt, Args&& ...args)
+	constexpr void log::warning(spdlog::format_string_t<Args...> fmt, Args&& ...args)
 	{
 		logger_->warn(std::forward < spdlog::format_string_t < Args... >> (fmt), std::forward<Args>(args)...);
 	}
 
 	template<typename T>
-	constexpr void Log::error(const T& message)
+	constexpr void log::error(const T& message)
 	{
 		logger_->error(message);
 	}
 
 	template<typename ... Args>
-	constexpr void Log::error(spdlog::format_string_t<Args...> fmt, Args&& ...args)
+	constexpr void log::error(spdlog::format_string_t<Args...> fmt, Args&& ...args)
 	{
 		logger_->error(std::forward < spdlog::format_string_t < Args... >> (fmt), std::forward<Args>(args)...);
 	}
 
 	template<typename T>
-	constexpr void Log::critical(const T& message)
+	constexpr void log::critical(const T& message)
 	{
 		logger_->critical(message);
-		throw;
 	}
 
 	template<typename ... Args>
-	constexpr void Log::critical(spdlog::format_string_t<Args...> fmt, Args&& ...args)
+	constexpr void log::critical(spdlog::format_string_t<Args...> fmt, Args&& ...args)
 	{
 		logger_->critical(std::forward < spdlog::format_string_t < Args... >> (fmt), std::forward<Args>(args)...);
-		throw;
 	}
 }
 

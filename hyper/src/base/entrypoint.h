@@ -1,17 +1,20 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#include "Application.h"
-#include "Log.h"
+#include "application.h"
+#include "log.h"
+#include "asserts.h"
+#include "events/Event_Old.h"
 #include <iostream>
+#include <fstream>
 
 int main() // NOLINT(misc-definitions-in-headers)
 {
-	hyper::Log::initialize();
+	hyper::log::initialize();
 	
-	hyper::Log::trace("Hello Hyper!");
+	hyper::log::trace("Hello Hyper!");
 	
-	hyper::Application* application = hyper::create_application();
+	hyper::application* application = hyper::create_application();
 	
 	application->execute();
 	application->terminate();

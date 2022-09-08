@@ -5,14 +5,14 @@
 
 namespace pg
 {
-	class playground_application final : public hyper::Application
+	class playground_application final : public hyper::application
 	{
 	public:
 		playground_application();
 	};
 }  // namespace pg
 
-inline hyper::Application* hyper::create_application()
+inline hyper::application* hyper::create_application()
 {
 	return new pg::playground_application();
 }

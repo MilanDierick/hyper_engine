@@ -4,9 +4,9 @@
 #ifndef HYPER_PARSER_H_
 #define HYPER_PARSER_H_
 
-#include "Log.h"
+#include "log.h"
 #include "nlohmann/json.hpp"
-#include "Settings.h"
+#include "settings.h"
 
 namespace hyper::parser
 {
@@ -30,7 +30,7 @@ namespace hyper::parser
 		return json.get<T>();
 	}
 	
-	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Settings::SettingValues,
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(settings::SettingValues,
 		version_major,
 		version_minor,
 		version_patch,

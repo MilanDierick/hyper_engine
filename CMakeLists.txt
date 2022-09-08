@@ -21,3 +21,7 @@ target_include_directories(playground PRIVATE
 target_link_libraries(playground PRIVATE
                       hyper
                       )
+
+target_compile_definitions(playground PRIVATE
+                           HP_DEBUG
+                           )

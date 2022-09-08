@@ -2,7 +2,7 @@
 
 namespace pg
 {
-	playground_application::playground_application() : Application()
+	playground_application::playground_application() : application()
 	{
 
 	}
