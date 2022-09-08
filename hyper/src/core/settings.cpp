@@ -1,10 +1,10 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#include "settings.h"
-#include "parser.h"
+#include "core/settings.h"
+#include "core/parser.h"
 
-namespace hyper
+namespace hp
 {
 	void settings::read_settings_from_file(settings::string_t& file_path)
 	{
@@ -37,4 +37,4 @@ namespace hyper
 	{
 		return m_settings;
 	}
-}  // namespace hyper
+}  // namespace hp

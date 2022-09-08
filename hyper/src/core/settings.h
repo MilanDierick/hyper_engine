@@ -7,7 +7,7 @@
 #include "nlohmann/json.hpp"
 #include <string>
 
-namespace hyper
+namespace hp
 {
 	class settings
 	{
@@ -46,6 +46,6 @@ namespace hyper
 		SettingValues m_settings;
 	};
 	
-}  // namespace hyper
+}  // namespace hp
 
 #endif //PLAYGROUND_SETTINGS_H

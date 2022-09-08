@@ -4,11 +4,11 @@
 #ifndef HYPER_LOG_H
 #define HYPER_LOG_H
 
-#include "config.h"
+#include "core/config.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
-namespace hyper
+namespace hp
 {
 	class HP_API log final
 	{

@@ -4,11 +4,11 @@
 #ifndef HYPER_APPLICATION_H
 #define HYPER_APPLICATION_H
 
-#include "base/config.h"
-//#include "settings.h"
+#include "core/config.h"
+#include "settings.h"
 #include <string>
 
-namespace hyper
+namespace hp
 {
 	class HP_API application
 	{
@@ -31,10 +31,10 @@ namespace hyper
 		static application* m_instance;
 		bool m_is_running;
 		std::string m_settings_path;
-		//settings m_settings;
+		settings m_settings;
 	};
 
 	extern application* create_application();
-} // namespace hyper
+} // namespace hp
 
 #endif //HYPER_APPLICATION_H

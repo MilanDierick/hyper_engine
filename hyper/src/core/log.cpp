@@ -1,12 +1,12 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#include "log.h"
+#include "core/log.h"
 
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-namespace hyper
+namespace hp
 {
 	std::shared_ptr<spdlog::logger> log::logger_ = nullptr;
 

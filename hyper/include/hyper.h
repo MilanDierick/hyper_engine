@@ -1,7 +1,7 @@
 #ifndef PLAYGROUND_HYPER_H
 #define PLAYGROUND_HYPER_H
 
-#include "base/application.h"
-#include "base/entrypoint.h"
+#include "core/application.h"
+#include "core/entrypoint.h"
 
 #endif //PLAYGROUND_HYPER_H

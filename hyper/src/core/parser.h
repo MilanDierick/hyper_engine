@@ -4,11 +4,11 @@
 #ifndef HYPER_PARSER_H_
 #define HYPER_PARSER_H_
 
-#include "log.h"
+#include "core/log.h"
 #include "nlohmann/json.hpp"
-#include "settings.h"
+#include "core/settings.h"
 
-namespace hyper::parser
+namespace hp::parser
 {
 	using json_t = nlohmann::json;
 	
@@ -36,6 +36,6 @@ namespace hyper::parser
 		version_patch,
 		window_width,
 		window_height)
-}  // namespace hyper::parser
+}  // namespace hp::parser
 
 #endif //HYPER_PARSER_H_

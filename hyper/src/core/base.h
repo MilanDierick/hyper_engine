@@ -4,7 +4,7 @@
 #ifndef PLAYGROUND_BASE_H
 #define PLAYGROUND_BASE_H
 
-#include "config.h"
+#include "core/config.h"
 
 #ifdef HP_DEBUG
 #if defined(HP_PLATFORM_WINDOWS)

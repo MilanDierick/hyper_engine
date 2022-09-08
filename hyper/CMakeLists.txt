@@ -20,20 +20,20 @@ add_subdirectory(thirdparty/spdlog)
 
 add_library(hyper SHARED
             include/hyper.h
-            src/base/application.cpp
-            src/base/application.h
-            src/base/config.h
-            src/base/entrypoint.h
-            src/base/log.cpp
-            src/base/log.h
-            src/base/parser.cpp
-            src/base/parser.h
-            src/base/settings.cpp
-            src/base/settings.h
-            src/base/asserts.h
-            src/base/base.h
-            src/base/window.cpp
-            src/base/window.h
+            src/core/application.cpp
+            src/core/application.h
+            src/core/config.h
+            src/core/entrypoint.h
+            src/core/log.cpp
+            src/core/log.h
+            src/core/parser.cpp
+            src/core/parser.h
+            src/core/settings.cpp
+            src/core/settings.h
+            src/core/asserts.h
+            src/core/base.h
+            src/core/window.cpp
+            src/core/window.h
             )
 
 target_precompile_headers(hyper PRIVATE
@@ -44,7 +44,7 @@ target_precompile_headers(hyper PRIVATE
 target_include_directories(hyper PUBLIC
                            include
                            src
-                           src/base
+                           src/core
                            thirdparty/fmt/include
                            thirdparty/json/include
                            thirdparty/spdlog/include
