@@ -12,6 +12,8 @@
 	#elif defined(HP_PLATFORM_LINUX)
 		#include <signal.h>
 		#define HP_DEBUGBREAK() raise(SIGTRAP)
+	#elif defined(HP_PLATFORM_MACOS)
+	#define HP_DEBUGBREAK() __builtin_trap() // No idea if this works, unable to test due to missing hardware
 	#else
 		#error "Platform doesn't support debugbreak yet!"
 	#endif
