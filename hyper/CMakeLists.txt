@@ -34,7 +34,12 @@ add_library(hyper SHARED
             src/core/base.h
             src/core/window.cpp
             src/core/window.h
-            src/core/layer.cpp src/core/layer.h src/core/layer_stack.cpp src/core/layer_stack.h src/events/event.h src/events/event.cpp)
+            src/core/layer.cpp
+            src/core/layer.h
+            src/core/layer_stack.cpp
+            src/core/layer_stack.h
+            src/events/event.h
+            )
 
 target_precompile_headers(hyper PRIVATE
                           src/hppch.cpp
