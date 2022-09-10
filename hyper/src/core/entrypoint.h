@@ -4,6 +4,7 @@
 #include "core/application.h"
 #include "core/log.h"
 #include "core/asserts.h"
+#include "events/event.h"
 #include <iostream>
 
 int main() // NOLINT(misc-definitions-in-headers)
