@@ -108,16 +108,10 @@ namespace hp
 		event& operator=(const event& other) = delete;
 		event& operator=(event&& other) = delete;
 		
-		void operator+=(callable callable)
+		void bind(callable callable)
 		{
 			auto* p_callable = new comparable_callable(std::move(callable));
 			add_callable(p_callable);
-		}
-		
-		void operator-=(callable callable)
-		{
-			auto* p_callable = new comparable_callable(std::move(callable));
-			remove_callable(p_callable);
 		}
 		
 		template<typename TObject>
@@ -136,6 +130,12 @@ namespace hp
 			p_callable->object = object;
 			
 			add_callable(p_callable);
+		}
+		
+		void unbind(callable callable)
+		{
+			auto* p_callable = new comparable_callable(std::move(callable));
+			remove_callable(p_callable);
 		}
 		
 		template<typename TObject>
