@@ -8,7 +8,12 @@
 
 namespace hp
 {
-	template<typename ArgType>
+	struct event_args
+	{
+	
+	};
+	
+	template<typename ArgType = event_args>
 	class event
 	{
 		using callable = typename std::function<void(ArgType)>;
@@ -105,8 +110,8 @@ namespace hp
 		
 		event(const event& other) = delete;
 		event(event&& other) noexcept = delete;
-		event& operator=(const event& other) = delete;
-		event& operator=(event&& other) = delete;
+		event& operator=(const event& other) = default;
+		event& operator=(event&& other) noexcept = delete;
 		
 		void bind(callable callable)
 		{

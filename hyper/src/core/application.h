@@ -5,7 +5,9 @@
 #define HYPER_APPLICATION_H
 
 #include "core/config.h"
-#include "settings.h"
+#include "core/settings.h"
+#include "core/window.h"
+#include "events/application_event_args.h"
 #include <string>
 
 namespace hp
@@ -24,14 +26,20 @@ namespace hp
 		void execute();
 		void terminate();
 
-		[[nodiscard]] application* instance();
-		[[nodiscard]] application* instance() const;
+		[[nodiscard]] window& get_window() const;
+		
+		[[nodiscard]] static application* instance();
 
 	private:
+		void on_window_closed_event(window_closed_event_args args);
+		void on_window_resized_event(window_resized_event_args args);
+		
 		static application* m_instance;
 		bool m_is_running;
+		bool m_minimized;
 		std::string m_settings_path;
 		settings m_settings;
+		std::unique_ptr<window> m_window;
 	};
 
 	extern application* create_application();

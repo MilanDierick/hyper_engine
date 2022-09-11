@@ -14,5 +14,8 @@
 #include "core/asserts.h"
 #include "core/base.h"
 #include "core/config.h"
+#include "core/log.h"
+
+#include <GLFW/glfw3.h>
 
 #endif //HYPER_HPPCH_H

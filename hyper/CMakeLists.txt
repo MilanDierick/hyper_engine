@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.23)
-project(hyper C CXX)
+project(hyper)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_POSITION_INDEPENDENT_CODE TRUE) # This is needed for FMT to successfully link
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Build shared library" FORCE)
 set(SPDLOG_ENABLE_PCH ON CACHE BOOL "Build static or shared library using precompiled header to speed up compilation time" FORCE)
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Use external fmt library instead of bundled" FORCE)
@@ -15,6 +17,8 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 set(JSON_Install OFF CACHE INTERNAL "")
 
 add_subdirectory(thirdparty/fmt)
+add_subdirectory(thirdparty/glad)
+add_subdirectory(thirdparty/glfw)
 add_subdirectory(thirdparty/json)
 add_subdirectory(thirdparty/spdlog)
 
@@ -39,7 +43,15 @@ add_library(hyper SHARED
             src/core/layer_stack.cpp
             src/core/layer_stack.h
             src/events/event.h
-            )
+            src/events/application_event_args.h
+            src/events/key_event_args.h
+            src/core/key_codes.h
+            src/platform/universal_window.cpp
+            src/platform/universal_window.h
+            src/renderer/graphics_context.h
+            src/platform/opengl/opengl_graphics_context.cpp
+            src/platform/opengl/opengl_graphics_context.h
+            src/events/mouse_event_args.h src/core/mouse_codes.h src/core/input.h src/platform/universal/universal_input.cpp)
 
 target_precompile_headers(hyper PRIVATE
                           src/hppch.cpp
@@ -51,12 +63,17 @@ target_include_directories(hyper PUBLIC
                            src
                            src/core
                            thirdparty/fmt/include
+                           thirdparty/glad/include
+                           thirdparty/glad/include
+                           thirdparty/glfw/include
                            thirdparty/json/include
                            thirdparty/spdlog/include
                            )
 
 target_link_libraries(hyper PRIVATE
                       fmt::fmt
+                      glad
+                      glfw
                       nlohmann_json::nlohmann_json
                       spdlog::spdlog
                       )
@@ -69,6 +86,7 @@ target_compile_options(hyper PRIVATE
 target_compile_definitions(hyper PRIVATE
                            HP_DEBUG
                            DLL_EXPORT
+                           GLFW_INCLUDE_NONE
                            )
 
 add_custom_command(

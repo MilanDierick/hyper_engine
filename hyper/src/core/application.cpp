@@ -12,11 +12,22 @@ namespace hp
 	{
 		m_instance = this;
 		m_settings.read_settings_from_file(m_settings_path);
+		m_window = std::unique_ptr<window>(window::create());
+		m_window->window_closed_event.bind(&application::on_window_closed_event, this);
+		m_window->window_resized_event.bind(&application::on_window_resized_event, this);
 	}
 
 	void application::execute()
 	{
-	
+		while (m_is_running)
+		{
+			m_window->on_update();
+			
+			if (m_minimized)
+			{
+				continue;
+			}
+		}
 	}
 
 	void application::terminate()
@@ -25,14 +36,31 @@ namespace hp
 		m_is_running = false;
 		m_settings.write_settings_to_file(m_settings_path); // settings changed after this point won't be saved.
 	}
-
+	
+	window& application::get_window() const
+	{
+		return *m_window;
+	}
+	
 	application* application::instance()
 	{
 		return m_instance;
 	}
-
-	application* application::instance() const
+	
+	void application::on_window_closed_event(window_closed_event_args args)
 	{
-		return m_instance;
+		UNUSED(args);
+		m_is_running = false;
+	}
+	
+	void application::on_window_resized_event(window_resized_event_args args)
+	{
+		if (args.width == 0 || args.height == 0)
+		{
+			m_minimized = true;
+		}
+		
+		m_minimized = false;
+		//renderer::on_window_resize(args.width, args.height);
 	}
 }  // namespace hp
