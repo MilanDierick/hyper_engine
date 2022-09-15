@@ -19,39 +19,100 @@ set(JSON_Install OFF CACHE INTERNAL "")
 add_subdirectory(thirdparty/fmt)
 add_subdirectory(thirdparty/glad)
 add_subdirectory(thirdparty/glfw)
+add_subdirectory(thirdparty/glm)
+#add_subdirectory(thirdparty/glslang)
 add_subdirectory(thirdparty/json)
+#add_subdirectory(thirdparty/spirv-headers)
+#add_subdirectory(thirdparty/spirv-tools)
+add_subdirectory(thirdparty/shaderc)
 add_subdirectory(thirdparty/spdlog)
+add_subdirectory(thirdparty/spirv-cross)
+add_subdirectory(thirdparty/stb)
+
+set(HYPER_SOURCES_PLATFORM_OPENGL
+    src/platform/opengl/OpenGLBuffer.cpp
+    src/platform/opengl/OpenGLBuffer.h
+    src/platform/opengl/OpenGLContext.cpp
+    src/platform/opengl/OpenGLContext.h
+    src/platform/opengl/OpenGLFramebuffer.cpp
+    src/platform/opengl/OpenGLFramebuffer.h
+    src/platform/opengl/OpenGLRendererAPI.cpp
+    src/platform/opengl/OpenGLRendererAPI.h
+    src/platform/opengl/OpenGLShader.cpp
+    src/platform/opengl/OpenGLShader.h
+    src/platform/opengl/OpenGLTexture.cpp
+    src/platform/opengl/OpenGLTexture.h
+    src/platform/opengl/OpenGLUniformBuffer.cpp
+    src/platform/opengl/OpenGLUniformBuffer.h
+    src/platform/opengl/OpenGLVertexArray.cpp
+    src/platform/opengl/OpenGLVertexArray.h
+    )
+
+set(HYPER_SOURCES_RENDERER
+    src/hyper/renderer/Buffer.cpp
+    src/hyper/renderer/Buffer.h
+    src/hyper/renderer/Camera.h
+    src/hyper/renderer/EditorCamera.cpp
+    src/hyper/renderer/EditorCamera.h
+    src/hyper/renderer/Framebuffer.cpp
+    src/hyper/renderer/Framebuffer.h
+    src/hyper/renderer/GraphicsContext.cpp
+    src/hyper/renderer/GraphicsContext.h
+    src/hyper/renderer/OrthographicCamera.cpp
+    src/hyper/renderer/OrthographicCamera.h
+    src/hyper/renderer/OrthographicCameraController.cpp
+    src/hyper/renderer/OrthographicCameraController.h
+    src/hyper/renderer/RenderCommand.cpp
+    src/hyper/renderer/RenderCommand.h
+    src/hyper/renderer/Renderer.cpp
+    src/hyper/renderer/Renderer.h
+    src/hyper/renderer/Renderer2D.cpp
+    src/hyper/renderer/Renderer2D.h
+    src/hyper/renderer/RendererAPI.cpp
+    src/hyper/renderer/RendererAPI.h
+    src/hyper/renderer/Shader.cpp
+    src/hyper/renderer/Shader.h
+    src/hyper/renderer/Texture.cpp
+    src/hyper/renderer/Texture.h
+    src/hyper/renderer/UniformBuffer.cpp
+    src/hyper/renderer/UniformBuffer.h
+    src/hyper/renderer/VertexArray.cpp
+    src/hyper/renderer/VertexArray.h
+    )
 
 add_library(hyper SHARED
+            ${HYPER_SOURCES_PLATFORM_OPENGL}
+            ${HYPER_SOURCES_RENDERER}
             include/hyper.h
-            src/core/application.cpp
-            src/core/application.h
-            src/core/config.h
-            src/core/entrypoint.h
-            src/core/log.cpp
-            src/core/log.h
-            src/core/parser.cpp
-            src/core/parser.h
-            src/core/settings.cpp
-            src/core/settings.h
-            src/core/asserts.h
-            src/core/base.h
-            src/core/window.cpp
-            src/core/window.h
-            src/core/layer.cpp
-            src/core/layer.h
-            src/core/layer_stack.cpp
-            src/core/layer_stack.h
-            src/events/event.h
-            src/events/application_event_args.h
-            src/events/key_event_args.h
-            src/core/key_codes.h
-            src/platform/universal_window.cpp
-            src/platform/universal_window.h
-            src/renderer/graphics_context.h
-            src/platform/opengl/opengl_graphics_context.cpp
-            src/platform/opengl/opengl_graphics_context.h
-            src/events/mouse_event_args.h src/core/mouse_codes.h src/core/input.h src/platform/universal/universal_input.cpp)
+            src/hyper/core/application.cpp
+            src/hyper/core/application.h
+            src/hyper/core/config.h
+            src/hyper/core/entrypoint.h
+            src/hyper/core/log.cpp
+            src/hyper/core/log.h
+            src/hyper/core/parser.cpp
+            src/hyper/core/parser.h
+            src/hyper/core/settings.cpp
+            src/hyper/core/settings.h
+            src/hyper/core/asserts.h
+            src/hyper/core/base.h
+            src/hyper/core/window.cpp
+            src/hyper/core/window.h
+            src/hyper/core/layer.cpp
+            src/hyper/core/layer.h
+            src/hyper/core/layer_stack.cpp
+            src/hyper/core/layer_stack.h
+            src/hyper/events/event.h
+            src/hyper/events/application_event_args.h
+            src/hyper/events/key_event_args.h
+            src/hyper/core/key_codes.h
+            src/platform/universal/universal_window.cpp
+            src/platform/universal/universal_window.h
+            src/hyper/events/mouse_event_args.h
+            src/hyper/core/mouse_codes.h
+            src/hyper/core/input.h
+            src/platform/universal/universal_input.cpp
+            src/hyper/core/timer.h)
 
 target_precompile_headers(hyper PRIVATE
                           src/hppch.cpp
@@ -61,21 +122,33 @@ target_precompile_headers(hyper PRIVATE
 target_include_directories(hyper PUBLIC
                            include
                            src
-                           src/core
+                           src/hyper/core
+                           thirdparty
                            thirdparty/fmt/include
                            thirdparty/glad/include
-                           thirdparty/glad/include
                            thirdparty/glfw/include
+                           thirdparty/glm/
                            thirdparty/json/include
+                           thirdparty/shaderc/glslc/src
+                           thirdparty/shaderc/libshaderc/include
+                           thirdparty/shaderc/libshaderc_util/include
                            thirdparty/spdlog/include
+                           thirdparty/spirv-cross/include
+                           thirdparty/spirv-tools/include
+                           thirdparty/stb
                            )
 
 target_link_libraries(hyper PRIVATE
                       fmt::fmt
                       glad
                       glfw
+                      glm::glm
                       nlohmann_json::nlohmann_json
                       spdlog::spdlog
+                      shaderc
+                      spirv-cross-core
+                      spirv-cross-glsl
+                      stb
                       )
 
 target_compile_options(hyper PRIVATE

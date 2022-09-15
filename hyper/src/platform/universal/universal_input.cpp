@@ -2,7 +2,7 @@
 // A copy of this license has been included in this project's root directory.
 
 #include <application.h>
-#include "core/input.h"
+#include "hyper/core/input.h"
 #include <cmath>
 
 namespace hp

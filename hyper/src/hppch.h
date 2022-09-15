@@ -11,10 +11,10 @@
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
-#include "core/asserts.h"
-#include "core/base.h"
-#include "core/config.h"
-#include "core/log.h"
+#include "hyper/core/asserts.h"
+#include "hyper/core/base.h"
+#include "hyper/core/config.h"
+#include "hyper/core/log.h"
 
 #include <GLFW/glfw3.h>
 

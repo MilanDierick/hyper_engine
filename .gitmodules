@@ -10,3 +10,24 @@
 [submodule "hyper/thirdparty/glfw"]
 	path = hyper/thirdparty/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "hyper/thirdparty/spirv-cross"]
+	path = hyper/thirdparty/spirv-cross
+	url = https://github.com/KhronosGroup/SPIRV-Cross.git
+[submodule "hyper/thirdparty/glm"]
+	path = hyper/thirdparty/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "hyper/thirdparty/shaderc"]
+	path = hyper/thirdparty/shaderc
+	url = https://github.com/google/shaderc.git
+[submodule "hyper/thirdparty/stb"]
+	path = hyper/thirdparty/stb
+	url = https://github.com/nothings/stb.git
+[submodule "hyper/thirdparty/spirv-tools"]
+	path = hyper/thirdparty/spirv-tools
+	url = https://github.com/KhronosGroup/SPIRV-Tools.git
+[submodule "hyper/thirdparty/spirv-headers"]
+	path = hyper/thirdparty/spirv-headers
+	url = https://github.com/KhronosGroup/SPIRV-Headers.git
+[submodule "hyper/thirdparty/glslang"]
+	path = hyper/thirdparty/glslang
+	url = https://github.com/KhronosGroup/glslang.git
