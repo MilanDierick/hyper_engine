@@ -68,10 +68,10 @@ namespace hp
 			else if (m_camera_rotation <= -180.0F)
 				m_camera_rotation += 360.0F;
 			
-			m_camera.SetRotation(m_camera_rotation);
+			m_camera.set_rotation(m_camera_rotation);
 		}
 		
-		m_camera.SetPosition(m_camera_position);
+		m_camera.set_position(m_camera_position);
 		
 		m_camera_translation_speed = m_ZoomLevel;
 	}
@@ -79,14 +79,14 @@ namespace hp
 	void orthographic_camera_controller::on_resize(float width, float height)
 	{
 		m_AspectRatio = width / height;
-		m_camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		m_camera.set_projection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	}
 	
 	void orthographic_camera_controller::on_mouse_scrolled(mouse_scrolled_event_args args)
 	{
 		m_ZoomLevel -= args.y_offset * 0.25F;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25F);
-		m_camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		m_camera.set_projection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	}
 	
 	void orthographic_camera_controller::on_window_resized(window_resized_event_args args)

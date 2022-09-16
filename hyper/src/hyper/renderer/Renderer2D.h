@@ -1,7 +1,7 @@
 #ifndef HYPER_RENDERER_2D
 #define HYPER_RENDERER_2D
 
-#include "hyper/renderer/OrthographicCamera.h"
+#include "hyper/renderer/orthographic_camera.h"
 
 #include "hyper/renderer/Texture.h"
 
@@ -20,7 +20,7 @@ namespace hp
 		
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void BeginScene(const EditorCamera& camera);
-		static void BeginScene(const OrthographicCamera& camera); // TODO: Remove
+		static void BeginScene(const orthographic_camera& camera); // TODO: Remove
 		static void EndScene();
 		static void Flush();
 		

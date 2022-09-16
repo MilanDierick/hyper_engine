@@ -58,8 +58,8 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/Framebuffer.h
     src/hyper/renderer/graphics_context.cpp
     src/hyper/renderer/graphics_context.h
-    src/hyper/renderer/OrthographicCamera.cpp
-    src/hyper/renderer/OrthographicCamera.h
+    src/hyper/renderer/orthographic_camera.cpp
+    src/hyper/renderer/orthographic_camera.h
     src/hyper/renderer/orthographic_camera_controller.cpp
     src/hyper/renderer/orthographic_camera_controller.h
     src/hyper/renderer/RenderCommand.cpp

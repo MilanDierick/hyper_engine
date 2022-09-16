@@ -22,9 +22,9 @@ namespace hp
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 	
-	void renderer::BeginScene(OrthographicCamera& camera)
+	void renderer::BeginScene(orthographic_camera& camera)
 	{
-		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+		s_SceneData->ViewProjectionMatrix = camera.get_view_projection_matrix();
 	}
 	
 	void renderer::EndScene()

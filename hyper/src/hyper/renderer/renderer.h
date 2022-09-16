@@ -1,7 +1,7 @@
 #ifndef HYPER_RENDERER_H
 #define HYPER_RENDERER_H
 
-#include "hyper/renderer/OrthographicCamera.h"
+#include "hyper/renderer/orthographic_camera.h"
 #include "hyper/renderer/RenderCommand.h"
 #include "hyper/renderer/Shader.h"
 
@@ -15,7 +15,7 @@ namespace hp {
 		
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
-		static void BeginScene(OrthographicCamera& camera);
+		static void BeginScene(orthographic_camera& camera);
 		static void EndScene();
 
 		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));

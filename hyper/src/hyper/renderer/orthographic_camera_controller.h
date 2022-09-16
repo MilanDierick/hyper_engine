@@ -3,7 +3,7 @@
 
 #include "hyper/events/application_event_args.h"
 #include "hyper/events/mouse_event_args.h"
-#include "hyper/renderer/OrthographicCamera.h"
+#include "hyper/renderer/orthographic_camera.h"
 
 namespace hp {
 
@@ -15,8 +15,8 @@ namespace hp {
 		void on_update(uint64_t ticks);
 		void on_resize(float width, float height);
 
-		OrthographicCamera& GetCamera() { return m_camera; }
-		[[nodiscard]] const OrthographicCamera& GetCamera() const { return m_camera; }
+		orthographic_camera& GetCamera() { return m_camera; }
+		[[nodiscard]] const orthographic_camera& GetCamera() const { return m_camera; }
 
 		[[nodiscard]] float GetZoomLevel() const { return m_ZoomLevel; }
 		void SetZoomLevel(float level) { m_ZoomLevel = level; }
@@ -24,7 +24,7 @@ namespace hp {
 	private:
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0F;
-		OrthographicCamera m_camera;
+		orthographic_camera m_camera;
 
 		bool m_Rotation;
 
