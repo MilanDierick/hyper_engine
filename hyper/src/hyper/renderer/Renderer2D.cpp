@@ -1,10 +1,10 @@
 
 #include "hyper/renderer/Renderer2D.h"
 
-#include "hyper/renderer/VertexArray.h"
+#include "hyper/renderer/vertex_array.h"
 #include "hyper/renderer/Shader.h"
 #include "hyper/renderer/UniformBuffer.h"
-#include "hyper/renderer/RenderCommand.h"
+#include "hyper/renderer/render_command.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -51,16 +51,16 @@ namespace hp {
 		static const uint32_t MaxIndices = MaxQuads * 6;
 		static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
 
-		std::shared_ptr<VertexArray> QuadVertexArray;
+		std::shared_ptr<vertex_array> QuadVertexArray;
 		std::shared_ptr<VertexBuffer> QuadVertexBuffer;
 		std::shared_ptr<Shader> QuadShader;
 		std::shared_ptr<Texture2D> WhiteTexture;
 
-		std::shared_ptr<VertexArray> CircleVertexArray;
+		std::shared_ptr<vertex_array> CircleVertexArray;
 		std::shared_ptr<VertexBuffer> CircleVertexBuffer;
 		std::shared_ptr<Shader> CircleShader;
 
-		std::shared_ptr<VertexArray> LineVertexArray;
+		std::shared_ptr<vertex_array> LineVertexArray;
 		std::shared_ptr<VertexBuffer> LineVertexBuffer;
 		std::shared_ptr<Shader> LineShader;
 
@@ -99,7 +99,7 @@ namespace hp {
 	{
 		
 
-		s_Data.QuadVertexArray = VertexArray::Create();
+		s_Data.QuadVertexArray = vertex_array::Create();
 
 		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 		s_Data.QuadVertexBuffer->SetLayout({
@@ -135,7 +135,7 @@ namespace hp {
 		delete[] quadIndices;
 
 		// Circles
-		s_Data.CircleVertexArray = VertexArray::Create();
+		s_Data.CircleVertexArray = vertex_array::Create();
 
 		s_Data.CircleVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(CircleVertex));
 		s_Data.CircleVertexBuffer->SetLayout({
@@ -151,7 +151,7 @@ namespace hp {
 		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
 
 		// Lines
-		s_Data.LineVertexArray = VertexArray::Create();
+		s_Data.LineVertexArray = vertex_array::Create();
 
 		s_Data.LineVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
 		s_Data.LineVertexBuffer->SetLayout({
@@ -255,7 +255,7 @@ namespace hp {
 				s_Data.TextureSlots[i]->Bind(i);
 
 			s_Data.QuadShader->Bind();
-			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+			render_command::draw_indexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
 
@@ -265,7 +265,7 @@ namespace hp {
 			s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
 
 			s_Data.CircleShader->Bind();
-			RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
+			render_command::draw_indexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
 
@@ -275,8 +275,8 @@ namespace hp {
 			s_Data.LineVertexBuffer->SetData(s_Data.LineVertexBufferBase, dataSize);
 
 			s_Data.LineShader->Bind();
-			RenderCommand::SetLineWidth(s_Data.LineWidth);
-			RenderCommand::DrawLines(s_Data.LineVertexArray, s_Data.LineVertexCount);
+			render_command::set_line_width(s_Data.LineWidth);
+			render_command::draw_lines(s_Data.LineVertexArray, s_Data.LineVertexCount);
 			s_Data.Stats.DrawCalls++;
 		}
 	}

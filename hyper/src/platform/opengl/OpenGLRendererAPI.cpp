@@ -37,7 +37,7 @@ namespace hp
 		HP_CORE_ASSERT(false, "Unknown severity level!");
 	}
 	
-	void OpenGLRendererAPI::Init()
+	void OpenGLRendererAPI::init()
 	{
 		
 		#ifdef HZ_DEBUG
@@ -55,35 +55,35 @@ namespace hp
 		glEnable(GL_LINE_SMOOTH);
 	}
 	
-	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+	void OpenGLRendererAPI::set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
 		glViewport(x, y, width, height);
 	}
 	
-	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
+	void OpenGLRendererAPI::set_clear_color(const glm::vec4& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 	
-	void OpenGLRendererAPI::Clear()
+	void OpenGLRendererAPI::clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	
-	void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount)
+	void OpenGLRendererAPI::draw_indexed(const std::shared_ptr<vertex_array>& vertexArray, uint32_t indexCount)
 	{
 		vertexArray->Bind();
 		uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 	
-	void OpenGLRendererAPI::DrawLines(const std::shared_ptr<VertexArray>& vertexArray, uint32_t vertexCount)
+	void OpenGLRendererAPI::draw_lines(const std::shared_ptr<vertex_array>& vertexArray, uint32_t vertexCount)
 	{
 		vertexArray->Bind();
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 	
-	void OpenGLRendererAPI::SetLineWidth(float width)
+	void OpenGLRendererAPI::set_line_width(float width)
 	{
 		glLineWidth(width);
 	}

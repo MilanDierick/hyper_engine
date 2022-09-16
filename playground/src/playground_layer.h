@@ -29,7 +29,7 @@ namespace pg
 		hp::orthographic_camera_controller m_CameraController;
 		
 		// Temp
-		std::shared_ptr<hp::VertexArray> m_SquareVA;
+		std::shared_ptr<hp::vertex_array> m_SquareVA;
 		std::shared_ptr<hp::Shader> m_FlatColorShader;
 		
 		std::shared_ptr<hp::Texture2D> m_CheckerboardTexture;

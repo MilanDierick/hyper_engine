@@ -36,8 +36,8 @@ namespace pg
 		
 		// Render
 		hp::Renderer2D::ResetStats();
-		hp::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		hp::RenderCommand::Clear();
+		hp::render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1 });
+		hp::render_command::clear();
 		
 		hp::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		hp::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, -45.0f, { 0.8f, 0.2f, 0.3f, 1.0f });

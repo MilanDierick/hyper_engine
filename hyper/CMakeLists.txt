@@ -62,8 +62,8 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/orthographic_camera.h
     src/hyper/renderer/orthographic_camera_controller.cpp
     src/hyper/renderer/orthographic_camera_controller.h
-    src/hyper/renderer/RenderCommand.cpp
-    src/hyper/renderer/RenderCommand.h
+    src/hyper/renderer/render_command.cpp
+    src/hyper/renderer/render_command.h
     src/hyper/renderer/renderer.cpp
     src/hyper/renderer/renderer.h
     src/hyper/renderer/Renderer2D.cpp
@@ -76,8 +76,8 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/Texture.h
     src/hyper/renderer/UniformBuffer.cpp
     src/hyper/renderer/UniformBuffer.h
-    src/hyper/renderer/VertexArray.cpp
-    src/hyper/renderer/VertexArray.h
+    src/hyper/renderer/vertex_array.cpp
+    src/hyper/renderer/vertex_array.h
     )
 
 add_library(hyper SHARED

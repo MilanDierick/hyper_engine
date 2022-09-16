@@ -8,7 +8,7 @@ namespace hp
 	
 	void renderer::Init()
 	{
-		RenderCommand::Init();
+		render_command::init();
 		Renderer2D::Init();
 	}
 	
@@ -19,7 +19,7 @@ namespace hp
 	
 	void renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
-		RenderCommand::SetViewport(0, 0, width, height);
+		render_command::set_viewport(0, 0, width, height);
 	}
 	
 	void renderer::BeginScene(orthographic_camera& camera)
@@ -32,7 +32,7 @@ namespace hp
 	}
 	
 	void renderer::Submit(const std::shared_ptr<Shader>& shader,
-		const std::shared_ptr<VertexArray>& vertexArray,
+		const std::shared_ptr<vertex_array>& vertexArray,
 		const glm::mat4& transform)
 	{
 		shader->Bind();
@@ -40,7 +40,7 @@ namespace hp
 		shader->SetMat4("u_Transform", transform);
 		
 		vertexArray->Bind();
-		RenderCommand::DrawIndexed(vertexArray);
+		render_command::draw_indexed(vertexArray);
 	}
 	
 }  // namespace hp

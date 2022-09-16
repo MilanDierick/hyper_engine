@@ -1,11 +1,11 @@
 #ifndef HYPER_OPENGL_VERTEX_ARRAY_H
 #define HYPER_OPENGL_VERTEX_ARRAY_H
 
-#include "hyper/renderer/VertexArray.h"
+#include "hyper/renderer/vertex_array.h"
 
 namespace hp {
 
-	class OpenGLVertexArray : public VertexArray
+	class OpenGLVertexArray : public vertex_array
 	{
 	public:
 		OpenGLVertexArray();

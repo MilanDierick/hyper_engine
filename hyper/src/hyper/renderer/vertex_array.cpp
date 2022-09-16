@@ -1,11 +1,11 @@
-#include "hyper/renderer/VertexArray.h"
+#include "hyper/renderer/vertex_array.h"
 
 #include "hyper/renderer/renderer.h"
 #include "platform/opengl/OpenGLVertexArray.h"
 
 namespace hp
 {
-	std::shared_ptr<VertexArray> VertexArray::Create()
+	std::shared_ptr<vertex_array> vertex_array::Create()
 	{
 		switch (renderer::get_api())
 		{
