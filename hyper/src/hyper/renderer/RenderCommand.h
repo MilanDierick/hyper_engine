@@ -1,7 +1,7 @@
 #ifndef HYPER_RENDER_COMMAND_H
 #define HYPER_RENDER_COMMAND_H
 
-#include "hyper/renderer/RendererAPI.h"
+#include "hyper/renderer/renderer_api.h"
 
 namespace hp
 {
@@ -44,7 +44,7 @@ namespace hp
 		}
 	 
 	 private:
-		static std::unique_ptr<RendererAPI> s_RendererAPI;
+		static std::unique_ptr<renderer_api> s_RendererAPI;
 	};
 	
 }  // namespace hp

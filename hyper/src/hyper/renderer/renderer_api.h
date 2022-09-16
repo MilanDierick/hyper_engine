@@ -7,7 +7,7 @@
 
 namespace hp
 {
-	class HP_API RendererAPI
+	class HP_API renderer_api
 	{
 	 public:
 		enum class API
@@ -15,7 +15,7 @@ namespace hp
 			None = 0, OpenGL = 1
 		};
 	 public:
-		virtual ~RendererAPI() = default;
+		virtual ~renderer_api() = default;
 		
 		virtual void Init() = 0;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
@@ -32,7 +32,7 @@ namespace hp
 			return s_API;
 		}
 		
-		static std::unique_ptr<RendererAPI> Create();
+		static std::unique_ptr<renderer_api> Create();
 	 private:
 		static API s_API;
 	};

@@ -7,7 +7,7 @@
 
 namespace hp {
 
-	class Renderer
+	class renderer
 	{
 	public:
 		static void Init();
@@ -20,7 +20,7 @@ namespace hp {
 
 		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
 
-		static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
+		static renderer_api::API get_api() { return renderer_api::GetAPI(); }
 	private:
 		struct SceneData
 		{

@@ -4,7 +4,7 @@
 #ifndef PLAYGROUND_UNIVERSAL_WINDOW_H
 #define PLAYGROUND_UNIVERSAL_WINDOW_H
 
-#include "hyper/renderer/GraphicsContext.h"
+#include "hyper/renderer/graphics_context.h"
 #include "hyper/core/window.h"
 #include <GLFW/glfw3.h>
 
@@ -43,7 +43,7 @@ namespace hp
 	 private:
 		window_data m_data;
 		GLFWwindow* m_window;
-		std::unique_ptr<GraphicsContext> m_context;
+		std::unique_ptr<graphics_context> m_context;
 		
 		void init(const window_parameters& parameters);
 		void shutdown() const;

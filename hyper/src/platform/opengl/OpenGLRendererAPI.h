@@ -1,11 +1,11 @@
 #ifndef HYPER_RENDERER_API
 #define HYPER_RENDERER_API
 
-#include "hyper/renderer/RendererAPI.h"
+#include "hyper/renderer/renderer_api.h"
 
 namespace hp
 {
-	class OpenGLRendererAPI : public RendererAPI
+	class OpenGLRendererAPI : public renderer_api
 	{
 	 public:
 		virtual void Init() override;

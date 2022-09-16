@@ -1,37 +1,37 @@
-#include "hyper/renderer/Renderer.h"
+#include "hyper/renderer/renderer.h"
 
 #include "hyper/renderer/Renderer2D.h"
 
 namespace hp
 {
-	std::unique_ptr<Renderer::SceneData> Renderer::s_SceneData = std::make_unique<Renderer::SceneData>();
+	std::unique_ptr<renderer::SceneData> renderer::s_SceneData = std::make_unique<renderer::SceneData>();
 	
-	void Renderer::Init()
+	void renderer::Init()
 	{
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}
 	
-	void Renderer::Shutdown()
+	void renderer::Shutdown()
 	{
 		Renderer2D::Shutdown();
 	}
 	
-	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	void renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 	
-	void Renderer::BeginScene(OrthographicCamera& camera)
+	void renderer::BeginScene(OrthographicCamera& camera)
 	{
 		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 	
-	void Renderer::EndScene()
+	void renderer::EndScene()
 	{
 	}
 	
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader,
+	void renderer::Submit(const std::shared_ptr<Shader>& shader,
 		const std::shared_ptr<VertexArray>& vertexArray,
 		const glm::mat4& transform)
 	{

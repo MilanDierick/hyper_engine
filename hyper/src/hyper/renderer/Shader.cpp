@@ -1,22 +1,22 @@
 #include "hyper/renderer/Shader.h"
 
-#include "hyper/renderer/Renderer.h"
+#include "hyper/renderer/renderer.h"
 #include "platform/opengl/OpenGLShader.h"
 
 namespace hp
 {
 	std::shared_ptr<Shader> Shader::Create(const std::string& filepath)
 	{
-		switch (Renderer::GetAPI())
+		switch (renderer::get_api())
 		{
-		case RendererAPI::API::None:
-		HP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
+		case renderer_api::API::None:
+		HP_CORE_ASSERT(false, "renderer_api::None is currently not supported!");
 			return nullptr;
-		case RendererAPI::API::OpenGL:
+		case renderer_api::API::OpenGL:
 			return std::make_shared<OpenGLShader>(filepath);
 		}
 		
-		HP_CORE_ASSERT(false, "Unknown RendererAPI!");
+		HP_CORE_ASSERT(false, "Unknown renderer_api!");
 		return nullptr;
 	}
 	
@@ -24,16 +24,16 @@ namespace hp
 		const std::string& vertexSrc,
 		const std::string& fragmentSrc)
 	{
-		switch (Renderer::GetAPI())
+		switch (renderer::get_api())
 		{
-		case RendererAPI::API::None:
-		HP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
+		case renderer_api::API::None:
+		HP_CORE_ASSERT(false, "renderer_api::None is currently not supported!");
 			return nullptr;
-		case RendererAPI::API::OpenGL:
+		case renderer_api::API::OpenGL:
 			return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
 		
-		HP_CORE_ASSERT(false, "Unknown RendererAPI!");
+		HP_CORE_ASSERT(false, "Unknown renderer_api!");
 		return nullptr;
 	}
 	

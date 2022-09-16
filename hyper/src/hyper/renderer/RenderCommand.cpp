@@ -2,5 +2,5 @@
 
 namespace hp
 {
-	std::unique_ptr<RendererAPI> RenderCommand::s_RendererAPI = RendererAPI::Create();
+	std::unique_ptr<renderer_api> RenderCommand::s_RendererAPI = renderer_api::Create();
 }

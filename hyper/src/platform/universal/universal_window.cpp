@@ -8,7 +8,7 @@
 #include "hyper/core/asserts.h"
 #include "hyper/core/input.h"
 #include "hyper/core/log.h"
-#include "platform/opengl/OpenGLContext.h"
+#include "platform/opengl/opengl_context.h"
 
 namespace hp
 {
@@ -37,7 +37,7 @@ namespace hp
 	void universal_window::on_update()
 	{
 		glfwPollEvents();
-		m_context->SwapBuffers();
+		m_context->swap_buffers();
 	}
 	
 	uint32_t universal_window::get_width() const
@@ -109,8 +109,8 @@ namespace hp
 		
 		m_window = glfwCreateWindow(parameters.width, parameters.height, parameters.title, nullptr, nullptr);
 		
-		m_context = std::make_unique<OpenGLContext>(m_window);
-		m_context->Init();
+		m_context = std::make_unique<opengl_context>(m_window);
+		m_context->init();
 		
 		glfwSetWindowUserPointer(m_window, &m_data);
 		set_vsync(false);

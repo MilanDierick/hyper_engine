@@ -32,8 +32,8 @@ add_subdirectory(thirdparty/stb)
 set(HYPER_SOURCES_PLATFORM_OPENGL
     src/platform/opengl/OpenGLBuffer.cpp
     src/platform/opengl/OpenGLBuffer.h
-    src/platform/opengl/OpenGLContext.cpp
-    src/platform/opengl/OpenGLContext.h
+    src/platform/opengl/opengl_context.cpp
+    src/platform/opengl/opengl_context.h
     src/platform/opengl/OpenGLFramebuffer.cpp
     src/platform/opengl/OpenGLFramebuffer.h
     src/platform/opengl/OpenGLRendererAPI.cpp
@@ -56,20 +56,20 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/EditorCamera.h
     src/hyper/renderer/Framebuffer.cpp
     src/hyper/renderer/Framebuffer.h
-    src/hyper/renderer/GraphicsContext.cpp
-    src/hyper/renderer/GraphicsContext.h
+    src/hyper/renderer/graphics_context.cpp
+    src/hyper/renderer/graphics_context.h
     src/hyper/renderer/OrthographicCamera.cpp
     src/hyper/renderer/OrthographicCamera.h
     src/hyper/renderer/orthographic_camera_controller.cpp
     src/hyper/renderer/orthographic_camera_controller.h
     src/hyper/renderer/RenderCommand.cpp
     src/hyper/renderer/RenderCommand.h
-    src/hyper/renderer/Renderer.cpp
-    src/hyper/renderer/Renderer.h
+    src/hyper/renderer/renderer.cpp
+    src/hyper/renderer/renderer.h
     src/hyper/renderer/Renderer2D.cpp
     src/hyper/renderer/Renderer2D.h
-    src/hyper/renderer/RendererAPI.cpp
-    src/hyper/renderer/RendererAPI.h
+    src/hyper/renderer/renderer_api.cpp
+    src/hyper/renderer/renderer_api.h
     src/hyper/renderer/Shader.cpp
     src/hyper/renderer/Shader.h
     src/hyper/renderer/Texture.cpp
