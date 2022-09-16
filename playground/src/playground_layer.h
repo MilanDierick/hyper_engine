@@ -26,7 +26,7 @@ namespace pg
 		void om_imgui_render() override;
 	 
 	 private:
-		hp::OrthographicCameraController m_CameraController;
+		hp::orthographic_camera_controller m_CameraController;
 		
 		// Temp
 		std::shared_ptr<hp::VertexArray> m_SquareVA;

@@ -24,7 +24,7 @@ namespace pg
 	void playground_layer::on_update(uint64_t ticks)
 	{
 		// Update
-		m_CameraController.OnUpdate(ticks);
+		m_CameraController.on_update(ticks);
 		
 
 	}

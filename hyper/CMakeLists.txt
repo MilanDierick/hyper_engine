@@ -60,8 +60,8 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/GraphicsContext.h
     src/hyper/renderer/OrthographicCamera.cpp
     src/hyper/renderer/OrthographicCamera.h
-    src/hyper/renderer/OrthographicCameraController.cpp
-    src/hyper/renderer/OrthographicCameraController.h
+    src/hyper/renderer/orthographic_camera_controller.cpp
+    src/hyper/renderer/orthographic_camera_controller.h
     src/hyper/renderer/RenderCommand.cpp
     src/hyper/renderer/RenderCommand.h
     src/hyper/renderer/Renderer.cpp
