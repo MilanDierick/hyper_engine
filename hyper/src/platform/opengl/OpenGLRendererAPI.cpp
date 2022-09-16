@@ -72,14 +72,14 @@ namespace hp
 	
 	void OpenGLRendererAPI::draw_indexed(const std::shared_ptr<vertex_array>& vertexArray, uint32_t indexCount)
 	{
-		vertexArray->Bind();
-		uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
+		vertexArray->bind();
+		uint32_t count = indexCount ? indexCount : vertexArray->get_index_buffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 	
 	void OpenGLRendererAPI::draw_lines(const std::shared_ptr<vertex_array>& vertexArray, uint32_t vertexCount)
 	{
-		vertexArray->Bind();
+		vertexArray->bind();
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 	

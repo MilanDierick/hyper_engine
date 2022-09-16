@@ -10,20 +10,25 @@ namespace hp
 	class vertex_array
 	{
 	 public:
+		vertex_array() = default;
 		virtual ~vertex_array() = default;
 		
-		virtual void Bind() const = 0;
-		virtual void Unbind() const = 0;
+		vertex_array(const vertex_array& other) = delete;
+		vertex_array(vertex_array&& other) noexcept = delete;
+		vertex_array& operator=(const vertex_array& other) = delete;
+		vertex_array& operator=(vertex_array&& other) = delete;
 		
-		virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) = 0;
-		virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) = 0;
+		virtual void bind() const = 0;
+		virtual void unbind() const = 0;
 		
-		virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const = 0;
-		virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const = 0;
+		virtual void add_vertex_buffer(const std::shared_ptr<vertex_buffer>& vertex_buffer) = 0;
+		virtual void set_index_buffer(const std::shared_ptr<index_buffer>& index_buffer) = 0;
 		
-		static std::shared_ptr<vertex_array> Create();
+		[[nodiscard]] virtual const std::vector<std::shared_ptr<vertex_buffer>>& get_vertex_buffers() const = 0;
+		[[nodiscard]] virtual const std::shared_ptr<index_buffer>& get_index_buffer() const = 0;
+		
+		static std::shared_ptr<vertex_array> create();
 	};
-	
 }  // namespace hp
 
-#endif
+#endif //HYPER_VERTEX_ARRAY_H

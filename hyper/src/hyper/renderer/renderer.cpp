@@ -39,7 +39,7 @@ namespace hp
 		shader->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
 		shader->SetMat4("u_Transform", transform);
 		
-		vertexArray->Bind();
+		vertexArray->bind();
 		render_command::draw_indexed(vertexArray);
 	}
 	

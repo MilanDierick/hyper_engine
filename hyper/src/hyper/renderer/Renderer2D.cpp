@@ -52,16 +52,16 @@ namespace hp {
 		static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
 
 		std::shared_ptr<vertex_array> QuadVertexArray;
-		std::shared_ptr<VertexBuffer> QuadVertexBuffer;
+		std::shared_ptr<vertex_buffer> QuadVertexBuffer;
 		std::shared_ptr<Shader> QuadShader;
 		std::shared_ptr<Texture2D> WhiteTexture;
 
 		std::shared_ptr<vertex_array> CircleVertexArray;
-		std::shared_ptr<VertexBuffer> CircleVertexBuffer;
+		std::shared_ptr<vertex_buffer> CircleVertexBuffer;
 		std::shared_ptr<Shader> CircleShader;
 
 		std::shared_ptr<vertex_array> LineVertexArray;
-		std::shared_ptr<VertexBuffer> LineVertexBuffer;
+		std::shared_ptr<vertex_buffer> LineVertexBuffer;
 		std::shared_ptr<Shader> LineShader;
 
 		uint32_t QuadIndexCount = 0;
@@ -99,9 +99,9 @@ namespace hp {
 	{
 		
 
-		s_Data.QuadVertexArray = vertex_array::Create();
+		s_Data.QuadVertexArray = vertex_array::create();
 
-		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
+		s_Data.QuadVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 		s_Data.QuadVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position"     },
 			{ ShaderDataType::Float4, "a_Color"        },
@@ -110,7 +110,7 @@ namespace hp {
 			{ ShaderDataType::Float,  "a_TilingFactor" },
 			{ ShaderDataType::Int,    "a_EntityID"     }
 		});
-		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
+		s_Data.QuadVertexArray->add_vertex_buffer(s_Data.QuadVertexBuffer);
 
 		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
 
@@ -130,14 +130,14 @@ namespace hp {
 			offset += 4;
 		}
 
-		std::shared_ptr<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.MaxIndices);
-		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
+		std::shared_ptr<index_buffer> quadIB = index_buffer::Create(quadIndices, s_Data.MaxIndices);
+		s_Data.QuadVertexArray->set_index_buffer(quadIB);
 		delete[] quadIndices;
 
 		// Circles
-		s_Data.CircleVertexArray = vertex_array::Create();
+		s_Data.CircleVertexArray = vertex_array::create();
 
-		s_Data.CircleVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(CircleVertex));
+		s_Data.CircleVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(CircleVertex));
 		s_Data.CircleVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_WorldPosition" },
 			{ ShaderDataType::Float3, "a_LocalPosition" },
@@ -146,20 +146,20 @@ namespace hp {
 			{ ShaderDataType::Float,  "a_Fade"          },
 			{ ShaderDataType::Int,    "a_EntityID"      }
 		});
-		s_Data.CircleVertexArray->AddVertexBuffer(s_Data.CircleVertexBuffer);
-		s_Data.CircleVertexArray->SetIndexBuffer(quadIB); // Use quad IB
+		s_Data.CircleVertexArray->add_vertex_buffer(s_Data.CircleVertexBuffer);
+		s_Data.CircleVertexArray->set_index_buffer(quadIB); // Use quad IB
 		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
 
 		// Lines
-		s_Data.LineVertexArray = vertex_array::Create();
+		s_Data.LineVertexArray = vertex_array::create();
 
-		s_Data.LineVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
+		s_Data.LineVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
 		s_Data.LineVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color"    },
 			{ ShaderDataType::Int,    "a_EntityID" }
 		});
-		s_Data.LineVertexArray->AddVertexBuffer(s_Data.LineVertexBuffer);
+		s_Data.LineVertexArray->add_vertex_buffer(s_Data.LineVertexBuffer);
 		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
 
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
@@ -250,7 +250,7 @@ namespace hp {
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
 			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
-			// Bind textures
+			// bind textures
 			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 				s_Data.TextureSlots[i]->Bind(i);
 

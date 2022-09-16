@@ -5,7 +5,7 @@
 
 namespace hp
 {
-	class OpenGLVertexBuffer : public VertexBuffer
+	class OpenGLVertexBuffer : public vertex_buffer
 	{
 	 public:
 		OpenGLVertexBuffer(uint32_t size);
@@ -32,7 +32,7 @@ namespace hp
 		BufferLayout m_Layout;
 	};
 	
-	class OpenGLIndexBuffer : public IndexBuffer
+	class OpenGLIndexBuffer : public index_buffer
 	{
 	 public:
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);

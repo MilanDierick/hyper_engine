@@ -105,10 +105,10 @@ namespace hp {
 		uint32_t m_Stride = 0;
 	};
 
-	class VertexBuffer
+	class vertex_buffer
 	{
 	public:
-		virtual ~VertexBuffer() = default;
+		virtual ~vertex_buffer() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
@@ -118,22 +118,22 @@ namespace hp {
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
-		static std::shared_ptr<VertexBuffer> Create(uint32_t size);
-		static std::shared_ptr<VertexBuffer> Create(float* vertices, uint32_t size);
+		static std::shared_ptr<vertex_buffer> Create(uint32_t size);
+		static std::shared_ptr<vertex_buffer> Create(float* vertices, uint32_t size);
 	};
 
 	// Currently Hazel only supports 32-bit index buffers
-	class IndexBuffer
+	class index_buffer
 	{
 	public:
-		virtual ~IndexBuffer() = default;
+		virtual ~index_buffer() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
 		virtual uint32_t GetCount() const = 0;
 
-		static std::shared_ptr<IndexBuffer> Create(uint32_t* indices, uint32_t count);
+		static std::shared_ptr<index_buffer> Create(uint32_t* indices, uint32_t count);
 	};
 
 }

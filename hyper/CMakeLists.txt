@@ -44,8 +44,8 @@ set(HYPER_SOURCES_PLATFORM_OPENGL
     src/platform/opengl/OpenGLTexture.h
     src/platform/opengl/OpenGLUniformBuffer.cpp
     src/platform/opengl/OpenGLUniformBuffer.h
-    src/platform/opengl/OpenGLVertexArray.cpp
-    src/platform/opengl/OpenGLVertexArray.h
+    src/platform/opengl/opengl_vertex_array.cpp
+    src/platform/opengl/opengl_vertex_array.h
     )
 
 set(HYPER_SOURCES_RENDERER

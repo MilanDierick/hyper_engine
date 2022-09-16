@@ -5,7 +5,7 @@
 namespace hp
 {
 	
-	std::shared_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	std::shared_ptr<vertex_buffer> vertex_buffer::Create(uint32_t size)
 	{
 		switch (renderer::get_api())
 		{
@@ -20,7 +20,7 @@ namespace hp
 		return nullptr;
 	}
 	
-	std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
+	std::shared_ptr<vertex_buffer> vertex_buffer::Create(float* vertices, uint32_t size)
 	{
 		switch (renderer::get_api())
 		{
@@ -35,7 +35,7 @@ namespace hp
 		return nullptr;
 	}
 	
-	std::shared_ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
+	std::shared_ptr<index_buffer> index_buffer::Create(uint32_t* indices, uint32_t size)
 	{
 		switch (renderer::get_api())
 		{

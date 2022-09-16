@@ -1,4 +1,4 @@
-#include "platform/opengl/OpenGLVertexArray.h"
+#include "platform/opengl/opengl_vertex_array.h"
 
 #include <glad/glad.h>
 
@@ -36,27 +36,27 @@ namespace hp
 		return 0;
 	}
 	
-	OpenGLVertexArray::OpenGLVertexArray()
+	opengl_vertex_array::opengl_vertex_array()
 	{
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 	
-	OpenGLVertexArray::~OpenGLVertexArray()
+	opengl_vertex_array::~opengl_vertex_array()
 	{
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 	
-	void OpenGLVertexArray::Bind() const
+	void opengl_vertex_array::bind() const
 	{
 		glBindVertexArray(m_RendererID);
 	}
 	
-	void OpenGLVertexArray::Unbind() const
+	void opengl_vertex_array::unbind() const
 	{
 		glBindVertexArray(0);
 	}
 	
-	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void opengl_vertex_array::add_vertex_buffer(const std::shared_ptr<vertex_buffer>& vertexBuffer)
 	{
 		HP_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 		
@@ -124,7 +124,7 @@ namespace hp
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 	
-	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	void opengl_vertex_array::set_index_buffer(const std::shared_ptr<index_buffer>& indexBuffer)
 	{
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
