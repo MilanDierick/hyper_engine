@@ -38,17 +38,17 @@ namespace hp {
 		std::string Name;
 		ShaderDataType Type;
 		uint32_t Size;
-		size_t Offset;
-		bool Normalized;
+		size_t offset;
+		bool normalized;
 
 		BufferElement() = default;
 
 		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
-			: Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized)
+			: Name(name), Type(type), Size(ShaderDataTypeSize(type)), offset(0), normalized(normalized)
 		{
 		}
 
-		uint32_t GetComponentCount() const
+		uint32_t get_component_count() const
 		{
 			switch (Type)
 			{
@@ -81,8 +81,8 @@ namespace hp {
 			CalculateOffsetsAndStride();
 		}
 
-		uint32_t GetStride() const { return m_Stride; }
-		const std::vector<BufferElement>& GetElements() const { return m_Elements; }
+		uint32_t get_stride() const { return m_Stride; }
+		const std::vector<BufferElement>& get_elements() const { return m_Elements; }
 
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
@@ -95,7 +95,7 @@ namespace hp {
 			m_Stride = 0;
 			for (auto& element : m_Elements)
 			{
-				element.Offset = offset;
+				element.offset = offset;
 				offset += element.Size;
 				m_Stride += element.Size;
 			}
@@ -110,12 +110,12 @@ namespace hp {
 	public:
 		virtual ~vertex_buffer() = default;
 
-		virtual void Bind() const = 0;
+		virtual void bind() const = 0;
 		virtual void Unbind() const = 0;
 
 		virtual void SetData(const void* data, uint32_t size) = 0;
 
-		virtual const BufferLayout& GetLayout() const = 0;
+		virtual const BufferLayout& get_layout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
 		static std::shared_ptr<vertex_buffer> Create(uint32_t size);
@@ -128,7 +128,7 @@ namespace hp {
 	public:
 		virtual ~index_buffer() = default;
 
-		virtual void Bind() const = 0;
+		virtual void bind() const = 0;
 		virtual void Unbind() const = 0;
 
 		virtual uint32_t GetCount() const = 0;

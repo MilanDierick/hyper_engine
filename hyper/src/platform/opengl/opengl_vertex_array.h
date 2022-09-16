@@ -3,28 +3,34 @@
 
 #include "hyper/renderer/vertex_array.h"
 
-namespace hp {
-
+namespace hp
+{
 	class opengl_vertex_array : public vertex_array
 	{
-	public:
+	 public:
 		opengl_vertex_array();
-		virtual ~opengl_vertex_array();
-
-		virtual void bind() const override;
-		virtual void unbind() const override;
-
-		virtual void add_vertex_buffer(const std::shared_ptr<vertex_buffer>& vertexBuffer) override;
-		virtual void set_index_buffer(const std::shared_ptr<index_buffer>& indexBuffer) override;
-
-		virtual const std::vector<std::shared_ptr<vertex_buffer>>& get_vertex_buffers() const { return m_VertexBuffers; }
-		virtual const std::shared_ptr<index_buffer>& get_index_buffer() const { return m_IndexBuffer; }
-	private:
-		uint32_t m_RendererID;
-		uint32_t m_VertexBufferIndex = 0;
-		std::vector<std::shared_ptr<vertex_buffer>> m_VertexBuffers;
-		std::shared_ptr<index_buffer> m_IndexBuffer;
+		~opengl_vertex_array() override;
+		
+		opengl_vertex_array(const opengl_vertex_array& other) = delete;
+		opengl_vertex_array(opengl_vertex_array&& other) noexcept = delete;
+		opengl_vertex_array& operator=(const opengl_vertex_array& other) = delete;
+		opengl_vertex_array& operator=(opengl_vertex_array&& other) = delete;
+		
+		void bind() const override;
+		void unbind() const override;
+		
+		void add_vertex_buffer(const std::shared_ptr<vertex_buffer>& vertex_buffer) override;
+		void set_index_buffer(const std::shared_ptr<index_buffer>& index_buffer) override;
+		
+		[[nodiscard]] const std::vector<std::shared_ptr<vertex_buffer>>& get_vertex_buffers() const override;
+		[[nodiscard]] const std::shared_ptr<index_buffer>& get_index_buffer() const override;
+	 
+	 private:
+		uint32_t m_renderer_id;
+		uint32_t m_vertex_buffer_index = 0;
+		std::vector<std::shared_ptr<vertex_buffer>> m_vertex_buffers;
+		std::shared_ptr<index_buffer> m_index_buffer;
 	};
 }  // namespace hp
 
-#endif
+#endif //HYPER_OPENGL_VERTEX_ARRAY_H
