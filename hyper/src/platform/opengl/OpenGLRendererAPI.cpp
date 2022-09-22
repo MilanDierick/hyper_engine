@@ -39,7 +39,6 @@ namespace hp
 	
 	void OpenGLRendererAPI::init()
 	{
-		
 		#ifdef HZ_DEBUG
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);

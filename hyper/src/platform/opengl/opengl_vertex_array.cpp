@@ -4,27 +4,27 @@
 
 namespace hp
 {
-	static GLenum shader_data_type_to_opengl_base_type(ShaderDataType type)
+	static GLenum shader_data_type_to_opengl_base_type(shader_data_type type)
 	{
 		switch (type)
 		{
-			case ShaderDataType::Float: return GL_FLOAT; // NOLINT()
-			case ShaderDataType::Float2: return GL_FLOAT;
-			case ShaderDataType::Float3: return GL_FLOAT;
-			case ShaderDataType::Float4: return GL_FLOAT;
-			case ShaderDataType::Mat3: return GL_FLOAT;
-			case ShaderDataType::Mat4: return GL_FLOAT;
-			case ShaderDataType::Int: return GL_INT;
-			case ShaderDataType::Int2: return GL_INT;
-			case ShaderDataType::Int3: return GL_INT;
-			case ShaderDataType::Int4: return GL_INT;
-			case ShaderDataType::Bool: return GL_BOOL;
-			case ShaderDataType::None:
-			HP_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			case shader_data_type::Float: return GL_FLOAT; // NOLINT()
+			case shader_data_type::Float2: return GL_FLOAT;
+			case shader_data_type::Float3: return GL_FLOAT;
+			case shader_data_type::Float4: return GL_FLOAT;
+			case shader_data_type::Mat3: return GL_FLOAT;
+			case shader_data_type::Mat4: return GL_FLOAT;
+			case shader_data_type::Int: return GL_INT;
+			case shader_data_type::Int2: return GL_INT;
+			case shader_data_type::Int3: return GL_INT;
+			case shader_data_type::Int4: return GL_INT;
+			case shader_data_type::Bool: return GL_BOOL;
+			case shader_data_type::None:
+			HP_CORE_ASSERT(false, "Unknown shader_data_type!");
 				break;
 		}
 		
-		HP_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		HP_CORE_ASSERT(false, "Unknown shader_data_type!");
 		return 0;
 	}
 	
@@ -60,10 +60,10 @@ namespace hp
 		{
 			switch (element.Type)
 			{
-				case ShaderDataType::Float:
-				case ShaderDataType::Float2:
-				case ShaderDataType::Float3:
-				case ShaderDataType::Float4:
+				case shader_data_type::Float:
+				case shader_data_type::Float2:
+				case shader_data_type::Float3:
+				case shader_data_type::Float4:
 				{
 					glEnableVertexAttribArray(m_vertex_buffer_index);
 					glVertexAttribPointer(
@@ -76,11 +76,11 @@ namespace hp
 					m_vertex_buffer_index++;
 					break;
 				}
-				case ShaderDataType::Int:
-				case ShaderDataType::Int2:
-				case ShaderDataType::Int3:
-				case ShaderDataType::Int4:
-				case ShaderDataType::Bool:
+				case shader_data_type::Int:
+				case shader_data_type::Int2:
+				case shader_data_type::Int3:
+				case shader_data_type::Int4:
+				case shader_data_type::Bool:
 				{
 					glEnableVertexAttribArray(m_vertex_buffer_index);
 					glVertexAttribIPointer(
@@ -92,8 +92,8 @@ namespace hp
 					m_vertex_buffer_index++;
 					break;
 				}
-				case ShaderDataType::Mat3:
-				case ShaderDataType::Mat4:
+				case shader_data_type::Mat3:
+				case shader_data_type::Mat4:
 				{
 					auto count = static_cast<uint8_t>(element.get_component_count());
 					
@@ -114,7 +114,7 @@ namespace hp
 					break;
 				}
 				default:
-				HP_CORE_ASSERT(false, "Unknown ShaderDataType!");
+				HP_CORE_ASSERT(false, "Unknown shader_data_type!");
 			}
 		}
 		

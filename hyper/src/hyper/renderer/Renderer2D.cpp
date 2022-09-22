@@ -103,12 +103,12 @@ namespace hp {
 
 		s_Data.QuadVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 		s_Data.QuadVertexBuffer->SetLayout({
-			{ ShaderDataType::Float3, "a_Position"     },
-			{ ShaderDataType::Float4, "a_Color"        },
-			{ ShaderDataType::Float2, "a_TexCoord"     },
-			{ ShaderDataType::Float,  "a_TexIndex"     },
-			{ ShaderDataType::Float,  "a_TilingFactor" },
-			{ ShaderDataType::Int,    "a_EntityID"     }
+			{ shader_data_type::Float3, "a_Position"     },
+			{ shader_data_type::Float4, "a_Color"        },
+			{ shader_data_type::Float2, "a_TexCoord"     },
+			{ shader_data_type::Float,  "a_TexIndex"     },
+			{ shader_data_type::Float,  "a_TilingFactor" },
+			{ shader_data_type::Int,    "a_EntityID"     }
 		});
 		s_Data.QuadVertexArray->add_vertex_buffer(s_Data.QuadVertexBuffer);
 
@@ -139,12 +139,12 @@ namespace hp {
 
 		s_Data.CircleVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(CircleVertex));
 		s_Data.CircleVertexBuffer->SetLayout({
-			{ ShaderDataType::Float3, "a_WorldPosition" },
-			{ ShaderDataType::Float3, "a_LocalPosition" },
-			{ ShaderDataType::Float4, "a_Color"         },
-			{ ShaderDataType::Float,  "a_Thickness"     },
-			{ ShaderDataType::Float,  "a_Fade"          },
-			{ ShaderDataType::Int,    "a_EntityID"      }
+			{ shader_data_type::Float3, "a_WorldPosition" },
+			{ shader_data_type::Float3, "a_LocalPosition" },
+			{ shader_data_type::Float4, "a_Color"         },
+			{ shader_data_type::Float,  "a_Thickness"     },
+			{ shader_data_type::Float,  "a_Fade"          },
+			{ shader_data_type::Int,    "a_EntityID"      }
 		});
 		s_Data.CircleVertexArray->add_vertex_buffer(s_Data.CircleVertexBuffer);
 		s_Data.CircleVertexArray->set_index_buffer(quadIB); // Use quad IB
@@ -155,9 +155,9 @@ namespace hp {
 
 		s_Data.LineVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
 		s_Data.LineVertexBuffer->SetLayout({
-			{ ShaderDataType::Float3, "a_Position" },
-			{ ShaderDataType::Float4, "a_Color"    },
-			{ ShaderDataType::Int,    "a_EntityID" }
+			{ shader_data_type::Float3, "a_Position" },
+			{ shader_data_type::Float4, "a_Color"    },
+			{ shader_data_type::Int,    "a_EntityID" }
 		});
 		s_Data.LineVertexArray->add_vertex_buffer(s_Data.LineVertexBuffer);
 		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];

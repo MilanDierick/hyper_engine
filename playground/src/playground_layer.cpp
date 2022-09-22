@@ -25,8 +25,6 @@ namespace pg
 	{
 		// Update
 		m_CameraController.on_update(ticks);
-		
-
 	}
 	
 	void playground_layer::on_render()

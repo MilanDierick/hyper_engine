@@ -12,7 +12,7 @@ namespace hp
 {
 	application* application::m_instance = nullptr;
 	
-	application::application() : m_is_running(true), m_settings_path("settings.json"), m_settings()
+	application::application() : m_is_running(true), m_minimized(false), m_settings_path("settings.json"), m_settings()
 	{
 		m_instance = this;
 		m_settings.read_settings_from_file(m_settings_path);
@@ -48,16 +48,17 @@ namespace hp
 			
 			m_window->on_update();
 			
-//			if (m_minimized)
-//			{
-//				continue;
-//			}
+			if (m_minimized)
+			{
+				continue;
+			}
 			
 			while (lag >= MS_PER_TICK)
 			{
 				for (layer* layer : m_layerstack)
 				{
-					layer->on_update(static_cast<uint64_t>((1000 / MS_PER_TICK)));
+					// TODO: Figure out how we want to propagate time
+					layer->on_update(static_cast<uint64_t>(MS_PER_TICK));
 				}
 				
 				lag -= MS_PER_TICK;
@@ -110,9 +111,10 @@ namespace hp
 		if (args.width == 0 || args.height == 0)
 		{
 			m_minimized = true;
+			return;
 		}
 		
 		m_minimized = false;
-		//renderer::on_window_resize(args.width, args.height);
+		renderer::OnWindowResize(args.width, args.height);
 	}
 }  // namespace hp
