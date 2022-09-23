@@ -6,7 +6,7 @@
 #include "hyper/renderer/Texture.h"
 
 #include "hyper/renderer/camera.h"
-#include "hyper/renderer/EditorCamera.h"
+#include "hyper/renderer/editor_camera.h"
 
 //#include "Hazel/Scene/Components.h"
 
@@ -19,7 +19,7 @@ namespace hp
 		static void Shutdown();
 		
 		static void BeginScene(const camera& camera, const glm::mat4& transform);
-		static void BeginScene(const EditorCamera& camera);
+		static void BeginScene(const editor_camera& camera);
 		static void BeginScene(const orthographic_camera& camera); // TODO: Remove
 		static void EndScene();
 		static void Flush();

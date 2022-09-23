@@ -69,8 +69,8 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/buffer.cpp
     src/hyper/renderer/buffer.h
     src/hyper/renderer/camera.h
-    src/hyper/renderer/EditorCamera.cpp
-    src/hyper/renderer/EditorCamera.h
+    src/hyper/renderer/editor_camera.cpp
+    src/hyper/renderer/editor_camera.h
     src/hyper/renderer/Framebuffer.cpp
     src/hyper/renderer/Framebuffer.h
     src/hyper/renderer/graphics_context.cpp
