@@ -72,7 +72,7 @@ namespace hp
 	void OpenGLRendererAPI::draw_indexed(const std::shared_ptr<vertex_array>& vertexArray, uint32_t indexCount)
 	{
 		vertexArray->bind();
-		uint32_t count = indexCount ? indexCount : vertexArray->get_index_buffer()->GetCount();
+		uint32_t count = indexCount ? indexCount : vertexArray->get_index_buffer()->get_count();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 	

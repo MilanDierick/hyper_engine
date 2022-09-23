@@ -25,9 +25,6 @@
 [submodule "hyper/thirdparty/spirv-tools"]
 	path = hyper/thirdparty/spirv-tools
 	url = https://github.com/KhronosGroup/SPIRV-Tools.git
-[submodule "hyper/thirdparty/spirv-headers"]
-	path = hyper/thirdparty/spirv-headers
-	url = https://github.com/KhronosGroup/SPIRV-Headers.git
 [submodule "hyper/thirdparty/glslang"]
 	path = hyper/thirdparty/glslang
 	url = https://github.com/KhronosGroup/glslang.git

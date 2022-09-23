@@ -1,7 +1,7 @@
 #ifndef HYPER_VERTEX_ARRAY_H
 #define HYPER_VERTEX_ARRAY_H
 
-#include "hyper/renderer/Buffer.h"
+#include "hyper/renderer/buffer.h"
 
 #include <memory>
 

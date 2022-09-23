@@ -363,7 +363,7 @@ namespace hp
 			int memberCount = bufferType.member_types.size();
 			
 			log::trace("  {0}", resource.name);
-			log::trace("    Size = {0}", bufferSize);
+			log::trace("    size = {0}", bufferSize);
 			log::trace("    Binding = {0}", binding);
 			log::trace("    Members = {0}", memberCount);
 		}

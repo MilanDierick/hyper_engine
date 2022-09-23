@@ -58,7 +58,7 @@ namespace hp
 		const auto     & layout = vertex_buffer->get_layout();
 		for (const auto& element : layout)
 		{
-			switch (element.Type)
+			switch (element.type)
 			{
 				case shader_data_type::Float:
 				case shader_data_type::Float2:
@@ -69,7 +69,7 @@ namespace hp
 					glVertexAttribPointer(
 						m_vertex_buffer_index,
 						static_cast<GLint>(element.get_component_count()),
-						shader_data_type_to_opengl_base_type(element.Type),
+						shader_data_type_to_opengl_base_type(element.type),
 						element.normalized ? GL_TRUE : GL_FALSE,
 						static_cast<GLsizei>(layout.get_stride()),
 						reinterpret_cast<const void*>(element.offset)); // NOLINT(performance-no-int-to-ptr)
@@ -86,7 +86,7 @@ namespace hp
 					glVertexAttribIPointer(
 						m_vertex_buffer_index,
 						static_cast<GLint>(element.get_component_count()),
-						shader_data_type_to_opengl_base_type(element.Type),
+						shader_data_type_to_opengl_base_type(element.type),
 						static_cast<GLsizei>(layout.get_stride()),
 						reinterpret_cast<const void*>(element.offset)); // NOLINT(performance-no-int-to-ptr)
 					m_vertex_buffer_index++;
@@ -103,7 +103,7 @@ namespace hp
 						glVertexAttribPointer(
 							m_vertex_buffer_index,
 							count,
-							shader_data_type_to_opengl_base_type(element.Type),
+							shader_data_type_to_opengl_base_type(element.type),
 							element.normalized ? GL_TRUE : GL_FALSE,
 							static_cast<GLint>(layout.get_stride()),
 							reinterpret_cast<const void*>(element.offset // NOLINT(performance-no-int-to-ptr)

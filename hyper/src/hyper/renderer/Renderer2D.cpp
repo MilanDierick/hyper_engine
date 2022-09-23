@@ -101,15 +101,14 @@ namespace hp {
 
 		s_Data.QuadVertexArray = vertex_array::create();
 
-		s_Data.QuadVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
-		s_Data.QuadVertexBuffer->SetLayout({
-			{ shader_data_type::Float3, "a_Position"     },
-			{ shader_data_type::Float4, "a_Color"        },
-			{ shader_data_type::Float2, "a_TexCoord"     },
-			{ shader_data_type::Float,  "a_TexIndex"     },
-			{ shader_data_type::Float,  "a_TilingFactor" },
-			{ shader_data_type::Int,    "a_EntityID"     }
-		});
+		s_Data.QuadVertexBuffer = vertex_buffer::create(s_Data.MaxVertices * sizeof(QuadVertex));
+		s_Data.QuadVertexBuffer->set_layout(
+			{{ shader_data_type::Float3, "a_Position" },
+			 { shader_data_type::Float4, "a_Color" },
+			 { shader_data_type::Float2, "a_TexCoord" },
+			 { shader_data_type::Float,  "a_TexIndex" },
+			 { shader_data_type::Float,  "a_TilingFactor" },
+			 { shader_data_type::Int,    "a_EntityID" }});
 		s_Data.QuadVertexArray->add_vertex_buffer(s_Data.QuadVertexBuffer);
 
 		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
@@ -130,22 +129,21 @@ namespace hp {
 			offset += 4;
 		}
 
-		std::shared_ptr<index_buffer> quadIB = index_buffer::Create(quadIndices, s_Data.MaxIndices);
+		std::shared_ptr<index_buffer> quadIB = index_buffer::create(quadIndices, s_Data.MaxIndices);
 		s_Data.QuadVertexArray->set_index_buffer(quadIB);
 		delete[] quadIndices;
 
 		// Circles
 		s_Data.CircleVertexArray = vertex_array::create();
 
-		s_Data.CircleVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(CircleVertex));
-		s_Data.CircleVertexBuffer->SetLayout({
-			{ shader_data_type::Float3, "a_WorldPosition" },
-			{ shader_data_type::Float3, "a_LocalPosition" },
-			{ shader_data_type::Float4, "a_Color"         },
-			{ shader_data_type::Float,  "a_Thickness"     },
-			{ shader_data_type::Float,  "a_Fade"          },
-			{ shader_data_type::Int,    "a_EntityID"      }
-		});
+		s_Data.CircleVertexBuffer = vertex_buffer::create(s_Data.MaxVertices * sizeof(CircleVertex));
+		s_Data.CircleVertexBuffer->set_layout(
+			{{ shader_data_type::Float3, "a_WorldPosition" },
+			 { shader_data_type::Float3, "a_LocalPosition" },
+			 { shader_data_type::Float4, "a_Color" },
+			 { shader_data_type::Float,  "a_Thickness" },
+			 { shader_data_type::Float,  "a_Fade" },
+			 { shader_data_type::Int,    "a_EntityID" }});
 		s_Data.CircleVertexArray->add_vertex_buffer(s_Data.CircleVertexBuffer);
 		s_Data.CircleVertexArray->set_index_buffer(quadIB); // Use quad IB
 		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
@@ -153,12 +151,11 @@ namespace hp {
 		// Lines
 		s_Data.LineVertexArray = vertex_array::create();
 
-		s_Data.LineVertexBuffer = vertex_buffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
-		s_Data.LineVertexBuffer->SetLayout({
-			{ shader_data_type::Float3, "a_Position" },
-			{ shader_data_type::Float4, "a_Color"    },
-			{ shader_data_type::Int,    "a_EntityID" }
-		});
+		s_Data.LineVertexBuffer = vertex_buffer::create(s_Data.MaxVertices * sizeof(LineVertex));
+		s_Data.LineVertexBuffer->set_layout(
+			{{ shader_data_type::Float3, "a_Position" },
+			 { shader_data_type::Float4, "a_Color" },
+			 { shader_data_type::Int,    "a_EntityID" }});
 		s_Data.LineVertexArray->add_vertex_buffer(s_Data.LineVertexBuffer);
 		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
 
@@ -248,7 +245,7 @@ namespace hp {
 		if (s_Data.QuadIndexCount)
 		{
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
-			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+			s_Data.QuadVertexBuffer->set_data(s_Data.QuadVertexBufferBase, dataSize);
 
 			// bind textures
 			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
@@ -262,7 +259,7 @@ namespace hp {
 		if (s_Data.CircleIndexCount)
 		{
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase);
-			s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
+			s_Data.CircleVertexBuffer->set_data(s_Data.CircleVertexBufferBase, dataSize);
 
 			s_Data.CircleShader->Bind();
 			render_command::draw_indexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
@@ -272,7 +269,7 @@ namespace hp {
 		if (s_Data.LineVertexCount)
 		{
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.LineVertexBufferPtr - (uint8_t*)s_Data.LineVertexBufferBase);
-			s_Data.LineVertexBuffer->SetData(s_Data.LineVertexBufferBase, dataSize);
+			s_Data.LineVertexBuffer->set_data(s_Data.LineVertexBufferBase, dataSize);
 
 			s_Data.LineShader->Bind();
 			render_command::set_line_width(s_Data.LineWidth);

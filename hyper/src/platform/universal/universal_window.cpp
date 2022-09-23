@@ -24,7 +24,7 @@ namespace hp
 		return new universal_window(parameters);
 	}
 	
-	universal_window::universal_window(const window_parameters& parameters) : m_window(nullptr)
+	universal_window::universal_window(const window_parameters& parameters) : m_data(), m_window(nullptr)
 	{
 		init(parameters);
 	}
@@ -107,7 +107,8 @@ namespace hp
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		
-		m_window = glfwCreateWindow(parameters.width, parameters.height, parameters.title, glfwGetPrimaryMonitor(), nullptr);
+		m_window =
+			glfwCreateWindow(parameters.width, parameters.height, parameters.title, glfwGetPrimaryMonitor(), nullptr);
 		
 		m_context = std::make_unique<opengl_context>(m_window);
 		m_context->init();

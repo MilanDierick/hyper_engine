@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.22.3)
 project(hyper)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -10,20 +10,37 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
 set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Build shared library" FORCE)
 set(SPDLOG_ENABLE_PCH ON CACHE BOOL "Build static or shared library using precompiled header to speed up compilation time" FORCE)
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Use external fmt library instead of bundled" FORCE)
+
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 set(JSON_Install OFF CACHE INTERNAL "")
+
+set(SHADERC_SKIP_INSTALL TRUE)
+set(SHADERC_SKIP_TESTS TRUE)
+set(SHADERC_SKIP_EXAMPLES TRUE)
+set(SHADERC_SKIP_COPYRIGHT_CHECK TRUE)
+
+set(SPIRV_CROSS_SHARED FALSE)
+set(SPIRV_CROSS_STATIC TRUE)
+set(SPIRV_CROSS_CLI FALSE)
+set(SPIRV_CROSS_ENABLE_TESTS FALSE)
+set(SPIRV_CROSS_ENABLE_GLSL TRUE)
+set(SPIRV_CROSS_ENABLE_HLSL TRUE)
+set(SPIRV_CROSS_ENABLE_MSL TRUE)
+set(SPIRV_CROSS_ENABLE_CPP TRUE)
+set(SPIRV_CROSS_ENABLE_REFLECT TRUE)
+set(SPIRV_CROSS_ENABLE_C_API TRUE)
+set(SPIRV_CROSS_ENABLE_UTIL TRUE)
+set(SPIRV_CROSS_SKIP_INSTALL TRUE)
 
 add_subdirectory(thirdparty/fmt)
 add_subdirectory(thirdparty/glad)
 add_subdirectory(thirdparty/glfw)
 add_subdirectory(thirdparty/glm)
-#add_subdirectory(thirdparty/glslang)
 add_subdirectory(thirdparty/json)
-#add_subdirectory(thirdparty/spirv-headers)
-#add_subdirectory(thirdparty/spirv-tools)
 add_subdirectory(thirdparty/shaderc)
 add_subdirectory(thirdparty/spdlog)
 add_subdirectory(thirdparty/spirv-cross)
@@ -49,8 +66,8 @@ set(HYPER_SOURCES_PLATFORM_OPENGL
     )
 
 set(HYPER_SOURCES_RENDERER
-    src/hyper/renderer/Buffer.cpp
-    src/hyper/renderer/Buffer.h
+    src/hyper/renderer/buffer.cpp
+    src/hyper/renderer/buffer.h
     src/hyper/renderer/Camera.h
     src/hyper/renderer/EditorCamera.cpp
     src/hyper/renderer/EditorCamera.h
