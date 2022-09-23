@@ -4,7 +4,7 @@
 
 namespace hp {
 	
-	std::shared_ptr<Framebuffer> Framebuffer::Create(const FramebufferSpecification& spec)
+	std::shared_ptr<framebuffer> framebuffer::create(const framebuffer_specification& spec)
 	{
 		switch (renderer::get_api())
 		{

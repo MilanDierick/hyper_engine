@@ -9,7 +9,6 @@
 
 namespace hp
 {
-	
 	class editor_camera : public camera
 	{
 	 public:
@@ -49,7 +48,7 @@ namespace hp
 		void update_projection();
 		void update_view();
 		
-		void on_mouse_scroll(mouse_scrolled_event_args& args);
+		void on_mouse_scroll(mouse_scrolled_event_args args);
 		
 		void mouse_pan(const glm::vec2& delta);
 		void mouse_rotate(const glm::vec2& delta);

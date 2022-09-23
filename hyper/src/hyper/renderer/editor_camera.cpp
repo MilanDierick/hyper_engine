@@ -24,6 +24,7 @@ namespace hp
 		  m_yaw(),
 		  camera(glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip))
 	{
+		input::mouse_scrolled_event.bind(&editor_camera::on_mouse_scroll, this);
 		update_view();
 	}
 	
@@ -95,7 +96,7 @@ namespace hp
 		update_view();
 	}
 	
-	void editor_camera::on_mouse_scroll(mouse_scrolled_event_args& args)
+	void editor_camera::on_mouse_scroll(mouse_scrolled_event_args args)
 	{
 		float delta = args.y_offset * 0.1F;
 		mouse_zoom(delta);

@@ -71,8 +71,8 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/camera.h
     src/hyper/renderer/editor_camera.cpp
     src/hyper/renderer/editor_camera.h
-    src/hyper/renderer/Framebuffer.cpp
-    src/hyper/renderer/Framebuffer.h
+    src/hyper/renderer/framebuffer.cpp
+    src/hyper/renderer/framebuffer.h
     src/hyper/renderer/graphics_context.cpp
     src/hyper/renderer/graphics_context.h
     src/hyper/renderer/orthographic_camera.cpp

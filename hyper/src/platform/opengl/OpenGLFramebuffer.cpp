@@ -77,24 +77,24 @@ namespace hp
 			glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, TextureTarget(multisampled), id, 0);
 		}
 		
-		static bool IsDepthFormat(FramebufferTextureFormat format)
+		static bool IsDepthFormat(framebuffer_texture_format format)
 		{
 			switch (format)
 			{
-			case FramebufferTextureFormat::DEPTH24STENCIL8:
+			case framebuffer_texture_format::DEPTH24STENCIL8:
 				return true;
 			}
 			
 			return false;
 		}
 		
-		static GLenum HazelFBTextureFormatToGL(FramebufferTextureFormat format)
+		static GLenum HazelFBTextureFormatToGL(framebuffer_texture_format format)
 		{
 			switch (format)
 			{
-			case FramebufferTextureFormat::RGBA8:
+			case framebuffer_texture_format::RGBA8:
 				return GL_RGBA8;
-			case FramebufferTextureFormat::RED_INTEGER:
+			case framebuffer_texture_format::RED_INTEGER:
 				return GL_RED_INTEGER;
 			}
 			
@@ -104,11 +104,11 @@ namespace hp
 		
 	}
 	
-	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec) : m_Specification(spec)
+	OpenGLFramebuffer::OpenGLFramebuffer(const framebuffer_specification& spec) : m_Specification(spec)
 	{
-		for (auto spec_ : m_Specification.Attachments.Attachments)
+		for (auto spec_ : m_Specification.attachments.attachments)
 		{
-			if (!utils::IsDepthFormat(spec_.TextureFormat))
+			if (!utils::IsDepthFormat(spec_.texture_format))
 				m_ColorAttachmentSpecifications.emplace_back(spec_);
 			else
 				m_DepthAttachmentSpecification = spec_;
@@ -139,9 +139,9 @@ namespace hp
 		glCreateFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		
-		bool multisample = m_Specification.Samples > 1;
+		bool multisample = m_Specification.samples > 1;
 		
-		// Attachments
+		// attachments
 		if (m_ColorAttachmentSpecifications.size())
 		{
 			m_ColorAttachments.resize(m_ColorAttachmentSpecifications.size());
@@ -150,43 +150,43 @@ namespace hp
 			for (size_t i = 0; i < m_ColorAttachments.size(); i++)
 			{
 				utils::BindTexture(multisample, m_ColorAttachments[i]);
-				switch (m_ColorAttachmentSpecifications[i].TextureFormat)
+				switch (m_ColorAttachmentSpecifications[i].texture_format)
 				{
-				case FramebufferTextureFormat::RGBA8:
+				case framebuffer_texture_format::RGBA8:
 					utils::AttachColorTexture(m_ColorAttachments[i],
-						m_Specification.Samples,
+						m_Specification.samples,
 						GL_RGBA8,
 						GL_RGBA,
-						m_Specification.Width,
-						m_Specification.Height,
+						m_Specification.width,
+						m_Specification.height,
 						i);
 					break;
-				case FramebufferTextureFormat::RED_INTEGER:
+				case framebuffer_texture_format::RED_INTEGER:
 					utils::AttachColorTexture(m_ColorAttachments[i],
-						m_Specification.Samples,
+						m_Specification.samples,
 						GL_R32I,
 						GL_RED_INTEGER,
-						m_Specification.Width,
-						m_Specification.Height,
+						m_Specification.width,
+						m_Specification.height,
 						i);
 					break;
 				}
 			}
 		}
 		
-		if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::None)
+		if (m_DepthAttachmentSpecification.texture_format != framebuffer_texture_format::None)
 		{
 			utils::CreateTextures(multisample, &m_DepthAttachment, 1);
 			utils::BindTexture(multisample, m_DepthAttachment);
-			switch (m_DepthAttachmentSpecification.TextureFormat)
+			switch (m_DepthAttachmentSpecification.texture_format)
 			{
-			case FramebufferTextureFormat::DEPTH24STENCIL8:
+			case framebuffer_texture_format::DEPTH24STENCIL8:
 				utils::AttachDepthTexture(m_DepthAttachment,
-					m_Specification.Samples,
+					m_Specification.samples,
 					GL_DEPTH24_STENCIL8,
 					GL_DEPTH_STENCIL_ATTACHMENT,
-					m_Specification.Width,
-					m_Specification.Height);
+					m_Specification.width,
+					m_Specification.height);
 				break;
 			}
 		}
@@ -205,36 +205,36 @@ namespace hp
 		}
 		
 		HP_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,
-			"Framebuffer is incomplete!");
+			"framebuffer is incomplete!");
 		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 	
-	void OpenGLFramebuffer::Bind()
+	void OpenGLFramebuffer::bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
+		glViewport(0, 0, m_Specification.width, m_Specification.height);
 	}
 	
-	void OpenGLFramebuffer::Unbind()
+	void OpenGLFramebuffer::unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 	
-	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
+	void OpenGLFramebuffer::resize(uint32_t width, uint32_t height)
 	{
 		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
 		{
 			log::warning("Attempted to rezize framebuffer to {0}, {1}", width, height);
 			return;
 		}
-		m_Specification.Width = width;
-		m_Specification.Height = height;
+		m_Specification.width  = width;
+		m_Specification.height = height;
 		
 		Invalidate();
 	}
 	
-	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
+	int OpenGLFramebuffer::read_pixel(uint32_t attachmentIndex, int x, int y)
 	{
 		HP_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
 		
@@ -245,14 +245,14 @@ namespace hp
 		
 	}
 	
-	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	void OpenGLFramebuffer::clear_attachment(uint32_t attachmentIndex, int value)
 	{
 		HP_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
 		
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
 		glClearTexImage(m_ColorAttachments[attachmentIndex],
 			0,
-			utils::HazelFBTextureFormatToGL(spec.TextureFormat),
+			utils::HazelFBTextureFormatToGL(spec.texture_format),
 			GL_INT,
 			&value);
 	}
