@@ -68,7 +68,7 @@ set(HYPER_SOURCES_PLATFORM_OPENGL
 set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/buffer.cpp
     src/hyper/renderer/buffer.h
-    src/hyper/renderer/Camera.h
+    src/hyper/renderer/camera.h
     src/hyper/renderer/EditorCamera.cpp
     src/hyper/renderer/EditorCamera.h
     src/hyper/renderer/Framebuffer.cpp

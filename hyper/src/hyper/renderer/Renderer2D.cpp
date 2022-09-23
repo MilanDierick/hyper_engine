@@ -199,11 +199,11 @@ namespace hp {
 		StartBatch();
 	}
 
-	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	void Renderer2D::BeginScene(const camera& camera, const glm::mat4& transform)
 	{
 		
 
-		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		s_Data.CameraBuffer.ViewProjection = camera.get_projection() * glm::inverse(transform);
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();

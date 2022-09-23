@@ -1,7 +1,7 @@
 #ifndef HYPER_EDITOR_CAMERA_H
 #define HYPER_EDITOR_CAMERA_H
 
-#include "hyper/renderer/Camera.h"
+#include "hyper/renderer/camera.h"
 #include "hyper/events/event.h"
 #include "hyper/events/mouse_event_args.h"
 
@@ -9,7 +9,7 @@
 
 namespace hp {
 
-	class EditorCamera : public Camera
+	class EditorCamera : public camera
 	{
 	public:
 		EditorCamera() = default;
@@ -24,7 +24,7 @@ namespace hp {
 		inline void SetViewportSize(float width, float height) { m_ViewportWidth = width; m_ViewportHeight = height; UpdateProjection(); }
 
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-		glm::mat4 GetViewProjection() const { return m_Projection * m_ViewMatrix; }
+		glm::mat4 GetViewProjection() const { return m_projection * m_ViewMatrix; }
 
 		glm::vec3 GetUpDirection() const;
 		glm::vec3 GetRightDirection() const;
