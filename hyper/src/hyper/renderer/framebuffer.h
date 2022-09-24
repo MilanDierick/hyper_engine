@@ -56,11 +56,11 @@ namespace hp
 	
 	struct framebuffer_specification
 	{
-		uint32_t                             width;
-		uint32_t                             height;
+		uint32_t width;
+		uint32_t height;
 		framebuffer_attachment_specification attachments;
-		uint32_t                             samples;
-		bool                                 swap_chain_target;
+		uint32_t samples;
+		bool swap_chain_target;
 		
 		framebuffer_specification() : width(), height(), samples(1), swap_chain_target()
 		{
@@ -87,7 +87,6 @@ namespace hp
 		virtual void clear_attachment(uint32_t attachmentIndex, int value) = 0;
 		
 		[[nodiscard]] virtual uint32_t get_color_attachment_renderer_id(uint32_t index) const = 0;
-		
 		[[nodiscard]] virtual const framebuffer_specification& get_specification() const = 0;
 		
 		static std::shared_ptr<framebuffer> create(const framebuffer_specification& spec);

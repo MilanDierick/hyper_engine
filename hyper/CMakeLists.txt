@@ -47,8 +47,8 @@ add_subdirectory(thirdparty/spirv-cross)
 add_subdirectory(thirdparty/stb)
 
 set(HYPER_SOURCES_PLATFORM_OPENGL
-    src/platform/opengl/OpenGLBuffer.cpp
-    src/platform/opengl/OpenGLBuffer.h
+    src/platform/opengl/opengl_buffer.cpp
+    src/platform/opengl/opengl_buffer.h
     src/platform/opengl/opengl_context.cpp
     src/platform/opengl/opengl_context.h
     src/platform/opengl/OpenGLFramebuffer.cpp
