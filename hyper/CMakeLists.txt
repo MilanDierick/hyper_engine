@@ -51,8 +51,8 @@ set(HYPER_SOURCES_PLATFORM_OPENGL
     src/platform/opengl/opengl_buffer.h
     src/platform/opengl/opengl_context.cpp
     src/platform/opengl/opengl_context.h
-    src/platform/opengl/OpenGLFramebuffer.cpp
-    src/platform/opengl/OpenGLFramebuffer.h
+    src/platform/opengl/opengl_framebuffer.cpp
+    src/platform/opengl/opengl_framebuffer.h
     src/platform/opengl/OpenGLRendererAPI.cpp
     src/platform/opengl/OpenGLRendererAPI.h
     src/platform/opengl/OpenGLShader.cpp
