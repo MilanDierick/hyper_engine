@@ -5,7 +5,7 @@
 
 namespace hp
 {
-	class OpenGLRendererAPI : public renderer_api
+	class opengl_renderer_api : public renderer_api
 	{
 	 public:
 		virtual void init() override;
@@ -14,8 +14,8 @@ namespace hp
 		virtual void set_clear_color(const glm::vec4& color) override;
 		virtual void clear() override;
 		
-		virtual void draw_indexed(const std::shared_ptr<vertex_array>& vertexArray, uint32_t indexCount = 0) override;
-		virtual void draw_lines(const std::shared_ptr<vertex_array>& vertexArray, uint32_t vertexCount) override;
+		virtual void draw_indexed(const std::shared_ptr<vertex_array>& vertex_array, uint32_t index_count = 0) override;
+		virtual void draw_lines(const std::shared_ptr<vertex_array>& vertex_array, uint32_t vertex_count) override;
 		
 		virtual void set_line_width(float width) override;
 	};

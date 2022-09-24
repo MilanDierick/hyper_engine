@@ -1,6 +1,6 @@
 #include "hyper/renderer/renderer_api.h"
 
-#include "platform/opengl/OpenGLRendererAPI.h"
+#include "platform/opengl/opengl_renderer_api.h"
 
 namespace hp
 {
@@ -14,7 +14,7 @@ namespace hp
 		HP_CORE_ASSERT(false, "renderer_api::None is currently not supported!");
 			return nullptr;
 		case renderer_api::API::OpenGL:
-			return std::make_unique<OpenGLRendererAPI>();
+			return std::make_unique<opengl_renderer_api>();
 		}
 		
 		HP_CORE_ASSERT(false, "Unknown renderer_api!");
