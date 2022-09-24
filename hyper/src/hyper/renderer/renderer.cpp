@@ -31,13 +31,13 @@ namespace hp
 	{
 	}
 	
-	void renderer::Submit(const std::shared_ptr<Shader>& shader,
+	void renderer::Submit(const std::shared_ptr<shader>& shader,
 		const std::shared_ptr<vertex_array>& vertexArray,
 		const glm::mat4& transform)
 	{
-		shader->Bind();
-		shader->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
-		shader->SetMat4("u_Transform", transform);
+		shader->bind();
+		shader->set_mat_4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+		shader->set_mat_4("u_Transform", transform);
 		
 		vertexArray->bind();
 		render_command::draw_indexed(vertexArray);

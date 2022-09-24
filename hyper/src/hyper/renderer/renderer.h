@@ -3,7 +3,7 @@
 
 #include "hyper/renderer/orthographic_camera.h"
 #include "hyper/renderer/render_command.h"
-#include "hyper/renderer/Shader.h"
+#include "hyper/renderer/shader.h"
 
 namespace hp {
 
@@ -18,7 +18,7 @@ namespace hp {
 		static void BeginScene(orthographic_camera& camera);
 		static void EndScene();
 
-		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<vertex_array>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
+		static void Submit(const std::shared_ptr<shader>& shader, const std::shared_ptr<vertex_array>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
 
 		static renderer_api::API get_api() { return renderer_api::GetAPI(); }
 	private:

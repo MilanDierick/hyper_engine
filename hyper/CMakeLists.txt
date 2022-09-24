@@ -55,8 +55,8 @@ set(HYPER_SOURCES_PLATFORM_OPENGL
     src/platform/opengl/opengl_framebuffer.h
     src/platform/opengl/opengl_renderer_api.cpp
     src/platform/opengl/opengl_renderer_api.h
-    src/platform/opengl/OpenGLShader.cpp
-    src/platform/opengl/OpenGLShader.h
+    src/platform/opengl/opengl_shader.cpp
+    src/platform/opengl/opengl_shader.h
     src/platform/opengl/OpenGLTexture.cpp
     src/platform/opengl/OpenGLTexture.h
     src/platform/opengl/OpenGLUniformBuffer.cpp
@@ -87,8 +87,8 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/Renderer2D.h
     src/hyper/renderer/renderer_api.cpp
     src/hyper/renderer/renderer_api.h
-    src/hyper/renderer/Shader.cpp
-    src/hyper/renderer/Shader.h
+    src/hyper/renderer/shader.cpp
+    src/hyper/renderer/shader.h
     src/hyper/renderer/Texture.cpp
     src/hyper/renderer/Texture.h
     src/hyper/renderer/UniformBuffer.cpp

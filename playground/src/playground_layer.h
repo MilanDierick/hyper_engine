@@ -30,7 +30,7 @@ namespace pg
 		
 		// Temp
 		std::shared_ptr<hp::vertex_array> m_SquareVA;
-		std::shared_ptr<hp::Shader> m_FlatColorShader;
+		std::shared_ptr<hp::shader> m_FlatColorShader;
 		
 		std::shared_ptr<hp::Texture2D> m_CheckerboardTexture;
 		

@@ -2,7 +2,7 @@
 #include "hyper/renderer/Renderer2D.h"
 
 #include "hyper/renderer/vertex_array.h"
-#include "hyper/renderer/Shader.h"
+#include "hyper/renderer/shader.h"
 #include "hyper/renderer/UniformBuffer.h"
 #include "hyper/renderer/render_command.h"
 
@@ -53,16 +53,16 @@ namespace hp {
 
 		std::shared_ptr<vertex_array> QuadVertexArray;
 		std::shared_ptr<vertex_buffer> QuadVertexBuffer;
-		std::shared_ptr<Shader> QuadShader;
+		std::shared_ptr<shader> QuadShader;
 		std::shared_ptr<Texture2D> WhiteTexture;
 
 		std::shared_ptr<vertex_array> CircleVertexArray;
 		std::shared_ptr<vertex_buffer> CircleVertexBuffer;
-		std::shared_ptr<Shader> CircleShader;
+		std::shared_ptr<shader> CircleShader;
 
 		std::shared_ptr<vertex_array> LineVertexArray;
 		std::shared_ptr<vertex_buffer> LineVertexBuffer;
-		std::shared_ptr<Shader> LineShader;
+		std::shared_ptr<shader> LineShader;
 
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
@@ -167,9 +167,9 @@ namespace hp {
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
-		s_Data.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
-		s_Data.LineShader = Shader::Create("assets/shaders/Renderer2D_Line.glsl");
+		s_Data.QuadShader = shader::create("assets/shaders/Renderer2D_Quad.glsl");
+		s_Data.CircleShader = shader::create("assets/shaders/Renderer2D_Circle.glsl");
+		s_Data.LineShader = shader::create("assets/shaders/Renderer2D_Line.glsl");
 
 		// Set first texture slot to 0
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
@@ -250,8 +250,8 @@ namespace hp {
 			// bind textures
 			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 				s_Data.TextureSlots[i]->Bind(i);
-
-			s_Data.QuadShader->Bind();
+			
+			s_Data.QuadShader->bind();
 			render_command::draw_indexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
@@ -260,8 +260,8 @@ namespace hp {
 		{
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase);
 			s_Data.CircleVertexBuffer->set_data(s_Data.CircleVertexBufferBase, dataSize);
-
-			s_Data.CircleShader->Bind();
+			
+			s_Data.CircleShader->bind();
 			render_command::draw_indexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
@@ -270,8 +270,8 @@ namespace hp {
 		{
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.LineVertexBufferPtr - (uint8_t*)s_Data.LineVertexBufferBase);
 			s_Data.LineVertexBuffer->set_data(s_Data.LineVertexBufferBase, dataSize);
-
-			s_Data.LineShader->Bind();
+			
+			s_Data.LineShader->bind();
 			render_command::set_line_width(s_Data.LineWidth);
 			render_command::draw_lines(s_Data.LineVertexArray, s_Data.LineVertexCount);
 			s_Data.Stats.DrawCalls++;
