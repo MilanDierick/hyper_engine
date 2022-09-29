@@ -8,7 +8,7 @@ Entities:
       Rotation: [0, 0, -0.638996005]
       Scale: [6.74196768, 0.46067813, 1]
     SpriteRendererComponent:
-      Color: [0.949806929, 0.455301404, 0.0660097376, 1]
+      color: [0.949806929, 0.455301404, 0.0660097376, 1]
     Rigidbody2DComponent:
       BodyType: Static
       FixedRotation: false
@@ -45,7 +45,7 @@ Entities:
       Rotation: [0, 0, -0.235084534]
       Scale: [0.361159712, 0.375572056, 0.848135769]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
+      color: [1, 1, 1, 1]
     Rigidbody2DComponent:
       BodyType: Dynamic
       FixedRotation: false
@@ -64,7 +64,7 @@ Entities:
       Rotation: [0, 0, 0.603692532]
       Scale: [6.74196959, 0.46067816, 1]
     SpriteRendererComponent:
-      Color: [0.949806929, 0.455301404, 0.0660097376, 1]
+      color: [0.949806929, 0.455301404, 0.0660097376, 1]
     Rigidbody2DComponent:
       BodyType: Static
       FixedRotation: false
@@ -83,9 +83,9 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [2.15999985, 2.15999985, 2.15999985]
     CircleRendererComponent:
-      Color: [0.934362948, 0.362345755, 0.057721246, 1]
-      Thickness: 0.100000001
-      Fade: 0.00499999989
+      color: [0.934362948, 0.362345755, 0.057721246, 1]
+      thickness: 0.100000001
+      fade: 0.00499999989
     Rigidbody2DComponent:
       BodyType: Static
       FixedRotation: false

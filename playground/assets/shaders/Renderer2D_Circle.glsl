@@ -1,6 +1,6 @@
 //--------------------------
 // - Hazel 2D -
-// Renderer2D Circle Shader
+// renderer_2d Circle Shader
 // --------------------------
 
 #type vertex
@@ -20,10 +20,10 @@ layout(std140, binding = 0) uniform Camera
 
 struct VertexOutput
 {
-	vec3 LocalPosition;
-	vec4 Color;
-	float Thickness;
-	float Fade;
+	vec3 local_position;
+	vec4 color;
+	float thickness;
+	float fade;
 };
 
 layout (location = 0) out VertexOutput Output;
@@ -31,10 +31,10 @@ layout (location = 4) out flat int v_EntityID;
 
 void main()
 {
-	Output.LocalPosition = a_LocalPosition;
-	Output.Color = a_Color;
-	Output.Thickness = a_Thickness;
-	Output.Fade = a_Fade;
+	Output.local_position = a_LocalPosition;
+	Output.color = a_Color;
+	Output.thickness = a_Thickness;
+	Output.fade = a_Fade;
 
 	v_EntityID = a_EntityID;
 
@@ -49,10 +49,10 @@ layout(location = 1) out int o_EntityID;
 
 struct VertexOutput
 {
-	vec3 LocalPosition;
-	vec4 Color;
-	float Thickness;
-	float Fade;
+	vec3 local_position;
+	vec4 color;
+	float thickness;
+	float fade;
 };
 
 layout (location = 0) in VertexOutput Input;
@@ -61,15 +61,15 @@ layout (location = 4) in flat int v_EntityID;
 void main()
 {
     // Calculate distance and fill circle with white
-    float distance = 1.0 - length(Input.LocalPosition);
-    float circle = smoothstep(0.0, Input.Fade, distance);
-    circle *= smoothstep(Input.Thickness + Input.Fade, Input.Thickness, distance);
+    float distance = 1.0 - length(Input.local_position);
+    float circle = smoothstep(0.0, Input.fade, distance);
+    circle *= smoothstep(Input.thickness + Input.fade, Input.thickness, distance);
 
 	if (circle == 0.0)
 		discard;
 
     // Set output color
-    o_Color = Input.Color;
+    o_Color = Input.color;
 	o_Color.a *= circle;
 
 	o_EntityID = v_EntityID;

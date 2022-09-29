@@ -44,9 +44,9 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [4.40999985, 4.40999985, 4.40999985]
     SpriteRendererComponent:
-      Color: [1, 0.999989986, 0.999989986, 1]
+      color: [1, 0.999989986, 0.999989986, 1]
       TexturePath: assets\textures\ChernoLogo.png
-      TilingFactor: 1
+      tiling_factor: 1
   - Entity: 6645248621277955267
     TagComponent:
       Tag: CheckerboardBG
@@ -55,6 +55,6 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [20, 20, 20]
     SpriteRendererComponent:
-      Color: [0.999989986, 1, 0.999989986, 1]
+      color: [0.999989986, 1, 0.999989986, 1]
       TexturePath: assets\textures\Checkerboard.png
-      TilingFactor: 10
+      tiling_factor: 10

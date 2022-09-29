@@ -44,7 +44,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 0, 0, 1]
+      color: [1, 0, 0, 1]
   - Entity: 6902904111259729925
     TagComponent:
       Tag: Green Square
@@ -53,4 +53,4 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [0, 1, 0, 1]
+      color: [0, 1, 0, 1]

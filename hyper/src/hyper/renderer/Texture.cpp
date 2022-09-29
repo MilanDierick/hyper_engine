@@ -5,7 +5,7 @@
 
 namespace hp
 {
-	std::shared_ptr<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+	std::shared_ptr<texture_2d> texture_2d::Create(uint32_t width, uint32_t height)
 	{
 		switch (renderer::get_api())
 		{
@@ -20,7 +20,7 @@ namespace hp
 		return nullptr;
 	}
 	
-	std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path)
+	std::shared_ptr<texture_2d> texture_2d::Create(const std::string& path)
 	{
 		switch (renderer::get_api())
 		{

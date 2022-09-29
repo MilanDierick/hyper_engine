@@ -9,7 +9,7 @@ namespace hp
 	{
 		None = 0,
 		
-		// Color
+		// color
 		RGBA8, RED_INTEGER,
 		
 		// Depth/stencil

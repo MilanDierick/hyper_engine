@@ -83,8 +83,8 @@ set(HYPER_SOURCES_RENDERER
     src/hyper/renderer/render_command.h
     src/hyper/renderer/renderer.cpp
     src/hyper/renderer/renderer.h
-    src/hyper/renderer/Renderer2D.cpp
-    src/hyper/renderer/Renderer2D.h
+    src/hyper/renderer/renderer_2d.cpp
+    src/hyper/renderer/renderer_2d.h
     src/hyper/renderer/renderer_api.cpp
     src/hyper/renderer/renderer_api.h
     src/hyper/renderer/shader.cpp

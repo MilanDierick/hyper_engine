@@ -1,6 +1,6 @@
 #include "hyper/renderer/renderer.h"
 
-#include "hyper/renderer/Renderer2D.h"
+#include "hyper/renderer/renderer_2d.h"
 
 namespace hp
 {
@@ -9,12 +9,12 @@ namespace hp
 	void renderer::Init()
 	{
 		render_command::init();
-		Renderer2D::Init();
+		renderer_2d::init();
 	}
 	
 	void renderer::Shutdown()
 	{
-		Renderer2D::Shutdown();
+		renderer_2d::shutdown();
 	}
 	
 	void renderer::OnWindowResize(uint32_t width, uint32_t height)
