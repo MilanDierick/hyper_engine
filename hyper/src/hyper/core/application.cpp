@@ -1,7 +1,6 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#include <hyper/renderer/renderer.h>
 #include "hyper/core/timer.h"
 #include "hyper/core/application.h"
 #include "hyper/core/log.h"
@@ -20,12 +19,12 @@ namespace hp
 		m_window->window_closed_event.bind(&application::on_window_closed_event, this);
 		m_window->window_resized_event.bind(&application::on_window_resized_event, this);
 		
-		renderer::Init();
+		//renderer::init(); // TODO
 	}
 	
 	application::~application()
 	{
-		renderer::Shutdown();
+		//renderer::shutdown(); // TODO
 	}
 	
 	void application::execute()
@@ -115,6 +114,6 @@ namespace hp
 		}
 		
 		m_minimized = false;
-		renderer::OnWindowResize(args.width, args.height);
+		//renderer::on_window_resize(args.width, args.height); // TODO
 	}
 }  // namespace hp

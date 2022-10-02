@@ -14,7 +14,7 @@ int main(int argc, char** argv) // NOLINT(misc-definitions-in-headers)
 	UNUSED(argc);
 	UNUSED(argv);
 	
-	hp::log::initialize();
+	hp::log::init();
 	
 	hp::log::trace("Hello Hyper!");
 	

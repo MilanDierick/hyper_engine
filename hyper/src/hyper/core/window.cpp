@@ -4,7 +4,6 @@
 #include "hyper/core/window.h"
 
 #include <utility>
-#include "platform/universal/universal_window.h"
 
 namespace hp
 {

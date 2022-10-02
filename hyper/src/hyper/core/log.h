@@ -13,7 +13,7 @@ namespace hp
 	class HP_API log final
 	{
 	public:
-		static void initialize();
+		static void init();
 
 		template<typename T>
 		constexpr static void trace(const T& message);

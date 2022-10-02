@@ -3,6 +3,8 @@
 
 #include "layer_stack.h"
 
+#include <ranges>
+
 namespace hp
 {
 	layer_stack::layer_stack() : m_layer_insert_index(0)

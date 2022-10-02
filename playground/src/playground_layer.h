@@ -26,14 +26,6 @@ namespace pg
 		void om_imgui_render() override;
 	 
 	 private:
-		hp::orthographic_camera_controller m_CameraController;
-		
-		// Temp
-		std::shared_ptr<hp::vertex_array> m_SquareVA;
-		std::shared_ptr<hp::shader> m_FlatColorShader;
-		
-		std::shared_ptr<hp::texture_2d> m_CheckerboardTexture;
-		
 		glm::vec4 m_SquareColor = { 0.2F, 0.3F, 0.8F, 1.0F };
 	};
 	

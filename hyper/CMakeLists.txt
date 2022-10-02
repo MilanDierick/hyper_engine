@@ -36,70 +36,25 @@ set(SPIRV_CROSS_ENABLE_C_API TRUE)
 set(SPIRV_CROSS_ENABLE_UTIL TRUE)
 set(SPIRV_CROSS_SKIP_INSTALL TRUE)
 
-add_subdirectory(thirdparty/fmt)
-add_subdirectory(thirdparty/glad)
-add_subdirectory(thirdparty/glfw)
-add_subdirectory(thirdparty/glm)
-add_subdirectory(thirdparty/json)
-add_subdirectory(thirdparty/shaderc)
-add_subdirectory(thirdparty/spdlog)
-add_subdirectory(thirdparty/spirv-cross)
-add_subdirectory(thirdparty/stb)
-
-set(HYPER_SOURCES_PLATFORM_OPENGL
-    src/platform/opengl/opengl_buffer.cpp
-    src/platform/opengl/opengl_buffer.h
-    src/platform/opengl/opengl_context.cpp
-    src/platform/opengl/opengl_context.h
-    src/platform/opengl/opengl_framebuffer.cpp
-    src/platform/opengl/opengl_framebuffer.h
-    src/platform/opengl/opengl_renderer_api.cpp
-    src/platform/opengl/opengl_renderer_api.h
-    src/platform/opengl/opengl_shader.cpp
-    src/platform/opengl/opengl_shader.h
-    src/platform/opengl/OpenGLTexture.cpp
-    src/platform/opengl/OpenGLTexture.h
-    src/platform/opengl/OpenGLUniformBuffer.cpp
-    src/platform/opengl/OpenGLUniformBuffer.h
-    src/platform/opengl/opengl_vertex_array.cpp
-    src/platform/opengl/opengl_vertex_array.h
-    )
+find_package(fmt REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(glm REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(Vulkan REQUIRED)
 
 set(HYPER_SOURCES_RENDERER
-    src/hyper/renderer/buffer.cpp
-    src/hyper/renderer/buffer.h
-    src/hyper/renderer/camera.h
-    src/hyper/renderer/editor_camera.cpp
-    src/hyper/renderer/editor_camera.h
-    src/hyper/renderer/framebuffer.cpp
-    src/hyper/renderer/framebuffer.h
-    src/hyper/renderer/graphics_context.cpp
-    src/hyper/renderer/graphics_context.h
-    src/hyper/renderer/orthographic_camera.cpp
-    src/hyper/renderer/orthographic_camera.h
-    src/hyper/renderer/orthographic_camera_controller.cpp
-    src/hyper/renderer/orthographic_camera_controller.h
-    src/hyper/renderer/render_command.cpp
-    src/hyper/renderer/render_command.h
-    src/hyper/renderer/renderer.cpp
-    src/hyper/renderer/renderer.h
-    src/hyper/renderer/renderer_2d.cpp
-    src/hyper/renderer/renderer_2d.h
-    src/hyper/renderer/renderer_api.cpp
-    src/hyper/renderer/renderer_api.h
-    src/hyper/renderer/shader.cpp
-    src/hyper/renderer/shader.h
-    src/hyper/renderer/Texture.cpp
-    src/hyper/renderer/Texture.h
-    src/hyper/renderer/UniformBuffer.cpp
-    src/hyper/renderer/UniformBuffer.h
-    src/hyper/renderer/vertex_array.cpp
-    src/hyper/renderer/vertex_array.h
+    
+    )
+
+set(HYPER_SOURCES_PLATFORM_VULKAN
+    src/platform/vulkan/vulkan_window.cpp
+    src/platform/vulkan/vulkan_window.h
     )
 
 add_library(hyper SHARED
-            ${HYPER_SOURCES_PLATFORM_OPENGL}
             ${HYPER_SOURCES_RENDERER}
+            ${HYPER_SOURCES_PLATFORM_VULKAN}
             include/hyper.h
             src/hyper/core/application.cpp
             src/hyper/core/application.h
@@ -123,12 +78,10 @@ add_library(hyper SHARED
             src/hyper/events/application_event_args.h
             src/hyper/events/key_event_args.h
             src/hyper/core/key_codes.h
-            src/platform/universal/universal_window.cpp
-            src/platform/universal/universal_window.h
             src/hyper/events/mouse_event_args.h
             src/hyper/core/mouse_codes.h
             src/hyper/core/input.h
-            src/platform/universal/universal_input.cpp
+            src/platform/universal/glfw_input.cpp
             src/hyper/core/timer.h)
 
 target_precompile_headers(hyper PRIVATE
@@ -140,32 +93,18 @@ target_include_directories(hyper PUBLIC
                            include
                            src
                            src/hyper/core
-                           thirdparty
-                           thirdparty/fmt/include
-                           thirdparty/glad/include
-                           thirdparty/glfw/include
-                           thirdparty/glm/
-                           thirdparty/json/include
-                           thirdparty/shaderc/glslc/src
-                           thirdparty/shaderc/libshaderc/include
-                           thirdparty/shaderc/libshaderc_util/include
-                           thirdparty/spdlog/include
-                           thirdparty/spirv-cross/include
-                           thirdparty/spirv-tools/include
-                           thirdparty/stb
                            )
 
 target_link_libraries(hyper PRIVATE
-                      fmt::fmt
-                      glad
+                      fmt
                       glfw
-                      glm::glm
-                      nlohmann_json::nlohmann_json
-                      spdlog::spdlog
-                      shaderc
-                      spirv-cross-core
-                      spirv-cross-glsl
-                      stb
+                      glm
+                      nlohmann_json
+                      spdlog
+                      )
+
+target_link_libraries(hyper PUBLIC
+                      fmt
                       )
 
 target_compile_options(hyper PRIVATE
@@ -176,7 +115,11 @@ target_compile_options(hyper PRIVATE
 target_compile_definitions(hyper PRIVATE
                            HP_DEBUG
                            DLL_EXPORT
-                           GLFW_INCLUDE_NONE
+                           GLFW_INCLUDE_VULKAN
+                           )
+
+target_compile_definitions(hyper PUBLIC
+                           SPDLOG_FMT_EXTERNAL
                            )
 
 add_custom_command(
