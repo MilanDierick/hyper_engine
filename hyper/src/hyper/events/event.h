@@ -4,6 +4,8 @@
 #ifndef PLAYGROUND_EVENT_H
 #define PLAYGROUND_EVENT_H
 
+#include "hyper/core/config.h"
+
 #include <functional>
 
 namespace hp
@@ -13,11 +15,11 @@ namespace hp
 	};
 	
 	template<typename ArgType = event_args>
-	class event
+	class HP_API event
 	{
 		using callable = typename std::function<void(ArgType)>;
 		
-		struct comparable_callable
+		struct HP_API comparable_callable
 		{
 			callable callable;
 			void* object = nullptr;

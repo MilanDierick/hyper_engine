@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22.3)
-project(playground C CXX)
+project(playground)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -11,7 +11,9 @@ add_subdirectory(hyper)
 
 add_executable(playground
                playground/src/playground_application.cpp
-               playground/src/playground_layer.cpp playground/src/playground_layer.h)
+               playground/src/playground_layer.cpp
+               playground/src/playground_layer.h
+               )
 
 target_include_directories(playground PRIVATE
                            playground/src

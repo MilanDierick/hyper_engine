@@ -10,9 +10,9 @@ namespace hp
 	layer::layer(std::string debug_name) : m_debug_name(std::move(debug_name))
 	{
 	}
-	
-	const std::string& layer::get_name() const
+
+	const std::string &layer::get_name() const
 	{
 		return m_debug_name;
 	}
-}
+}  // namespace hp

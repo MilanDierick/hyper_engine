@@ -88,7 +88,7 @@ namespace hp
 			s_glfw_initialized = true;
 		}
 
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 		glfwWindowHint(GLFW_FLOATING, GLFW_FALSE);
 		glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
@@ -97,7 +97,7 @@ namespace hp
 		glfwWindowHint(GLFW_SAMPLES, GLFW_DONT_CARE);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 		glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
