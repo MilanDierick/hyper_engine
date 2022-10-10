@@ -1,8 +1,8 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#ifndef PLAYGROUND_LAYER_STACK_H
-#define PLAYGROUND_LAYER_STACK_H
+#ifndef HYPER_LAYER_STACK_H
+#define HYPER_LAYER_STACK_H
 
 #include "layer.h"
 
@@ -38,4 +38,4 @@ namespace hp
 	
 }  // namespace hp
 
-#endif //PLAYGROUND_LAYER_STACK_H
+#endif //HYPER_LAYER_STACK_H

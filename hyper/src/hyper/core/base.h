@@ -1,8 +1,8 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#ifndef PLAYGROUND_BASE_H
-#define PLAYGROUND_BASE_H
+#ifndef HYPER_BASE_H
+#define HYPER_BASE_H
 
 #include "hyper/core/config.h"
 
@@ -25,4 +25,4 @@
 #define HP_EXPAND_MACRO(x) x
 #define HP_STRINGIFY_MACRO(x) #x
 
-#endif //PLAYGROUND_BASE_H
+#endif //HYPER_BASE_H

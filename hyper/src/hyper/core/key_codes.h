@@ -1,8 +1,8 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#ifndef PLAYGROUND_KEY_CODES_H
-#define PLAYGROUND_KEY_CODES_H
+#ifndef HYPER_KEY_CODES_H
+#define HYPER_KEY_CODES_H
 
 #include <cstdint>
 #include <ostream>
@@ -151,4 +151,4 @@ namespace hp
 	}
 }
 
-#endif //PLAYGROUND_KEY_CODES_H
+#endif //HYPER_KEY_CODES_H

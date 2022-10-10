@@ -1,8 +1,8 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#ifndef PLAYGROUND_EVENT_H
-#define PLAYGROUND_EVENT_H
+#ifndef HYPER_EVENT_H
+#define HYPER_EVENT_H
 
 #include "hyper/core/config.h"
 
@@ -183,4 +183,4 @@ namespace hp
 	};
 }
 
-#endif //PLAYGROUND_EVENT_H
+#endif //HYPER_EVENT_H

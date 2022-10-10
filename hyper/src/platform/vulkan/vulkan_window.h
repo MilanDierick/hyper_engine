@@ -1,5 +1,5 @@
-#ifndef PLAYGROUND_VULKAN_WINDOW_H
-#define PLAYGROUND_VULKAN_WINDOW_H
+#ifndef HYPER_VULKAN_WINDOW_H
+#define HYPER_VULKAN_WINDOW_H
 
 #include "hyper/core/window.h"
 #include "hyper/events/application_event_args.h"
@@ -46,4 +46,4 @@ namespace hp
 	};
 }
 
-#endif //PLAYGROUND_VULKAN_WINDOW_H
+#endif //HYPER_VULKAN_WINDOW_H

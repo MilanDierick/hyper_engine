@@ -1,8 +1,8 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#ifndef PLAYGROUND_WINDOW_H
-#define PLAYGROUND_WINDOW_H
+#ifndef HYPER_WINDOW_H
+#define HYPER_WINDOW_H
 
 #include "hyper/events/event.h"
 #include "hyper/events/application_event_args.h"
@@ -44,4 +44,4 @@ namespace hp
 	};
 }
 
-#endif //PLAYGROUND_WINDOW_H
+#endif //HYPER_WINDOW_H

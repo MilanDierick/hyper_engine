@@ -1,8 +1,8 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#ifndef PLAYGROUND_KEY_EVENT_ARGS_H
-#define PLAYGROUND_KEY_EVENT_ARGS_H
+#ifndef HYPER_KEY_EVENT_ARGS_H
+#define HYPER_KEY_EVENT_ARGS_H
 
 #include "hyper/core/key_codes.h"
 #include "event.h"
@@ -53,4 +53,4 @@ namespace hp
 }  // namespace hp
 
 
-#endif //PLAYGROUND_KEY_EVENT_ARGS_H
+#endif //HYPER_KEY_EVENT_ARGS_H
