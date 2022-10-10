@@ -48,7 +48,7 @@ add_library(hyper SHARED
             src/hyper/core/input.h
             src/platform/universal/glfw_input.cpp
             src/hyper/core/timer.h
-            src/hyper/core/arena_allocator.cpp src/hyper/core/arena_allocator.h)
+            src/hyper/core/arena_allocator.inl src/hyper/core/arena_allocator.h src/hyper/core/concepts.h)
 
 target_precompile_headers(hyper PRIVATE
                           src/hppch.cpp

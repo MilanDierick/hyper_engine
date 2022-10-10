@@ -5,6 +5,7 @@
 #define HYPER_SETTINGS_H
 
 #include "nlohmann/json.hpp"
+
 #include <string>
 
 namespace hp
@@ -28,13 +29,13 @@ namespace hp
 		settings() = default;
 		~settings() = default;
 
-		settings(const settings &other) = delete;
-		settings(settings &&other) noexcept = delete;
-		settings &operator=(const settings &other) = delete;
-		settings &operator=(settings &&other) = delete;
+		settings(const settings& other) = delete;
+		settings(settings&& other) noexcept = delete;
+		settings& operator=(const settings& other) = delete;
+		settings& operator=(settings&& other) = delete;
 
-		void read_settings_from_file(string_t &file_path);
-		void write_settings_to_file(string_t &file_path);
+		void read_settings_from_file(string_t& file_path);
+		void write_settings_to_file(string_t& file_path);
 
 		[[nodiscard]] setting_values get_value() const;
 
@@ -42,6 +43,6 @@ namespace hp
 		setting_values m_settings;
 	};
 
-}  // namespace hp
+} // namespace hp
 
 #endif //HYPER_SETTINGS_H

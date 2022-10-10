@@ -10,7 +10,7 @@ namespace hp
 {
 	class HP_API layer
 	{
-	 public:
+	public:
 		explicit layer(std::string debug_name = "Layer");
 		virtual ~layer() = default;
 
@@ -27,9 +27,9 @@ namespace hp
 
 		[[nodiscard]] const std::string& get_name() const;
 
-	 private:
+	private:
 		std::string m_debug_name;
 	};
-}  // namespace hp
+} // namespace hp
 
 #endif //HYPER_LAYER_H

@@ -7,13 +7,16 @@
 
 namespace hp
 {
-	window_parameters::window_parameters() : title("Hyper Engine"), width(2560), height(1440)
+	window_parameters::window_parameters() : title("Hyper Engine"),
+	                                         width(2560),
+	                                         height(1440)
 	{
 	}
-	
+
 	window_parameters::window_parameters(const char* title, const int32_t width, const int32_t height)
-		: title(title), width(width), height(height)
+	    : title(title),
+	      width(width),
+	      height(height)
 	{
 	}
 } // namespace hp
-

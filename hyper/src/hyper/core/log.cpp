@@ -24,4 +24,4 @@ namespace hp
 		logger_->set_level(spdlog::level::trace);
 		logger_->flush_on(spdlog::level::trace);
 	}
-}
+} // namespace hp

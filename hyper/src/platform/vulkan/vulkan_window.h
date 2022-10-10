@@ -1,3 +1,6 @@
+// Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
+// A copy of this license has been included in this project's root directory.
+
 #ifndef HYPER_VULKAN_WINDOW_H
 #define HYPER_VULKAN_WINDOW_H
 
@@ -44,6 +47,6 @@ namespace hp
 		void init(const window_parameters& parameters);
 		void shutdown() const;
 	};
-}
+} // namespace hp
 
 #endif //HYPER_VULKAN_WINDOW_H

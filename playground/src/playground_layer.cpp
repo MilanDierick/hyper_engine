@@ -6,31 +6,30 @@
 namespace pg
 {
 	playground_layer::playground_layer()
-		: layer("Playground"), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
+	    : layer("Playground"),
+	      m_SquareColor({0.2F, 0.3F, 0.8F, 1.0F})
 	{
-	
 	}
-	
+
 	void playground_layer::on_attach()
 	{
 	}
-	
+
 	void playground_layer::on_detach()
 	{
-	
 	}
-	
+
 	void playground_layer::on_update(uint64_t ticks)
 	{
 	}
-	
+
 	void playground_layer::on_render()
 	{
-		static float rotation = 0.0f;
-		rotation += 0 * 50.0f;
+		static float rotation = 0.0F;
+		rotation += 0 * 50.0F;
 	}
-	
+
 	void playground_layer::om_imgui_render()
 	{
 	}
-} // hp
+} // namespace pg

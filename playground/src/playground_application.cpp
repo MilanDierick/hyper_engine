@@ -12,12 +12,12 @@ namespace pg
 	public:
 		playground_application();
 	};
-	
+
 	playground_application::playground_application()
 	{
 		push_layer(new playground_layer());
 	}
-}  // namespace pg
+} // namespace pg
 
 hp::application* hp::create_application()
 {

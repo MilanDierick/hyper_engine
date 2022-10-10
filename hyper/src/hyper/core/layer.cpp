@@ -11,8 +11,8 @@ namespace hp
 	{
 	}
 
-	const std::string &layer::get_name() const
+	const std::string& layer::get_name() const
 	{
 		return m_debug_name;
 	}
-}  // namespace hp
+} // namespace hp

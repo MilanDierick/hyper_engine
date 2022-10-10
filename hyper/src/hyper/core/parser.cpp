@@ -6,7 +6,4 @@
 namespace hp::parser
 {
 
-}  // namespace hp
-
-
-
+} // namespace hp::parser

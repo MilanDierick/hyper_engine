@@ -1,8 +1,9 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#include <application.h>
 #include "hyper/core/input.h"
+
+#include <application.h>
 #include <cmath>
 
 namespace hp
@@ -38,7 +39,7 @@ namespace hp
 		double y_pos = NAN;
 		glfwGetCursorPos(window, &x_pos, &y_pos);
 
-		return { static_cast<float>(x_pos), static_cast<float>(y_pos) };
+		return {static_cast<float>(x_pos), static_cast<float>(y_pos)};
 	}
 
 	float input::get_mouse_x()
@@ -54,4 +55,4 @@ namespace hp
 
 		return y;
 	}
-}
+} // namespace hp

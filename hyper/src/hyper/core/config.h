@@ -49,4 +49,6 @@
 
 #define UNUSED(x) static_cast<void>(x)
 
+using single_t = int8_t;
+
 #endif //HYPER_CONFIG_H

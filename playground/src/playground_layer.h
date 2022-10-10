@@ -10,25 +10,25 @@ namespace pg
 {
 	class playground_layer final : public hp::layer
 	{
-	 public:
+	public:
 		playground_layer();
 		~playground_layer() override = default;
-		
+
 		playground_layer(const playground_layer& other) = delete;
 		playground_layer(playground_layer&& other) noexcept = delete;
 		playground_layer& operator=(const playground_layer& other) = delete;
 		playground_layer& operator=(playground_layer&& other) = delete;
-		
+
 		void on_attach() override;
 		void on_detach() override;
 		void on_update(uint64_t ticks) override;
 		void on_render() override;
 		void om_imgui_render() override;
-	 
-	 private:
-		glm::vec4 m_SquareColor = { 0.2F, 0.3F, 0.8F, 1.0F };
+
+	private:
+		glm::vec4 m_SquareColor;
 	};
-	
-}  // namespace pg
+
+} // namespace pg
 
 #endif //PLAYGROUND_PLAYGROUND_LAYER_H
