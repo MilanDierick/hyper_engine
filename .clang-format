@@ -47,6 +47,7 @@ IncludeCategories:
     CaseSensitive: true
 IndentCaseLabels: true
 IndentPPDirectives: BeforeHash
+IndentRequiresClause: false
 IndentWidth: 4
 SortIncludes: CaseInsensitive
 KeepEmptyLinesAtTheStartOfBlocks: false
@@ -73,5 +74,6 @@ SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 PackConstructorInitializers: CurrentLine
+RequiresClausePosition: WithPreceding
 TabWidth: 4
 UseTab: ForIndentation

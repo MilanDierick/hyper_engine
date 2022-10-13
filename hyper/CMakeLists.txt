@@ -74,9 +74,8 @@ target_link_libraries(hyper PUBLIC
                       )
 
 target_compile_options(hyper PRIVATE
-                       $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-                       $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
-                       /wd4251
+                       $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX /wd4251>
+                       $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
                        )
 
 target_compile_definitions(hyper PRIVATE
