@@ -8,6 +8,10 @@ find_package(nlohmann_json REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(Vulkan REQUIRED)
 
+set(HYPER_SOURCES_STL
+
+    )
+
 set(HYPER_SOURCES_RENDERER
 
     )
@@ -18,6 +22,7 @@ set(HYPER_SOURCES_PLATFORM_VULKAN
     )
 
 add_library(hyper SHARED
+            ${HYPER_SOURCES_STL}
             ${HYPER_SOURCES_RENDERER}
             ${HYPER_SOURCES_PLATFORM_VULKAN}
             include/hyper.h
@@ -48,7 +53,10 @@ add_library(hyper SHARED
             src/hyper/core/input.h
             src/platform/universal/glfw_input.cpp
             src/hyper/core/timer.h
-            src/hyper/core/arena_allocator.inl src/hyper/core/arena_allocator.h src/hyper/core/concepts.h)
+            src/hyper/core/arena_allocator.inl
+            src/hyper/core/arena_allocator.h
+            src/hyper/core/concepts.h
+            )
 
 target_precompile_headers(hyper PRIVATE
                           src/hppch.cpp
@@ -58,12 +66,10 @@ target_precompile_headers(hyper PRIVATE
 target_include_directories(hyper PUBLIC
                            include
                            src
-                           src/hyper/core
                            )
 
 target_link_libraries(hyper PRIVATE
                       glfw
-                      glm::glm
                       nlohmann_json::nlohmann_json
                       spdlog::spdlog
                       Vulkan::Vulkan
@@ -71,11 +77,12 @@ target_link_libraries(hyper PRIVATE
 
 target_link_libraries(hyper PUBLIC
                       fmt::fmt
+                      glm::glm
                       )
 
 target_compile_options(hyper PRIVATE
-                       $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX /wd4251>
-                       $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
+                       $<$<CXX_COMPILER_ID:MSVC>:/Oi /W4 /WX /wd4251>
+                       $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
                        )
 
 target_compile_definitions(hyper PRIVATE

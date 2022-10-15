@@ -109,7 +109,7 @@ namespace hp
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		m_window = glfwCreateWindow(parameters.width, parameters.height, parameters.title, glfwGetPrimaryMonitor(), nullptr);
+		m_window = glfwCreateWindow(parameters.width, parameters.height, parameters.title, nullptr, nullptr);
 
 		//m_context = std::make_unique<opengl_context>(m_window); // TODO
 		//m_context->init();

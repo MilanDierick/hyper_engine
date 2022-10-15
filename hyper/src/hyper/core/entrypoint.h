@@ -9,8 +9,6 @@
 
 #include <iostream>
 
-extern hp::application* hp::create_application();
-
 int main(int argc, char** argv) // NOLINT(misc-definitions-in-headers)
 {
 	UNUSED(argc);
@@ -18,26 +16,11 @@ int main(int argc, char** argv) // NOLINT(misc-definitions-in-headers)
 
 	hp::log::init();
 
-	struct matrix
-	{
-		int64_t x;
-		int64_t y;
-		int64_t z;
-	};
+	hp::log::trace("Hello Hyper!");
 
-	hp::log::info("Size of Matrix: {0}", sizeof(matrix));
+	hp::application* application = hp::create_application();
 
-	hp::mem::arena_allocator<30> allocator;
-
-	auto* some_matrix = allocator.allocate<matrix>();
-	auto* some_matrix2 = allocator.allocate<matrix>();
-
-	//hp::log::trace("Hello Hyper!");
-
-	//hp::application* application = hp::create_application();
-
-	//application->execute();
-	//application->terminate();
+	application->execute();
 
 	return 0;
 }

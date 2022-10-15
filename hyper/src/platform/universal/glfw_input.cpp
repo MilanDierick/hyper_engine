@@ -1,9 +1,9 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
+#include "hyper/core/application.h"
 #include "hyper/core/input.h"
 
-#include <application.h>
 #include <cmath>
 
 namespace hp

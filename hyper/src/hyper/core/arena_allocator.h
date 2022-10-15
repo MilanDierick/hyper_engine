@@ -5,27 +5,31 @@
 #define HYPER_ARENA_ALLOCATOR_H
 
 #include "hyper/core/concepts.h"
+#include "hyper/core/config.h"
 
 #include <array>
 #include <set>
 
 namespace hp::mem
 {
-	template<size_t Size> requires concepts::allocation_size<Size>
+	template<size_t Size>
+	requires concepts::allocation_size<Size>
 	class arena_allocator // TODO: Handle memory deallocation
 	{
 	public:
+		static_assert(Size > 0);
+
 		using value_type = single_t;
-		using size_type = size_t;
-		using pointer = single_t*;
+		using size_type  = size_t;
+		using pointer    = single_t*;
 
 		arena_allocator();
-		~arena_allocator() = default;
+		~arena_allocator()                                       = default;
 
-		arena_allocator(const arena_allocator& other) = delete;
-		arena_allocator(arena_allocator&& other) noexcept = delete;
+		arena_allocator(const arena_allocator& other)            = delete;
+		arena_allocator(arena_allocator&& other) noexcept        = delete;
 		arena_allocator& operator=(const arena_allocator& other) = delete;
-		arena_allocator& operator=(arena_allocator&& other) = delete;
+		arena_allocator& operator=(arena_allocator&& other)      = delete;
 
 		template<concepts::default_constructable T>
 		[[nodiscard]] constexpr T* allocate();

@@ -21,6 +21,12 @@ namespace pg
 
 	void playground_layer::on_update(uint64_t ticks)
 	{
+		UNUSED(ticks);
+
+		if (hp::input::is_key_pressed(hp::key_code::Escape))
+		{
+			hp::application::instance()->terminate();
+		}
 	}
 
 	void playground_layer::on_render()

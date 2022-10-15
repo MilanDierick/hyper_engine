@@ -8,8 +8,8 @@
 namespace hp
 {
 	window_parameters::window_parameters() : title("Hyper Engine"),
-	                                         width(2560),
-	                                         height(1440)
+	                                         width(1280),
+	                                         height(720)
 	{
 	}
 
