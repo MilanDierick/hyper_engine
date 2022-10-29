@@ -5,8 +5,8 @@ find_package(fmt CONFIG REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
 find_package(spdlog REQUIRED)
-find_package(Vulkan REQUIRED)
 
 set(HYPER_SOURCES_STL
 
@@ -16,15 +16,14 @@ set(HYPER_SOURCES_RENDERER
 
     )
 
-set(HYPER_SOURCES_PLATFORM_VULKAN
-    src/platform/vulkan/vulkan_window.cpp
-    src/platform/vulkan/vulkan_window.h
-    )
+set(HYPER_SOURCES_PLATFORM_SFML
+
+    src/platform/sfml/sfml_window.cpp src/platform/sfml/sfml_window.h)
 
 add_library(hyper SHARED
             ${HYPER_SOURCES_STL}
             ${HYPER_SOURCES_RENDERER}
-            ${HYPER_SOURCES_PLATFORM_VULKAN}
+            ${HYPER_SOURCES_PLATFORM_SFML}
             include/hyper.h
             src/hyper/core/application.cpp
             src/hyper/core/application.h
@@ -72,8 +71,11 @@ target_include_directories(hyper PUBLIC
 target_link_libraries(hyper PRIVATE
                       glfw
                       nlohmann_json::nlohmann_json
+                      sfml-system
+                      sfml-network
+                      sfml-graphics
+                      sfml-window
                       spdlog::spdlog
-                      Vulkan::Vulkan
                       )
 
 target_link_libraries(hyper PUBLIC
@@ -94,7 +96,6 @@ target_compile_definitions(hyper PRIVATE
 
 target_compile_definitions(hyper PUBLIC
                            SPDLOG_FMT_EXTERNAL
-                           HP_VULKAN_VALIDATION_LAYERS
                            )
 
 add_custom_command(
