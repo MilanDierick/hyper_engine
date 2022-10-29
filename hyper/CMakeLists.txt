@@ -30,6 +30,7 @@ add_library(hyper SHARED
             src/hyper/core/application.h
             src/hyper/core/config.h
             src/hyper/core/entrypoint.h
+            src/hyper/core/extensions.h
             src/hyper/core/log.cpp
             src/hyper/core/log.h
             src/hyper/core/parser.cpp
@@ -93,6 +94,7 @@ target_compile_definitions(hyper PRIVATE
 
 target_compile_definitions(hyper PUBLIC
                            SPDLOG_FMT_EXTERNAL
+                           HP_VULKAN_VALIDATION_LAYERS
                            )
 
 add_custom_command(

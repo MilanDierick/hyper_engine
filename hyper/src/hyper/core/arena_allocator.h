@@ -19,9 +19,9 @@ namespace hp::mem
 	public:
 		static_assert(Size > 0);
 
-		using value_type = single_t;
+		using value_type = std::byte;
 		using size_type  = size_t;
-		using pointer    = single_t*;
+		using pointer    = std::byte*;
 
 		arena_allocator();
 		~arena_allocator()                                       = default;

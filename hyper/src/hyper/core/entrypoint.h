@@ -8,6 +8,7 @@
 #include "hyper/events/event.h"
 
 #include <iostream>
+#include <memory_resource>
 
 int main(int argc, char** argv) // NOLINT(misc-definitions-in-headers)
 {

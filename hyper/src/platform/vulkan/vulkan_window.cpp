@@ -76,11 +76,35 @@ namespace hp
 
 	void vulkan_window::init(const window_parameters& parameters)
 	{
-		m_data.title = parameters.title;
-		m_data.width = parameters.width;
-		m_data.height = parameters.height;
+		init_vulkan();
+		init_glfw(parameters);
+	}
+
+	void vulkan_window::shutdown() const
+	{
+		auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(m_vulkan_instance, "vkDestroyDebugUtilsMessengerEXT"));
+
+		if (func != nullptr)
+		{
+			func(m_vulkan_instance, m_vulkan_debug_messenger, nullptr);
+		}
+		else
+		{
+			throw std::runtime_error("Vulkan extension not present!");
+		}
+
+		vkDestroyInstance(m_vulkan_instance, nullptr);
+		glfwDestroyWindow(m_window);
+		glfwTerminate();
+	}
+
+	void vulkan_window::init_glfw(const window_parameters& parameters)
+	{
+		m_data.title                  = parameters.title;
+		m_data.width                  = parameters.width;
+		m_data.height                 = parameters.height;
 		m_data.p_window_resized_event = &window_resized_event;
-		m_data.p_window_closed_event = &window_closed_event;
+		m_data.p_window_closed_event  = &window_closed_event;
 
 		log::info("Creating window {0} ({1} {2})", parameters.title, parameters.width, parameters.height);
 
@@ -121,8 +145,8 @@ namespace hp
 		        m_window,
 		        [](GLFWwindow* window, const int width, const int height)
 		        {
-			        auto* data = static_cast<window_data*>(glfwGetWindowUserPointer(window));
-			        data->width = width;
+			        auto* data   = static_cast<window_data*>(glfwGetWindowUserPointer(window));
+			        data->width  = width;
 			        data->height = height;
 
 			        const window_resized_event_args eventArgs(width, height);
@@ -220,8 +244,137 @@ namespace hp
 		        });
 	}
 
-	void vulkan_window::shutdown() const
+	void vulkan_window::init_vulkan()
 	{
-		glfwDestroyWindow(m_window);
+		create_vulkan_instance();
+	}
+
+	void vulkan_window::create_vulkan_instance()
+	{
+		auto extensions = get_required_vulkan_extensions();
+
+#ifdef HP_VULKAN_VALIDATION_LAYERS
+		if (!check_vulkan_validation_layer_support())
+		{
+			throw std::runtime_error("Validation layers requested but not available!");
+		}
+#endif
+
+		VkApplicationInfo application_info           = {};
+		application_info.sType                       = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+		application_info.pApplicationName            = "Playground";
+		application_info.applicationVersion          = VK_MAKE_VERSION(0, 0, 1);
+		application_info.pEngineName                 = "Hyper Engine";
+		application_info.engineVersion               = VK_MAKE_VERSION(0, 0, 1);
+		application_info.apiVersion                  = VK_API_VERSION_1_0;
+
+		VkInstanceCreateInfo instance_create_info    = {};
+		instance_create_info.sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+		instance_create_info.pApplicationInfo        = &application_info;
+		instance_create_info.enabledExtensionCount   = static_cast<uint32_t>(extensions.size());
+		instance_create_info.ppEnabledExtensionNames = extensions.data();
+		instance_create_info.enabledLayerCount       = 0;
+
+		// Consider handling VK_ERROR_INCOMPATIBLE_DRIVER exception when running on macOS
+		// See: https://vulkan-tutorial.com/en/Drawing_a_triangle/Setup/Instance
+		if (vkCreateInstance(&instance_create_info, nullptr, &m_vulkan_instance) != VK_SUCCESS)
+		{
+			throw std::runtime_error("failed to create instance!");
+		}
+	}
+
+#ifdef HP_VULKAN_VALIDATION_LAYERS
+	bool vulkan_window::check_vulkan_validation_layer_support()
+	{
+		// TODO: Abstract Vulkan validation layers to clean up this method and simplify validation layer usage in the future
+		const std::vector<const char*> validation_layers = {"VK_LAYER_KHRONOS_validation"};
+
+		uint32_t layer_count                             = 0;
+		vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
+
+		std::vector<VkLayerProperties> available_layers(layer_count);
+		vkEnumerateInstanceLayerProperties(&layer_count, available_layers.data());
+
+		for (const char* layer_name: validation_layers)
+		{
+			bool layer_found = false;
+
+			for (const auto& layer_properties: available_layers)
+			{
+				if (strcmp(layer_name, static_cast<const char*>(layer_properties.layerName)) == 0)
+				{
+					layer_found = true;
+					break;
+				}
+			}
+
+			if (!layer_found)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	void vulkan_window::setup_vulkan_debug_messenger()
+	{
+		VkDebugUtilsMessengerCreateInfoEXT create_info{};
+		create_info.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+		create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+		create_info.messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+		create_info.pfnUserCallback = debug_callback;
+		create_info.pUserData       = nullptr; // Optional
+
+		auto func                   = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(m_vulkan_instance, "vkCreateDebugUtilsMessengerEXT"));
+
+		if (func != nullptr)
+		{
+			if (func(m_vulkan_instance, &create_info, nullptr, &m_vulkan_debug_messenger) != VK_SUCCESS)
+			{
+				throw std::runtime_error("Failed to set up debug messenger!");
+			}
+		}
+		else
+		{
+			throw std::runtime_error("Vulkan extension not present!");
+		}
+	}
+
+	VkBool32 vulkan_window::debug_callback(VkDebugUtilsMessageSeverityFlagBitsEXT message_severity, VkDebugUtilsMessageTypeFlagsEXT message_type, const VkDebugUtilsMessengerCallbackDataEXT* p_callback_data, void* p_user_data)
+	{
+		UNUSED(message_type);
+		UNUSED(p_user_data);
+
+		if (message_severity == VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+		{
+			log::warning("Validation layer: {0}", p_callback_data->pMessage);
+		}
+		else if (message_severity == VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
+		{
+			log::error("Validation layer: {0}", p_callback_data->pMessage);
+		}
+		else if (message_severity == VK_DEBUG_UTILS_MESSAGE_SEVERITY_FLAG_BITS_MAX_ENUM_EXT)
+		{
+			log::critical("Validation layer: {0}", p_callback_data->pMessage);
+		}
+
+		return VK_FALSE;
+	}
+#endif
+
+	std::vector<const char*> vulkan_window::get_required_vulkan_extensions()
+	{
+		uint32_t glfwExtensionCount = 0;
+		const char** glfwExtensions = nullptr;
+		glfwExtensions              = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+		std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+#ifdef HP_VULKAN_VALIDATION_LAYERS
+		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+#endif
+
+		return extensions;
 	}
 } // namespace hp
