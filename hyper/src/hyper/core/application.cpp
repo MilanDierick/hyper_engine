@@ -1,6 +1,7 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
+#include <hyper/renderer/renderer.h>
 #include "hyper/core/timer.h"
 #include "hyper/core/application.h"
 #include "hyper/core/log.h"
@@ -15,16 +16,22 @@ namespace hp
 	{
 		m_instance = this;
 		m_settings.read_settings_from_file(m_settings_path);
-		m_window = std::unique_ptr<window>(window::create());
+
+		window_parameters parameters;
+		parameters.title = "Hyper Engine";
+		parameters.width = m_settings.get_value().window_width;
+		parameters.height = m_settings.get_value().window_height;
+
+		m_window = std::unique_ptr<window>(window::create(parameters));
 		m_window->window_closed_event.bind(&application::on_window_closed_event, this);
 		m_window->window_resized_event.bind(&application::on_window_resized_event, this);
-		
-		//renderer::init(); // TODO
+
+		renderer::init();
 	}
 	
 	application::~application()
 	{
-		//renderer::shutdown(); // TODO
+		renderer::shutdown();
 	}
 	
 	void application::execute()
@@ -114,6 +121,6 @@ namespace hp
 		}
 		
 		m_minimized = false;
-		//renderer::on_window_resize(args.width, args.height); // TODO
+		renderer::on_window_resize(args.width, args.height);
 	}
 }  // namespace hp

@@ -1,63 +1,22 @@
 cmake_minimum_required(VERSION 3.22.3)
 project(hyper)
 
-find_package(fmt CONFIG REQUIRED)
-find_package(glfw3 REQUIRED)
-find_package(glm CONFIG REQUIRED)
-find_package(nlohmann_json REQUIRED)
-find_package(spdlog REQUIRED)
-find_package(Vulkan REQUIRED)
+set(CMAKE_CXX_STANDARD 20)
 
-set(HYPER_SOURCES_STL
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
-    )
+add_subdirectory(thirdparty)
 
-set(HYPER_SOURCES_RENDERER
+file(GLOB_RECURSE CPPSANDBOX_SOURCE_FILES
+     "src/hyper/*.h"
+     "src/hyper/*.cpp"
+     "src/platform/*.h"
+     "src/platform/*.cpp"
+     )
 
-    )
-
-set(HYPER_SOURCES_PLATFORM_VULKAN
-    src/platform/vulkan/vulkan_window.cpp
-    src/platform/vulkan/vulkan_window.h
-    )
-
-add_library(hyper SHARED
-            ${HYPER_SOURCES_STL}
-            ${HYPER_SOURCES_RENDERER}
-            ${HYPER_SOURCES_PLATFORM_VULKAN}
-            include/hyper.h
-            src/hyper/core/application.cpp
-            src/hyper/core/application.h
-            src/hyper/core/config.h
-            src/hyper/core/entrypoint.h
-            src/hyper/core/extensions.h
-            src/hyper/core/log.cpp
-            src/hyper/core/log.h
-            src/hyper/core/parser.cpp
-            src/hyper/core/parser.h
-            src/hyper/core/settings.cpp
-            src/hyper/core/settings.h
-            src/hyper/core/asserts.h
-            src/hyper/core/base.h
-            src/hyper/core/window.cpp
-            src/hyper/core/window.h
-            src/hyper/core/layer.cpp
-            src/hyper/core/layer.h
-            src/hyper/core/layer_stack.cpp
-            src/hyper/core/layer_stack.h
-            src/hyper/events/event.h
-            src/hyper/events/application_event_args.h
-            src/hyper/events/key_event_args.h
-            src/hyper/core/key_codes.h
-            src/hyper/events/mouse_event_args.h
-            src/hyper/core/mouse_codes.h
-            src/hyper/core/input.h
-            src/platform/universal/glfw_input.cpp
-            src/hyper/core/timer.h
-            src/hyper/core/arena_allocator.inl
-            src/hyper/core/arena_allocator.h
-            src/hyper/core/concepts.h
-            )
+add_library(hyper SHARED ${CPPSANDBOX_SOURCE_FILES})
 
 target_precompile_headers(hyper PRIVATE
                           src/hppch.cpp
@@ -67,22 +26,20 @@ target_precompile_headers(hyper PRIVATE
 target_include_directories(hyper PUBLIC
                            include
                            src
+                           thirdparty/glfw/include
+                           thirdparty/glm
+                           thirdparty/imgui
+                           thirdparty/json/include
+                           thirdparty/spdlog/include
+                           thirdparty/stb
+                           thirdparty/tinyobjloader
+                           thirdparty/vk-bootstrap/src
+                           thirdparty/volk
+                           thirdparty/VulkanMemoryAllocator/include
                            )
 
-target_link_libraries(hyper PRIVATE
-                      glfw
-                      nlohmann_json::nlohmann_json
-                      spdlog::spdlog
-                      Vulkan::Vulkan
-                      )
-
-target_link_libraries(hyper PUBLIC
-                      fmt::fmt
-                      glm::glm
-                      )
-
 target_compile_options(hyper PRIVATE
-                       $<$<CXX_COMPILER_ID:MSVC>:/Oi /W4 /WX /wd4251>
+                       $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX /wd4251 /wd4100>
                        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
                        )
 
@@ -92,10 +49,11 @@ target_compile_definitions(hyper PRIVATE
                            GLFW_INCLUDE_NONE
                            )
 
-target_compile_definitions(hyper PUBLIC
-                           SPDLOG_FMT_EXTERNAL
-                           HP_VULKAN_VALIDATION_LAYERS
-                           )
+target_link_libraries(hyper PRIVATE
+                      glfw
+                      glm::glm
+                      spdlog::spdlog
+                      )
 
 add_custom_command(
 		TARGET hyper POST_BUILD

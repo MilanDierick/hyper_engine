@@ -7,7 +7,7 @@ namespace pg
 {
 	playground_layer::playground_layer()
 	    : layer("Playground"),
-	      m_SquareColor({0.2F, 0.3F, 0.8F, 1.0F})
+	      m_square_color({0.2F, 0.3F, 0.8F, 1.0F})
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace pg
 	void playground_layer::on_render()
 	{
 		static float rotation = 0.0F;
-		rotation += 0 * 50.0F;
+		rotation              += 0 * 50.0F;
 	}
 
 	void playground_layer::om_imgui_render()

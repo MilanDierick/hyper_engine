@@ -26,7 +26,7 @@ namespace pg
 		void om_imgui_render() override;
 
 	private:
-		glm::vec4 m_SquareColor;
+		glm::vec4 m_square_color;
 	};
 
 } // namespace pg

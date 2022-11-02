@@ -11,31 +11,31 @@
 namespace hp::parser
 {
 	using json_t = nlohmann::json;
-
+	
 	template<class T>
 	static json_t serialize(T object);
-
+	
 	template<class T>
 	static T deserialize(const json_t& json);
-
+	
 	template<class T>
 	json_t serialize(T object)
 	{
 		return json_t(object);
 	}
-
+	
 	template<class T>
 	T deserialize(const json_t& json)
 	{
 		return json.get<T>();
 	}
-
+	
 	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(settings::setting_values,
-	                                   version_major,
-	                                   version_minor,
-	                                   version_patch,
-	                                   window_width,
-	                                   window_height)
-} // namespace hp::parser
+		version_major,
+		version_minor,
+		version_patch,
+		window_width,
+		window_height)
+}  // namespace hp::parser
 
 #endif //HYPER_PARSER_H_

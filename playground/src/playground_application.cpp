@@ -1,7 +1,6 @@
 #ifndef PLAYGROUND_APPLICATION_H
 #define PLAYGROUND_APPLICATION_H
 
-#include "hyper.h"
 #include "hyper/core/entrypoint.h"
 #include "playground_layer.h"
 

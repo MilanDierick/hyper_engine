@@ -4,10 +4,10 @@ AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments:
   AlignCompound: true
   AcrossComments: true
-  AcrossEmptyLines: true
+  AcrossEmptyLines: false
   Enabled: true
   PadOperators: true
-AlignOperands: Align
+AlignOperands: AlignAfterOperator
 AllowAllArgumentsOnNextLine: false
 AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false

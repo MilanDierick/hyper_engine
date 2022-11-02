@@ -8,9 +8,9 @@
 
 namespace hp
 {
-	std::shared_ptr<spdlog::logger> log::logger_ = nullptr;
+	std::shared_ptr<spdlog::logger> log::s_logger = nullptr;
 
-	void log::init()
+	void log::initialize()
 	{
 		std::vector<spdlog::sink_ptr> log_sinks{};
 		log_sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
@@ -19,9 +19,9 @@ namespace hp
 		log_sinks[0]->set_pattern("[%T] [%^%l%$] %v");
 		log_sinks[1]->set_pattern("[%T] [%l] %v");
 
-		logger_ = std::make_shared<spdlog::logger>("Hyper", begin(log_sinks), end(log_sinks));
-		register_logger(logger_);
-		logger_->set_level(spdlog::level::trace);
-		logger_->flush_on(spdlog::level::trace);
+		s_logger = std::make_shared<spdlog::logger>("Hyper", begin(log_sinks), end(log_sinks));
+		register_logger(s_logger);
+		s_logger->set_level(spdlog::level::trace);
+		s_logger->flush_on(spdlog::level::trace);
 	}
-} // namespace hp
+}

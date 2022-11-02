@@ -4,8 +4,6 @@
 #ifndef HYPER_CONFIG_H
 #define HYPER_CONFIG_H
 
-#include <cstdint>
-
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 //define something for Windows (32-bit and 64-bit, this part is common)
 #ifdef _WIN64
@@ -49,11 +47,6 @@
 #define HP_API
 #endif
 
-#define HP_NODISCARD [[nodiscard]]
-#define HP_CONSTEXPR constexpr
-#define HP_NOEXCEPT noexcept
 #define UNUSED(x) static_cast<void>(x)
-
-using single_t = int8_t;
 
 #endif //HYPER_CONFIG_H

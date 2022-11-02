@@ -1,8 +1,8 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#ifndef HYPER_ASSERT_H
-#define HYPER_ASSERT_H
+#ifndef PLAYGROUND_ASSERT_H
+#define PLAYGROUND_ASSERT_H
 
 #include "hyper/core/base.h"
 #include "hyper/core/log.h"
@@ -23,4 +23,4 @@
 #define HP_CORE_ASSERT(...)
 #endif
 
-#endif //HYPER_ASSERT_H
+#endif //PLAYGROUND_ASSERT_H

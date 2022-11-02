@@ -10,10 +10,12 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <string>
+#include <utility>
 
 #endif //HYPER_HPPCH_H

@@ -9,11 +9,12 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 add_subdirectory(hyper)
 
-add_executable(playground
-               playground/src/playground_application.cpp
-               playground/src/playground_layer.cpp
-               playground/src/playground_layer.h
-               )
+file(GLOB_RECURSE PLAYGROUND_SOURCE_FILES
+     "playground/src/*.h"
+     "playground/src/*.cpp"
+     )
+
+add_executable(playground ${PLAYGROUND_SOURCE_FILES})
 
 target_include_directories(playground PRIVATE
                            playground/src
@@ -33,3 +34,5 @@ add_custom_command(
 		${CMAKE_SOURCE_DIR}/playground/assets
 		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
 )
+
+include(cmake/shaders.cmake)
