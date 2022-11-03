@@ -12,7 +12,8 @@ namespace hp
 	public:
 		enum class API
 		{
-			None = 0
+			none   = 0,
+			vulkan = 1
 		};
 
 		virtual ~renderer_api() = default;
@@ -29,13 +30,13 @@ namespace hp
 
 		static API get_api()
 		{
-			return s_API;
+			return s_api;
 		}
 
-		static std::unique_ptr<renderer_api> Create();
+		static std::unique_ptr<renderer_api> create();
 
 	private:
-		static API s_API;
+		static API s_api;
 	};
 
 } // namespace hp

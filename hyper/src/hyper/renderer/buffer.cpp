@@ -9,8 +9,8 @@ namespace hp
 	{
 		switch (renderer::get_api())
 		{
-			case renderer_api::API::None:
-				HP_CORE_ASSERT(false, "renderer_api::None is currently not supported!");
+			case renderer_api::API::none:
+				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
 				return nullptr;
 		}
 
@@ -22,8 +22,8 @@ namespace hp
 	{
 		switch (renderer::get_api())
 		{
-			case renderer_api::API::None:
-				HP_CORE_ASSERT(false, "renderer_api::None is currently not supported!");
+			case renderer_api::API::none:
+				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
 				return nullptr;
 		}
 
@@ -35,8 +35,8 @@ namespace hp
 	{
 		switch (renderer::get_api())
 		{
-			case renderer_api::API::None:
-				HP_CORE_ASSERT(false, "renderer_api::None is currently not supported!");
+			case renderer_api::API::none:
+				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
 				return nullptr;
 		}
 

@@ -2,7 +2,7 @@
 
 namespace hp
 {
-	std::unique_ptr<renderer_api> render_command::s_renderer_api = renderer_api::Create();
+	std::unique_ptr<renderer_api> render_command::s_renderer_api = renderer_api::create();
 
 	void render_command::init()
 	{

@@ -4,7 +4,6 @@
 #include "platform/vulkan/vulkan_instance_builder.h"
 
 #include "platform/vulkan/system_info.h"
-#include "platform/vulkan/vulkan_errors.h"
 
 namespace hp
 {
@@ -30,7 +29,7 @@ namespace hp
 
 	vulkan_instance_builder::vulkan_instance_builder() = default;
 
-	result<vulkan_instance> vulkan_instance_builder::build() const
+	std::optional<vulkan_instance> vulkan_instance_builder::build() const
 	{
 		const system_info system_info;
 
@@ -41,22 +40,22 @@ namespace hp
 			const VkResult result = vkEnumerateInstanceVersion(&instance_version);
 			if (result != VK_SUCCESS && m_info.required_api_version > 0)
 			{
-				return {make_error_code(vulkan_instance_error::vulkan_version_unavailable)};
+				return std::nullopt;
 			}
 
 			if (instance_version < m_info.minimum_instance_version || m_info.minimum_instance_version == 0 && instance_version < m_info.required_api_version)
 			{
 				if (VK_VERSION_MINOR(m_info.required_api_version) == 2)
 				{
-					return {make_error_code(vulkan_instance_error::vulkan_version_1_2_unavailable)};
+					return std::nullopt;
 				}
 
 				if (VK_VERSION_MINOR(m_info.required_api_version))
 				{
-					return {make_error_code(vulkan_instance_error::vulkan_version_1_1_unavailable)};
+					return std::nullopt;
 				}
 
-				return static_cast<::hp::result<vulkan_instance>>(make_error_code(vulkan_instance_error::vulkan_version_unavailable));
+				return std::nullopt;
 			}
 		}
 
@@ -134,7 +133,7 @@ namespace hp
 #endif
 			if (!khr_surface_added || !added_window_exts)
 			{
-				return {make_error_code(vulkan_instance_error::windowing_extensions_not_present)};
+				return std::nullopt;
 			}
 		}
 
@@ -142,7 +141,7 @@ namespace hp
 
 		if (!all_extensions_supported)
 		{
-			return {make_error_code(vulkan_instance_error::requested_extensions_not_present)};
+			return std::nullopt;
 		}
 
 		for (const auto& layer: m_info.enabled_layers)
@@ -159,7 +158,7 @@ namespace hp
 
 		if (!all_layers_supported)
 		{
-			return {make_error_code(vulkan_instance_error::requested_layers_not_present)};
+			return std::nullopt;
 		}
 
 		std::vector<VkBaseOutStructure*> p_next_chain;
@@ -225,7 +224,7 @@ namespace hp
 
 		if (res != VK_SUCCESS)
 		{
-			return {make_error_code(vulkan_instance_error::failed_create_instance), res};
+			return std::nullopt;
 		}
 
 		if (m_info.use_default_debug_messenger)
@@ -239,7 +238,7 @@ namespace hp
 			                                   m_info.p_allocation_callbacks);
 			if (res != VK_SUCCESS)
 			{
-				return {make_error_code(vulkan_instance_error::failed_create_debug_messenger), res};
+				return std::nullopt;
 			}
 		}
 
@@ -249,5 +248,163 @@ namespace hp
 		instance.instance_version         = instance_version;
 		instance.api_version              = api_version;
 		return instance;
+	}
+
+	vulkan_instance_builder& vulkan_instance_builder::set_app_name(const std::string& app_name)
+	{
+		if (app_name.empty())
+		{
+			m_info.app_name = "Vulkan Application";
+		}
+		else
+		{
+			m_info.app_name = app_name;
+		}
+
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_engine_name(const std::string& engine_name)
+	{
+		if (engine_name.empty())
+		{
+			m_info.engine_name = "Vulkan Engine";
+		}
+		else
+		{
+			m_info.engine_name = engine_name;
+		}
+
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_app_version(uint32_t app_version)
+	{
+		m_info.application_version = app_version;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_app_version(uint32_t major, uint32_t minor, uint32_t patch)
+	{
+		m_info.application_version = VK_MAKE_VERSION(major, minor, patch);
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_engine_version(uint32_t engine_version)
+	{
+		m_info.engine_version = engine_version;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_engine_version(uint32_t major, uint32_t minor, uint32_t patch)
+	{
+		m_info.engine_version = VK_MAKE_VERSION(major, minor, patch);
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::require_api_version(uint32_t api_version)
+	{
+		m_info.required_api_version = api_version;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::require_api_version(uint32_t major, uint32_t minor, uint32_t patch)
+	{
+		m_info.required_api_version = VK_MAKE_VERSION(major, minor, patch);
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_minimum_instance_version(uint32_t instance_version)
+	{
+		m_info.minimum_instance_version = instance_version;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_minimum_instance_version(uint32_t major, uint32_t minor, uint32_t patch)
+	{
+		m_info.minimum_instance_version = VK_MAKE_VERSION(major, minor, patch);
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::enable_layer(const std::string& layer_name)
+	{
+		if (layer_name.empty())
+		{
+			return *this;
+		}
+
+		m_info.enabled_layers.push_back(layer_name.c_str());
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::enable_extension(const std::string& extension_name)
+	{
+		if (extension_name.empty())
+		{
+			return *this;
+		}
+
+		m_info.enabled_extensions.push_back(extension_name.c_str());
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_headless(bool headless)
+	{
+		m_info.headless_context = headless;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::enable_validation_layers(bool enable)
+	{
+		m_info.enable_validation_layers = enable;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::request_validation_layers(bool request)
+	{
+		m_info.request_validation_layers = request;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::use_default_debug_messenger()
+	{
+		m_info.use_default_debug_messenger = true;
+		m_info.debug_callback              = default_debug_callback;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_debug_messenger_callback(PFN_vkDebugUtilsMessengerCallbackEXT callback)
+	{
+		m_info.debug_callback = callback;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_debug_callback_user_data(void* p_user_data)
+	{
+		m_info.p_user_data = p_user_data;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_debug_callback_severity_flags(VkDebugUtilsMessageSeverityFlagsEXT severity_flags)
+	{
+		m_info.debug_message_severity = severity_flags;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::add_debug_callback_severity_flag(VkDebugUtilsMessageSeverityFlagBitsEXT severity_flag)
+	{
+		m_info.debug_message_severity |= severity_flag;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_debug_messenger_type_flags(VkDebugUtilsMessageTypeFlagsEXT type_flags)
+	{
+		m_info.debug_message_type = type_flags;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::add_debug_messenger_type_flag(VkDebugUtilsMessageTypeFlagBitsEXT type_flag)
+	{
+		m_info.debug_message_type |= type_flag;
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::disable_validation_layer(VkValidationCheckEXT check)
+	{
+		m_info.disabled_validation_checks.push_back(check);
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::enable_validation_feature(VkValidationFeatureEnableEXT feature)
+	{
+		m_info.enabled_validation_features.push_back(feature);
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::disable_validation_feature(VkValidationFeatureDisableEXT feature)
+	{
+		m_info.disabled_validation_features.push_back(feature);
+		return *this;
+	}
+	vulkan_instance_builder& vulkan_instance_builder::set_allocation_callbacks(VkAllocationCallbacks* p_allocation_callbacks)
+	{
+		m_info.p_allocation_callbacks = p_allocation_callbacks;
+		return *this;
 	}
 } // namespace hp

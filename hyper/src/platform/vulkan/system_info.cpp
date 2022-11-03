@@ -7,7 +7,8 @@
 
 namespace hp
 {
-	system_info::system_info() : validation_layers_available(false), debug_utils_available(false)
+	system_info::system_info() : validation_layers_available(false),
+	                             debug_utils_available(false)
 	{
 		uint32_t extension_count = 0;
 		vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, nullptr);
@@ -22,21 +23,19 @@ namespace hp
 
 	bool system_info::is_layer_available(const std::string& layer_name) const
 	{
-		for (const auto& layer : available_layers)
-		{
-			// cppcoreguidelines-pro-bounds-array-to-pointer-decay
-			std::span<const char> const layer_name_span(layer.layerName);
-			return std::equal(layer_name_span.begin(), layer_name_span.end(), layer_name.begin(), layer_name.end());
-		}
+		return std::any_of(available_layers.begin(), available_layers.end(), [&](const auto& layer)
+		                   {
+			                   std::span<const char> const layer_name_span(layer.layerName);
+			                   return std::equal(layer_name.begin(), layer_name.end(), layer_name_span.begin(), layer_name_span.end());
+		                   });
 	}
 
 	bool system_info::is_extension_available(const std::string& extension_name) const
 	{
-		for (const auto& extension : available_extensions)
-		{
-			// cppcoreguidelines-pro-bounds-array-to-pointer-decay
-			std::span<const char> const extension_name_span(extension.extensionName);
-			return std::equal(extension_name_span.begin(), extension_name_span.end(), extension_name.begin(), extension_name.end());
-		}
+		return std::any_of(available_layers.begin(), available_layers.end(), [&](const auto& layer)
+		                   {
+			                   std::span<const char> const extension_name_span(layer.layerName);
+			                   return std::equal(extension_name.begin(), extension_name.end(), extension_name_span.begin(), extension_name_span.end());
+		                   });
 	}
 } // namespace hp

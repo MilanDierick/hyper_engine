@@ -4,10 +4,10 @@
 #ifndef HYPER_VULKAN_INSTANCE_BUILDER_H
 #define HYPER_VULKAN_INSTANCE_BUILDER_H
 
-#include "hyper/core/result.h"
 #include "platform/vulkan/vulkan_instance.h"
 
 #include <span>
+#include <vulkan/vulkan.h>
 
 namespace hp
 {
@@ -116,7 +116,11 @@ namespace hp
 			{
 				const std::span<const char> layer_name_span(layer_name, strlen(layer_name));
 				const std::span<const char> layer_properties_span(layer_properties.layerName, strlen(layer_properties.layerName)); // NOLINT(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
-				return std::equal(layer_name_span.begin(), layer_name_span.end(), layer_properties_span.begin());
+
+				if (std::equal(layer_name_span.begin(), layer_name_span.end(), layer_properties_span.begin()))
+				{
+					return true;
+				}
 			}
 
 			return false;
@@ -124,19 +128,10 @@ namespace hp
 
 		bool check_layers_supported(std::vector<VkLayerProperties> const& available_layers, std::vector<const char*> const& layer_names)
 		{
-			bool all_found = true;
-
-			for (const auto& layer_name: layer_names)
-			{
-				const bool found = check_layer_supported(available_layers, layer_name);
-
-				if (!found)
-				{
-					all_found = false;
-				}
-			}
-
-			return all_found;
+			return std::all_of(layer_names.begin(), layer_names.end(), [&available_layers](const char* layer_name)
+			                   {
+				                   return check_layer_supported(available_layers, layer_name);
+			                   });
 		}
 
 		bool check_extension_supported(std::vector<VkExtensionProperties> const& available_extensions, const char* extension_name)
@@ -146,31 +141,21 @@ namespace hp
 				return false;
 			}
 
-			for (const auto& extension_properties: available_extensions)
-			{
-				const std::span<const char> extension_name_span(extension_name, strlen(extension_name));
-				const std::span<const char> extension_properties_span(extension_properties.extensionName, strlen(extension_properties.extensionName)); // NOLINT(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
-				return std::equal(extension_name_span.begin(), extension_name_span.end(), extension_properties_span.begin());
-			}
+			return std::any_of(available_extensions.begin(), available_extensions.end(), [extension_name](const auto& extension_properties)
+			                   {
+				                   const std::span<const char> extension_name_span(extension_name, strlen(extension_name));
+				                   const std::span<const char> extension_properties_span(extension_properties.extensionName, strlen(extension_properties.extensionName)); // NOLINT(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
 
-			return false;
+				                   return std::equal(extension_name_span.begin(), extension_name_span.end(), extension_properties_span.begin());
+			                   });
 		}
 
 		bool check_extensions_supported(std::vector<VkExtensionProperties> const& available_extensions, std::vector<const char*> const& extension_names)
 		{
-			bool all_found = true;
-
-			for (const auto& extension_name: extension_names)
-			{
-				const bool found = check_extension_supported(available_extensions, extension_name);
-
-				if (!found)
-				{
-					all_found = false;
-				}
-			}
-
-			return all_found;
+			return std::all_of(extension_names.begin(), extension_names.end(), [&available_extensions](const char* extension_name)
+			                   {
+				                   return check_extension_supported(available_extensions, extension_name);
+			                   });
 		}
 	} // namespace detail
 
@@ -222,7 +207,7 @@ namespace hp
 	public:
 		vulkan_instance_builder();
 
-		result<vulkan_instance> build() const;
+		[[nodiscard]] std::optional<vulkan_instance> build() const;
 
 		vulkan_instance_builder& set_app_name(const std::string& app_name);
 		vulkan_instance_builder& set_engine_name(const std::string& engine_name);
@@ -240,7 +225,7 @@ namespace hp
 		vulkan_instance_builder& enable_validation_layers(bool enable = true);
 		vulkan_instance_builder& request_validation_layers(bool request = true);
 		vulkan_instance_builder& use_default_debug_messenger();
-		vulkan_instance_builder& set_debug_messenger_callback(VkDebugUtilsMessengerCallbackDataEXT callback);
+		vulkan_instance_builder& set_debug_messenger_callback(PFN_vkDebugUtilsMessengerCallbackEXT callback);
 		vulkan_instance_builder& set_debug_callback_user_data(void* p_user_data);
 		vulkan_instance_builder& set_debug_callback_severity_flags(VkDebugUtilsMessageSeverityFlagsEXT severity_flags);
 		vulkan_instance_builder& add_debug_callback_severity_flag(VkDebugUtilsMessageSeverityFlagBitsEXT severity_flag);

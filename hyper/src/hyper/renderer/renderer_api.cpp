@@ -2,15 +2,17 @@
 
 namespace hp
 {
-	renderer_api::API renderer_api::s_API = renderer_api::API::None;
+	renderer_api::API renderer_api::s_api = renderer_api::API::none;
 
-	std::unique_ptr<renderer_api> renderer_api::Create()
+	std::unique_ptr<renderer_api> renderer_api::create()
 	{
-		switch (s_API)
+		switch (s_api)
 		{
-			case renderer_api::API::None:
-				HP_CORE_ASSERT(false, "renderer_api::None is currently not supported!");
+			case renderer_api::API::none:
+				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
 				return nullptr;
+			case API::vulkan:
+				break;
 		}
 
 		HP_CORE_ASSERT(false, "Unknown renderer_api!");

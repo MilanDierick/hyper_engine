@@ -4,7 +4,7 @@
 #ifndef HYPER_VULKAN_INSTANCE_H
 #define HYPER_VULKAN_INSTANCE_H
 
-#include "platform/vulkan/vulkan_instance_builder.h"
+//#include "platform/vulkan/vulkan_instance_builder.h"
 
 #include <vulkan/vulkan.h>
 
@@ -18,13 +18,12 @@ namespace hp
 		VkDebugUtilsMessengerEXT debug_messenger;
 		VkAllocationCallbacks* allocation_callbacks;
 
-		operator VkInstance() const;
-
-	private:
 		bool headless;
 		bool supports_properties2_ext;
 		uint32_t instance_version;
 		uint32_t api_version;
+
+		explicit operator VkInstance() const;
 
 		friend class vulkan_instance_builder;
 	};
