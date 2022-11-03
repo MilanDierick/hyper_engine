@@ -41,19 +41,19 @@ namespace hp
 			const VkResult result = vkEnumerateInstanceVersion(&instance_version);
 			if (result != VK_SUCCESS && m_info.required_api_version > 0)
 			{
-				return static_cast<::hp::result<vulkan_instance>>(make_error_code(vulkan_instance_error::vulkan_version_unavailable));
+				return {make_error_code(vulkan_instance_error::vulkan_version_unavailable)};
 			}
 
 			if (instance_version < m_info.minimum_instance_version || m_info.minimum_instance_version == 0 && instance_version < m_info.required_api_version)
 			{
 				if (VK_VERSION_MINOR(m_info.required_api_version) == 2)
 				{
-					return static_cast<::hp::result<vulkan_instance>>(make_error_code(vulkan_instance_error::vulkan_version_1_2_unavailable));
+					return {make_error_code(vulkan_instance_error::vulkan_version_1_2_unavailable)};
 				}
 
 				if (VK_VERSION_MINOR(m_info.required_api_version))
 				{
-					return static_cast<::hp::result<vulkan_instance>>(make_error_code(vulkan_instance_error::vulkan_version_1_1_unavailable));
+					return {make_error_code(vulkan_instance_error::vulkan_version_1_1_unavailable)};
 				}
 
 				return static_cast<::hp::result<vulkan_instance>>(make_error_code(vulkan_instance_error::vulkan_version_unavailable));
@@ -134,7 +134,7 @@ namespace hp
 #endif
 			if (!khr_surface_added || !added_window_exts)
 			{
-				return static_cast<::hp::result<vulkan_instance>>(make_error_code(vulkan_instance_error::windowing_extensions_not_present));
+				return {make_error_code(vulkan_instance_error::windowing_extensions_not_present)};
 			}
 		}
 
@@ -142,7 +142,7 @@ namespace hp
 
 		if (!all_extensions_supported)
 		{
-			return static_cast<::hp::result<vulkan_instance>>(make_error_code(vulkan_instance_error::requested_extensions_not_present));
+			return {make_error_code(vulkan_instance_error::requested_extensions_not_present)};
 		}
 
 		for (const auto& layer: m_info.enabled_layers)
@@ -159,7 +159,7 @@ namespace hp
 
 		if (!all_layers_supported)
 		{
-			return static_cast<::hp::result<vulkan_instance>>(make_error_code(vulkan_instance_error::requested_layers_not_present));
+			return {make_error_code(vulkan_instance_error::requested_layers_not_present)};
 		}
 
 		std::vector<VkBaseOutStructure*> p_next_chain;
@@ -225,7 +225,7 @@ namespace hp
 
 		if (res != VK_SUCCESS)
 		{
-			return result<vulkan_instance>(vulkan_instance_error::failed_create_instance, res);
+			return {make_error_code(vulkan_instance_error::failed_create_instance), res};
 		}
 
 		if (m_info.use_default_debug_messenger)
@@ -239,7 +239,7 @@ namespace hp
 			                                   m_info.p_allocation_callbacks);
 			if (res != VK_SUCCESS)
 			{
-				return result<vulkan_instance>(vulkan_instance_error::failed_create_debug_messenger, res);
+				return {make_error_code(vulkan_instance_error::failed_create_debug_messenger), res};
 			}
 		}
 

@@ -27,10 +27,12 @@ namespace hp
 		result(T&& value) noexcept : m_result{std::move(value)},
 		                             m_init{true} {}
 
+		result(std::error_code code) noexcept : m_error({code}) {};
+
 		result(error error) noexcept : m_error{error},
 		                               m_init{false} {}
 
-		result(std::error_code error_code, VkResult result = VK_SUCCESS) noexcept
+		result(std::error_code error_code, VkResult result) noexcept
 		    : m_error{error_code, result},
 		      m_init{false} {}
 
