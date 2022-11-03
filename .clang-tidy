@@ -24,6 +24,7 @@ Checks: "
   
   hicpp-*,
   -hicpp-braces-around-statements,
+  -hicpp-no-array-decay,
   -hicpp-signed-bitwise,
   -hicpp-vararg,
   

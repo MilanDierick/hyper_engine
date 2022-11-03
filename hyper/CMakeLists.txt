@@ -9,6 +9,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 add_subdirectory(thirdparty)
 
+find_package(Vulkan REQUIRED)
+
 file(GLOB_RECURSE CPPSANDBOX_SOURCE_FILES
      "src/hyper/*.h"
      "src/hyper/*.cpp"
@@ -53,6 +55,7 @@ target_link_libraries(hyper PRIVATE
                       glfw
                       glm::glm
                       spdlog::spdlog
+                      Vulkan::Vulkan
                       )
 
 add_custom_command(
