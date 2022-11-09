@@ -6,7 +6,7 @@
 #include "hyper/core/application.h"
 #include "hyper/core/log.h"
 
-#define MS_PER_TICK 1000.0F / 144.0F
+#define MS_PER_TICK (1000.0F / 144.0F)
 
 namespace hp
 {
@@ -50,7 +50,7 @@ namespace hp
 			
 			previousTimePoint = currentTimePoint;
 			
-			lag += elapsedTime.count();
+			lag += static_cast<double>(elapsedTime.count());
 			
 			m_window->on_update();
 			

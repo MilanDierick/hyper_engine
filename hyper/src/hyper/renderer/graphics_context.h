@@ -1,9 +1,11 @@
 #ifndef HYPER_GRAPHICS_CONTEXT_H
 #define HYPER_GRAPHICS_CONTEXT_H
 
+#include "hyper/core/config.h"
+
 namespace hp
 {
-	class graphics_context
+	class HP_API graphics_context
 	{
 	public:
 		graphics_context()          = default;
@@ -16,8 +18,6 @@ namespace hp
 
 		virtual void init()         = 0;
 		virtual void swap_buffers() = 0;
-
-		static std::unique_ptr<graphics_context> create(void* window);
 	};
 } // namespace hp
 

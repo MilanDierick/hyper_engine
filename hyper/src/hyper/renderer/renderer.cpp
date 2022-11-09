@@ -9,7 +9,7 @@ namespace hp
 	void renderer::init()
 	{
 		render_command::init();
-		renderer_2d::init();
+		//renderer_2d::init();
 	}
 
 	void renderer::shutdown()

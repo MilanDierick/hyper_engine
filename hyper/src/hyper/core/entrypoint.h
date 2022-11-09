@@ -9,6 +9,16 @@
 
 extern hp::application* hp::create_application();
 
+/*
+ * @brief The entry point of the application.
+ *
+ * @param argc The number of arguments passed to the application.
+ * @param argv The arguments passed to the application.
+ *
+ * @return The exit code of the application.
+ *
+ * @note The entry point of the application is the main function. This function is called by the operating system when the application is started.
+ */
 int main(int argc, char** argv) // NOLINT(misc-definitions-in-headers)
 {
 	UNUSED(argc);

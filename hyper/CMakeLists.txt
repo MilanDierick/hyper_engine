@@ -48,7 +48,7 @@ target_compile_options(hyper PRIVATE
 target_compile_definitions(hyper PRIVATE
                            HP_DEBUG
                            DLL_EXPORT
-                           GLFW_INCLUDE_NONE
+                           GLFW_INCLUDE_VULKAN
                            )
 
 target_link_libraries(hyper PRIVATE
@@ -56,6 +56,7 @@ target_link_libraries(hyper PRIVATE
                       glm::glm
                       spdlog::spdlog
                       Vulkan::Vulkan
+                      vk-bootstrap
                       )
 
 add_custom_command(

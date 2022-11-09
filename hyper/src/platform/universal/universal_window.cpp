@@ -6,10 +6,10 @@
 #include "hyper/core/asserts.h"
 #include "hyper/core/input.h"
 #include "hyper/core/log.h"
-
-#include <hyper/events/key_event_args.h>
-#include <hyper/events/mouse_event_args.h>
-//#include "platform/opengl/opengl_context.h"
+#include "hyper/events/key_event_args.h"
+#include "hyper/events/mouse_event_args.h"
+#include "hyper/renderer/renderer_api.h"
+#include "platform/vulkan/vulkan_graphics_context.h"
 
 namespace hp
 {
@@ -92,6 +92,11 @@ namespace hp
 			s_glfw_initialized = true;
 		}
 
+		if (glfwVulkanSupported() == 0)
+		{
+			log::error("Vulkan is not supported on this system!");
+		}
+
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 		glfwWindowHint(GLFW_FLOATING, GLFW_FALSE);
@@ -101,7 +106,6 @@ namespace hp
 		glfwWindowHint(GLFW_SAMPLES, GLFW_DONT_CARE);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 		glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -109,10 +113,22 @@ namespace hp
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+		if (renderer_api::get_api() == renderer_api::API::vulkan)
+		{
+			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		}
+		else
+		{
+			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+		}
+
 		m_window = glfwCreateWindow(parameters.width, parameters.height, parameters.title, nullptr, nullptr);
 
-		//m_context = std::make_unique<opengl_context>(m_window);
-		//m_context->init();
+		if (renderer_api::get_api() == renderer_api::API::vulkan)
+		{
+			m_context = std::make_unique<vulkan_graphics_context>(m_window);
+			m_context->init();
+		}
 
 		glfwSetWindowUserPointer(m_window, &m_data);
 		set_vsync(false);
