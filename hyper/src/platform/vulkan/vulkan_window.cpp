@@ -1,16 +1,10 @@
 // Copyright (c) 2022 Milan Dierick | This source file is licensed under GNU GPLv3.
 // A copy of this license has been included in this project's root directory.
 
-#include "universal_window.h"
+#include "vulkan_window.h"
 
-#include "hyper/core/asserts.h"
 #include "hyper/core/input.h"
-#include "hyper/core/log.h"
-#include "hyper/events/key_event_args.h"
 #include "hyper/events/mouse_event_args.h"
-#include "hyper/renderer/renderer_api.h"
-#include "platform/vulkan/vulkan_graphics_context.h"
-#include "platform/vulkan/vulkan_window.h"
 
 namespace hp
 {
@@ -21,39 +15,34 @@ namespace hp
 		log::error("GLFW error ({0}): {1}", error, description);
 	}
 
-	window* window::create(const window_parameters& parameters)
-	{
-		return new universal_window(parameters);
-	}
-
-	universal_window::universal_window(const window_parameters& parameters) : //m_data(),
-	                                                                          m_window(nullptr)
+	vulkan_window::vulkan_window(const window_parameters& parameters) : m_data(),
+	                                                                    m_window(nullptr)
 	{
 		init(parameters);
 	}
 
-	universal_window::~universal_window()
+	vulkan_window::~vulkan_window()
 	{
 		shutdown();
 	}
 
-	void universal_window::on_update()
+	void vulkan_window::on_update()
 	{
 		glfwPollEvents();
 		m_context->swap_buffers();
 	}
 
-	uint32_t universal_window::get_width() const
+	uint32_t vulkan_window::get_width() const
 	{
-		return 0;
+		return m_data.width;
 	}
 
-	uint32_t universal_window::get_height() const
+	uint32_t vulkan_window::get_height() const
 	{
-		return 0;
+		return m_data.height;
 	}
 
-	void universal_window::set_vsync(bool enabled)
+	void vulkan_window::set_vsync(bool enabled)
 	{
 		if (enabled)
 		{
@@ -61,42 +50,46 @@ namespace hp
 		}
 		else
 		{
-			//m_data.vsync = enabled;
+			glfwSwapInterval(1);
 		}
+
+		m_data.vsync = enabled;
 	}
 
-	bool universal_window::get_vsync() const
+	bool vulkan_window::get_vsync() const
 	{
-		return false;
+		return m_data.vsync;
 	}
 
-	void* universal_window::get_native_window() const
+	void* vulkan_window::get_native_window() const
 	{
 		return m_window;
 	}
 
-	void universal_window::init(const window_parameters& parameters)
+	vulkan_graphics_context* vulkan_window::get_context() const
 	{
-		//m_data.title                  = parameters.title;
-		//m_data.width                  = parameters.width;
-		//m_data.height                 = parameters.height;
-		//m_data.p_window_resized_event = &window_resized_event;
-		//m_data.p_window_closed_event  = &window_closed_event;
+		return m_context.get();
+	}
 
-		log::info("Creating window {0} ({1} {2})", parameters.title, parameters.width, parameters.height);
+	void vulkan_window::init(const window_parameters& parameters)
+	{
+		m_data.title  = parameters.title;
+		m_data.width  = parameters.width;
+		m_data.height = parameters.height;
+		m_data.p_window_resized_event = &window_resized_event;
+		m_data.p_window_closed_event  = &window_closed_event;
+
+		log::info("Creating window {0} ({1}, {2})", m_data.title, m_data.width, m_data.height);
 
 		if (!s_glfw_initialized)
 		{
-			[[maybe_unused]] const int32_t success = glfwInit();
+			[[maybe_unused]] const auto success = glfwInit();
 			HP_CORE_ASSERT(success, "Could not initialize GLFW!")
 			glfwSetErrorCallback(glfw_error_callback);
 			s_glfw_initialized = true;
 		}
 
-		if (glfwVulkanSupported() == 0)
-		{
-			log::error("Vulkan is not supported on this system!");
-		}
+		//HP_CORE_ASSERT(glfwVulkanSupported(), "Vulkan is not supported!")
 
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
@@ -107,31 +100,14 @@ namespace hp
 		glfwWindowHint(GLFW_SAMPLES, GLFW_DONT_CARE);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 		glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
-		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		m_window = glfwCreateWindow(static_cast<int32_t>(m_data.width), static_cast<int32_t>(m_data.height), m_data.title, nullptr, nullptr);
 
-		if (renderer_api::get_api() == renderer_api::API::vulkan)
-		{
-			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		}
-		else
-		{
-			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-		}
+		//m_context = std::make_unique<vulkan_graphics_context>(m_window);
+		//m_context->init();
 
-		m_window = glfwCreateWindow(parameters.width, parameters.height, parameters.title, nullptr, nullptr);
-
-		if (renderer_api::get_api() == renderer_api::API::vulkan)
-		{
-			m_context = std::make_unique<vulkan_graphics_context>(m_window);
-			m_context->init();
-		}
-
-		//glfwSetWindowUserPointer(m_window, &m_data);
+		glfwSetWindowUserPointer(m_window, &m_data);
 		set_vsync(false);
 
 		glfwSetWindowSizeCallback(
@@ -237,8 +213,7 @@ namespace hp
 		        });
 	}
 
-	void universal_window::shutdown() const
+	void vulkan_window::shutdown() const
 	{
-		glfwDestroyWindow(m_window);
 	}
 } // namespace hp

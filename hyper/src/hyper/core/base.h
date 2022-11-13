@@ -17,7 +17,7 @@
 	#else
 		#error "Platform doesn't support debugbreak yet!"
 	#endif
-	//#define HP_ENABLE_ASSERTS
+	#define HP_ENABLE_ASSERTS
 #else
 #define HP_DEBUGBREAK()
 #endif

@@ -32,71 +32,17 @@ namespace hp
 		application& operator=(const application& other) = delete;
 		application& operator=(application&& other) = delete;
 
-		/*
-		 * @brief Executes the application.
-		 *
-		 * @note This function is responsible for running the application.
-		 */
 		void execute();
-
-		/*
-		 * @brief Terminates the application.
-		 *
-		 * @note This function is responsible for terminating the application.
-		 */
 		void terminate();
 
-		/*
-		 * @brief Pushes a layer to the application.
-		 *
-		 * @param layer The layer to push.
-		 *
-		 * @note This function is responsible for pushing a layer to the application.
-		 * @note The layer is pushed to the top of the layer stack.
-		 * @note The layer is initialized when it is pushed to the application.
-		 * @note The layer is terminated when it is popped from the application.
-		 */
 		void push_layer(layer* layer);
-
-		/*
-		 * @brief Pushes an overlay to the application.
-		 *
-		 * @param overlay The overlay to push.
-		 *
-		 * @note This function is responsible for pushing an overlay to the application.
-		 * @note The overlay is pushed to the top of the layer stack.
-		 * @note The overlay is initialized when it is pushed to the application.
-		 * @note The overlay is terminated when it is popped from the application.
-		 */
 		void push_overlay(layer* layer);
 
-		/*
-		 * @brief Gets the application's window.
-		 *
-		 * @return The application's window.
-		 */
 		[[nodiscard]] window& get_window() const;
-
-		/*
-		 * @brief Gets an instance of the application.
-		 *
-		 * @return An instance of the application.
-		 */
 		[[nodiscard]] static application* instance();
 
 	private:
-		/*
-		 * @brief Event handler for the application's window close event.
-		 *
-		 * @param args The event arguments.
-		 */
 		void on_window_closed_event(window_closed_event_args args);
-
-		/*
-		 * @brief Event handler for the application's window resize event.
-		 *
-		 * @param args The event arguments.
-		 */
 		void on_window_resized_event(window_resized_event_args args);
 
 		static application* m_instance;
@@ -108,13 +54,6 @@ namespace hp
 		std::unique_ptr<window> m_window;
 	};
 
-	/*
-	 * @brief Creates an application.
-	 *
-	 * @return An application.
-	 *
-	 * @note This function is implemented by the client application.
-	 */
 	extern application* create_application();
 } // namespace hp
 

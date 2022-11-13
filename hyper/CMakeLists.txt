@@ -52,6 +52,7 @@ target_compile_definitions(hyper PRIVATE
                            )
 
 target_link_libraries(hyper PRIVATE
+                      fmt::fmt
                       glfw
                       glm::glm
                       spdlog::spdlog

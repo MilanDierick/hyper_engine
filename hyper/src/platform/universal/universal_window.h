@@ -11,16 +11,16 @@
 
 namespace hp
 {
-	struct HP_API window_data
-	{
-		const char* title;
-		uint32_t width;
-		uint32_t height;
-		bool vsync;
-
-		event<window_resized_event_args>* p_window_resized_event;
-		event<window_closed_event_args>* p_window_closed_event;
-	};
+	//struct HP_API window_data
+	//{
+	//	const char* title;
+	//	uint32_t width;
+	//	uint32_t height;
+	//	bool vsync;
+	//
+	//	event<window_resized_event_args>* p_window_resized_event;
+	//	event<window_closed_event_args>* p_window_closed_event;
+	//};
 
 	class HP_API universal_window : public window
 	{
@@ -40,9 +40,10 @@ namespace hp
 		void set_vsync(bool enabled) override;
 		[[nodiscard]] bool get_vsync() const override;
 		[[nodiscard]] void* get_native_window() const override;
+		[[nodiscard]] graphics_context* get_context() const;
 
 	private:
-		window_data m_data;
+		//window_data m_data;
 		GLFWwindow* m_window;
 		std::unique_ptr<graphics_context> m_context;
 

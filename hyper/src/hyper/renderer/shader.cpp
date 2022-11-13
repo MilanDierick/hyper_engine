@@ -1,6 +1,7 @@
 #include "hyper/renderer/shader.h"
 
 #include "hyper/renderer/renderer.h"
+#include "platform/vulkan/vulkan_shader.h"
 
 namespace hp
 {
@@ -11,6 +12,8 @@ namespace hp
 			case renderer_api::API::none:
 				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
 				return nullptr;
+			case renderer_api::API::vulkan:
+				return std::make_shared<vulkan_shader>(filepath);
 		}
 
 		HP_CORE_ASSERT(false, "Unknown renderer_api!");
