@@ -21,10 +21,10 @@ namespace hp
 		log::error("GLFW error ({0}): {1}", error, description);
 	}
 
-	window* window::create(const window_parameters& parameters)
-	{
-		return new universal_window(parameters);
-	}
+	//window* window::create(const window_parameters& parameters)
+	//{
+	//	return new vulkan_window(parameters);
+	//}
 
 	universal_window::universal_window(const window_parameters& parameters) : //m_data(),
 	                                                                          m_window(nullptr)

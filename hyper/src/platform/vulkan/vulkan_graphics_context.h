@@ -26,7 +26,10 @@ namespace hp
 		void init() override;
 		void swap_buffers() override;
 
-		[[nodiscard]] const vkb::Device& get_device() const;
+		vkb::Device get_device();
+
+		void record_command_buffer(VkCommandBuffer command_buffer, uint32_t image_index);
+		void draw_frame();
 
 	private:
 		GLFWwindow* m_p_window_handle;
@@ -36,10 +39,15 @@ namespace hp
 		VkQueue m_graphics_queue;
 		VkQueue m_present_queue;
 		vkb::Swapchain m_swapchain;
-		VkPipeline m_pipeline;
 		VkPipelineLayout m_pipeline_layout;
 		VkRenderPass m_render_pass;
 		VkPipeline m_graphics_pipeline;
+		std::vector<VkFramebuffer> m_swapchain_framebuffers;
+		VkCommandPool m_command_pool;
+		VkCommandBuffer m_command_buffer;
+		VkSemaphore m_image_available_semaphore;
+		VkSemaphore m_render_finished_semaphore;
+		VkFence m_in_flight_fence;
 
 		vkb::Instance create_instance();
 		VkSurfaceKHR create_surface();
@@ -49,6 +57,10 @@ namespace hp
 		vkb::Swapchain create_swapchain();
 		VkPipeline create_graphics_pipeline();
 		VkRenderPass create_render_pass();
+		std::vector<VkFramebuffer> create_framebuffers();
+		VkCommandPool create_command_pool();
+		VkCommandBuffer create_command_buffer();
+		void create_sync_objects();
 	};
 } // namespace hp
 

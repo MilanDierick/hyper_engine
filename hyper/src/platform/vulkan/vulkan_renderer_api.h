@@ -29,8 +29,6 @@ namespace hp
 		void draw_lines(const std::shared_ptr<vertex_array>& vertex_array, uint32_t vertex_count) override;
 
 		void set_line_width(float width) override;
-
-		// 275 * 275 * 256 bytes =
 	};
 } // namespace hp
 

@@ -35,4 +35,11 @@ add_custom_command(
 		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
 )
 
+add_custom_command(
+		TARGET playground POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_SOURCE_DIR}/shaders
+		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets/shaders
+)
+
 include(cmake/shaders.cmake)

@@ -7,13 +7,15 @@
 #include "hyper/renderer/shader.h"
 
 #include <vulkan/vulkan.h>
+#include <VkBootstrap.h>
 
 namespace hp
 {
-	class vulkan_shader : public shader
+	class HP_API vulkan_shader : public shader
 	{
 	public:
 		explicit vulkan_shader(const std::string& filepath);
+		vulkan_shader(const std::string& filepath, vkb::Device* device);
 		~vulkan_shader() override;
 
 		vulkan_shader(const vulkan_shader& other)            = default;
@@ -30,13 +32,14 @@ namespace hp
 		void set_float_3(const std::string& name, const glm::vec3& value) override;
 		void set_float_4(const std::string& name, const glm::vec4& value) override;
 		void set_mat_4(const std::string& name, const glm::mat4& value) override;
-		const std::string& get_name() const override;
+		[[nodiscard]] const std::string& get_name() const override;
 
 		// Implicit cast operator
 		explicit operator VkShaderModule() const;
 
 	private:
 		VkShaderModule m_shader_module;
+		VkDevice m_device;
 		std::string m_name;
 
 		std::vector<char> load_bytecode_from_filepath(const std::string& filepath);

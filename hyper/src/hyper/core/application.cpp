@@ -8,6 +8,8 @@
 
 #define MS_PER_TICK (1000.0F / 144.0F)
 
+#include "platform/vulkan/vulkan_renderer.h"
+
 namespace hp
 {
 	application* application::m_instance = nullptr;
@@ -26,7 +28,7 @@ namespace hp
 		m_window->window_closed_event.bind(&application::on_window_closed_event, this);
 		m_window->window_resized_event.bind(&application::on_window_resized_event, this);
 
-		renderer::init();
+		vulkan_renderer::get_instance().init();
 	}
 	
 	application::~application()
@@ -69,7 +71,9 @@ namespace hp
 				
 				lag -= MS_PER_TICK;
 			}
-			
+
+			vulkan_renderer::get_instance().draw_frame();
+
 			for (layer* layer : m_layerstack)
 			{
 				layer->on_render();

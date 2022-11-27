@@ -15,6 +15,11 @@ namespace hp
 		log::error("GLFW error ({0}): {1}", error, description);
 	}
 
+	window* window::create(const window_parameters& parameters)
+	{
+		return new vulkan_window(parameters);
+	}
+
 	vulkan_window::vulkan_window(const window_parameters& parameters) : m_data(),
 	                                                                    m_window(nullptr)
 	{
@@ -89,26 +94,18 @@ namespace hp
 			s_glfw_initialized = true;
 		}
 
-		//HP_CORE_ASSERT(glfwVulkanSupported(), "Vulkan is not supported!")
+		HP_CORE_ASSERT(glfwVulkanSupported(), "Vulkan is not supported!")
 
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
-		glfwWindowHint(GLFW_FLOATING, GLFW_FALSE);
-		glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
-		glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-		glfwWindowHint(GLFW_STEREO, GLFW_FALSE);
-		glfwWindowHint(GLFW_SAMPLES, GLFW_DONT_CARE);
-		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-		glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 		m_window = glfwCreateWindow(static_cast<int32_t>(m_data.width), static_cast<int32_t>(m_data.height), m_data.title, nullptr, nullptr);
 
-		//m_context = std::make_unique<vulkan_graphics_context>(m_window);
-		//m_context->init();
+		m_context = std::make_unique<vulkan_graphics_context>(m_window);
+		m_context->init();
 
 		glfwSetWindowUserPointer(m_window, &m_data);
-		set_vsync(false);
+		//set_vsync(false);
 
 		glfwSetWindowSizeCallback(
 		        m_window,

@@ -8,15 +8,19 @@
 
 namespace hp
 {
-	vulkan_shader::vulkan_shader(const std::string& filepath)
+	vulkan_shader::vulkan_shader(const std::string& filepath) : m_device()
+	{
+		m_shader_module = create_shader_module(load_bytecode_from_filepath(filepath));
+	}
+
+	vulkan_shader::vulkan_shader(const std::string& filepath, vkb::Device* device) : m_device(device->device)
 	{
 		m_shader_module = create_shader_module(load_bytecode_from_filepath(filepath));
 	}
 
 	vulkan_shader::~vulkan_shader()
 	{
-		auto* vulkan_window = dynamic_cast<class vulkan_window*>(&application::instance()->get_window());
-		vkDestroyShaderModule(vulkan_window->get_context()->get_device(), m_shader_module, nullptr);
+		vkDestroyShaderModule(m_device, m_shader_module, nullptr);
 	}
 
 	vulkan_shader::operator VkShaderModule() const
@@ -46,7 +50,11 @@ namespace hp
 
 	VkShaderModule vulkan_shader::create_shader_module(const std::vector<char>& bytecode)
 	{
-		auto* vulkan_window = dynamic_cast<class vulkan_window*>(&application::instance()->get_window());
+		if (m_device == nullptr)
+		{
+			auto* vulkan_window = dynamic_cast<class vulkan_window*>(&application::instance()->get_window());
+			m_device = vulkan_window->get_context()->get_device().device;
+		}
 
 		VkShaderModuleCreateInfo create_info{};
 		create_info.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -54,7 +62,7 @@ namespace hp
 		create_info.pCode    = reinterpret_cast<const uint32_t*>(bytecode.data());
 
 		VkShaderModule shader_module = VK_NULL_HANDLE;
-		if (vkCreateShaderModule(vulkan_window->get_context()->get_device(), &create_info, nullptr, &shader_module) != VK_SUCCESS)
+		if (vkCreateShaderModule(m_device, &create_info, nullptr, &shader_module) != VK_SUCCESS)
 		{
 			throw std::runtime_error("Failed to create shader module!");
 		}

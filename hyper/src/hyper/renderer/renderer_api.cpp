@@ -1,6 +1,6 @@
 #include "hyper/renderer/renderer_api.h"
 
-#include "platform/vulkan/vulkan_renderer_api.h"
+#include <platform/vulkan/vulkan_renderer_api.h>
 
 namespace hp
 {
@@ -13,9 +13,8 @@ namespace hp
 			case renderer_api::API::none:
 				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
 				return nullptr;
-			case API::vulkan:
+			case renderer_api::API::vulkan:
 				return std::make_unique<vulkan_renderer_api>();
-				break;
 		}
 
 		HP_CORE_ASSERT(false, "Unknown renderer_api!");
