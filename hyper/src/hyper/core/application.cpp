@@ -14,15 +14,14 @@ namespace hp
 {
 	application* application::m_instance = nullptr;
 	
-	application::application() : m_is_running(true), m_minimized(false), m_settings_path("settings.json"), m_settings()
+	application::application() : m_is_running(true), m_minimized(false), m_settings_path("settings.json")
 	{
 		m_instance = this;
-		m_settings.read_settings_from_file(m_settings_path);
 
 		window_parameters parameters;
 		parameters.title = "Hyper Engine";
-		parameters.width = m_settings.get_value().window_width;
-		parameters.height = m_settings.get_value().window_height;
+		parameters.width = 1920;
+		parameters.height = 1080;
 
 		m_window = std::unique_ptr<window>(window::create(parameters));
 		m_window->window_closed_event.bind(&application::on_window_closed_event, this);
@@ -85,7 +84,6 @@ namespace hp
 	{
 		log::info("application termination requested...");
 		m_is_running = false;
-		m_settings.write_settings_to_file(m_settings_path); // settings changed after this point won't be saved.
 	}
 	
 	void application::push_layer(layer* layer)

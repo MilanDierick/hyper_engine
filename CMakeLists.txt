@@ -9,6 +9,12 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 add_subdirectory(hyper)
 
+find_package(glfw3 CONFIG REQUIRED)
+find_package(GLM CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(Vulkan REQUIRED)
+
 file(GLOB_RECURSE PLAYGROUND_SOURCE_FILES
      "playground/src/*.h"
      "playground/src/*.cpp"

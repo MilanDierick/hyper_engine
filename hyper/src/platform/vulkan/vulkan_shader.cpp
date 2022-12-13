@@ -80,30 +80,45 @@ namespace hp
 
 	void vulkan_shader::set_int(const std::string& name, int value)
 	{
+		UNUSED(name);
+		UNUSED(value);
 	}
 
 	void vulkan_shader::set_int_array(const std::string& name, int* values, uint32_t count)
 	{
+		UNUSED(name);
+		UNUSED(values);
+		UNUSED(count);
 	}
 
 	void vulkan_shader::set_float(const std::string& name, float value)
 	{
+		UNUSED(name);
+		UNUSED(value);
 	}
 
 	void vulkan_shader::set_float_2(const std::string& name, const glm::vec2& value)
 	{
+		UNUSED(name);
+		UNUSED(value);
 	}
 
 	void vulkan_shader::set_float_3(const std::string& name, const glm::vec3& value)
 	{
+		UNUSED(name);
+		UNUSED(value);
 	}
 
 	void vulkan_shader::set_float_4(const std::string& name, const glm::vec4& value)
 	{
+		UNUSED(name);
+		UNUSED(value);
 	}
 
 	void vulkan_shader::set_mat_4(const std::string& name, const glm::mat4& value)
 	{
+		UNUSED(name);
+		UNUSED(value);
 	}
 
 	const std::string& vulkan_shader::get_name() const

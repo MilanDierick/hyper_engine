@@ -11,6 +11,8 @@ namespace hp
 			case renderer_api::API::none:
 				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
 				return nullptr;
+			case renderer_api::API::vulkan:
+				break;
 		}
 
 		HP_CORE_ASSERT(false, "Unknown renderer API!");

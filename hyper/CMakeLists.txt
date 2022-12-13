@@ -7,9 +7,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
-add_subdirectory(thirdparty)
+add_subdirectory(thirdparty/vk-bootstrap)
 
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 find_package(Vulkan REQUIRED)
+
+add_library(glfw::glfw ALIAS glfw)
 
 file(GLOB_RECURSE CPPSANDBOX_SOURCE_FILES
      "src/hyper/*.h"
@@ -28,16 +34,7 @@ target_precompile_headers(hyper PRIVATE
 target_include_directories(hyper PUBLIC
                            include
                            src
-                           thirdparty/glfw/include
-                           thirdparty/glm
-                           thirdparty/imgui
-                           thirdparty/json/include
-                           thirdparty/spdlog/include
-                           thirdparty/stb
-                           thirdparty/tinyobjloader
                            thirdparty/vk-bootstrap/src
-                           thirdparty/volk
-                           thirdparty/VulkanMemoryAllocator/include
                            )
 
 target_compile_options(hyper PRIVATE
@@ -51,8 +48,8 @@ target_compile_definitions(hyper PRIVATE
                            GLFW_INCLUDE_VULKAN
                            )
 
-target_link_libraries(hyper PRIVATE
-                      glfw
+target_link_libraries(hyper PUBLIC
+                      glfw::glfw
                       glm::glm
                       spdlog::spdlog
                       Vulkan::Vulkan

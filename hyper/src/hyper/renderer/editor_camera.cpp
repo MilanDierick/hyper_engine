@@ -10,17 +10,17 @@
 namespace hp
 {
 	editor_camera::editor_camera(float fov, float aspect_ratio, float near_clip, float far_clip)
-	    : m_fov(fov),
-	      m_aspect_ratio(aspect_ratio),
-	      m_near_clip(near_clip),
-	      m_far_clip(far_clip),
+	    : camera(glm::perspective(glm::radians(fov), aspect_ratio, near_clip, far_clip)),
 	      m_view_matrix(),
 	      m_position(),
 	      m_focal_point(),
 	      m_initial_mouse_position(),
+	      m_fov(fov),
+	      m_aspect_ratio(aspect_ratio),
+	      m_near_clip(near_clip),
+	      m_far_clip(far_clip),
 	      m_pitch(),
-	      m_yaw(),
-	      camera(glm::perspective(glm::radians(fov), aspect_ratio, near_clip, far_clip))
+	      m_yaw()
 	{
 		input::mouse_scrolled_event.bind(&editor_camera::on_mouse_scroll, this);
 		update_view();

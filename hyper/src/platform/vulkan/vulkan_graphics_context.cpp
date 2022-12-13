@@ -86,7 +86,7 @@ namespace hp
 		render_pass_info.renderArea.offset = {0, 0};
 		render_pass_info.renderArea.extent = m_swapchain.extent;
 
-		const VkClearValue clear_color   = {0.0F, 0.0F, 0.0F, 1.0F};
+		const VkClearValue clear_color   = {};
 		render_pass_info.clearValueCount = 1;
 		render_pass_info.pClearValues    = &clear_color;
 

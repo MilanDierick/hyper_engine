@@ -7,20 +7,14 @@
 #include "hyper/core/config.h"
 #include "hyper/core/layer.h"
 #include "hyper/core/layer_stack.h"
-#include "hyper/core/settings.h"
 #include "hyper/core/window.h"
 #include "hyper/events/application_event_args.h"
 
+#include <memory>
 #include <string>
 
 namespace hp
 {
-	/*
-	 * @brief The application class.
-	 *
-	 * @note The application class is the base class for all applications. It is responsible for managing the application's window and layers.
-	 * @note The application class is a singleton class. Only one instance of the application class can exist at a time.
-	 */
 	class HP_API application
 	{
 	public:
@@ -49,7 +43,6 @@ namespace hp
 		bool m_is_running;
 		bool m_minimized;
 		std::string m_settings_path;
-		settings m_settings;
 		layer_stack m_layerstack;
 		std::unique_ptr<window> m_window;
 	};

@@ -22,11 +22,17 @@ namespace hp
 
 	std::shared_ptr<shader> shader::create(const std::string& name, const std::string& vertex_src, const std::string& fragment_src)
 	{
+		UNUSED(name);
+		UNUSED(vertex_src);
+		UNUSED(fragment_src);
+
 		switch (renderer::get_api())
 		{
 			case renderer_api::API::none:
 				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
 				return nullptr;
+			case renderer_api::API::vulkan:
+				break;
 		}
 
 		HP_CORE_ASSERT(false, "Unknown renderer_api!");
