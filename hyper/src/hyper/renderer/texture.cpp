@@ -6,8 +6,8 @@ namespace hp
 {
 	std::shared_ptr<texture_2d> texture_2d::create(uint32_t width, uint32_t height)
 	{
-		UNUSED(width);
-		UNUSED(height);
+		hp_unused(width);
+		hp_unused(height);
 
 		switch (renderer::get_api())
 		{
@@ -24,7 +24,7 @@ namespace hp
 
 	std::shared_ptr<texture_2d> texture_2d::create(const std::string& path)
 	{
-		UNUSED(path);
+		hp_unused(path);
 
 		switch (renderer::get_api())
 		{

@@ -110,7 +110,7 @@ namespace hp
 	
 	void application::on_window_closed_event(window_closed_event_args args)
 	{
-		UNUSED(args);
+		hp_unused(args);
 		m_is_running = false;
 	}
 	

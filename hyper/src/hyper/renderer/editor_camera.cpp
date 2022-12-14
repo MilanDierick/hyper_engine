@@ -69,7 +69,7 @@ namespace hp
 
 	void editor_camera::on_update(uint64_t ticks)
 	{
-		UNUSED(ticks);
+		hp_unused(ticks);
 
 		if (input::is_key_pressed(key_code::LeftAlt))
 		{

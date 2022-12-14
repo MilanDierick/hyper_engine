@@ -7,7 +7,7 @@ namespace hp
 
 	std::shared_ptr<vertex_buffer> vertex_buffer::create(uint32_t size)
 	{
-		UNUSED(size);
+		hp_unused(size);
 
 		switch (renderer::get_api())
 		{
@@ -24,8 +24,8 @@ namespace hp
 
 	std::shared_ptr<vertex_buffer> vertex_buffer::create(float* vertices, uint32_t size)
 	{
-		UNUSED(vertices);
-		UNUSED(size);
+		hp_unused(vertices);
+		hp_unused(size);
 
 		switch (renderer::get_api())
 		{
@@ -42,8 +42,8 @@ namespace hp
 
 	std::shared_ptr<index_buffer> index_buffer::create(uint32_t* indices, uint32_t count)
 	{
-		UNUSED(indices);
-		UNUSED(count);
+		hp_unused(indices);
+		hp_unused(count);
 
 		switch (renderer::get_api())
 		{

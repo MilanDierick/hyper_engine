@@ -8,7 +8,7 @@ namespace hp
 
 	std::shared_ptr<framebuffer> framebuffer::create(const framebuffer_specification& spec)
 	{
-		UNUSED(spec);
+		hp_unused(spec);
 
 		switch (renderer::get_api())
 		{

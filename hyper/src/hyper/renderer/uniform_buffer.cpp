@@ -6,8 +6,8 @@ namespace hp
 {
 	std::shared_ptr<uniform_buffer> uniform_buffer::create(uint32_t size, uint32_t binding)
 	{
-		UNUSED(size);
-		UNUSED(binding);
+		hp_unused(size);
+		hp_unused(binding);
 
 		switch (renderer::get_api())
 		{

@@ -5,6 +5,7 @@
 #define PLAYGROUND_VULKAN_SHADER_H
 
 #include "hyper/renderer/shader.h"
+#include "platform/vulkan/vk_device.h"
 
 #include <vulkan/vulkan.h>
 #include <VkBootstrap.h>
@@ -14,14 +15,13 @@ namespace hp
 	class HP_API vulkan_shader : public shader
 	{
 	public:
-		explicit vulkan_shader(const std::string& filepath);
-		vulkan_shader(const std::string& filepath, vkb::Device* device);
+		vulkan_shader(const std::string& filepath, vk_device& device);
 		~vulkan_shader() override;
 
-		vulkan_shader(const vulkan_shader& other)            = default;
-		vulkan_shader(vulkan_shader&& other) noexcept        = default;
-		vulkan_shader& operator=(const vulkan_shader& other) = default;
-		vulkan_shader& operator=(vulkan_shader&& other)      = default;
+		vulkan_shader(const vulkan_shader& other)            = delete;
+		vulkan_shader(vulkan_shader&& other) noexcept        = delete;
+		vulkan_shader& operator=(const vulkan_shader& other) = delete;
+		vulkan_shader& operator=(vulkan_shader&& other)      = delete;
 
 		void bind() const override;
 		void unbind() const override;
@@ -39,7 +39,7 @@ namespace hp
 
 	private:
 		VkShaderModule m_shader_module;
-		VkDevice m_device;
+		vk_device* m_device;
 		std::string m_name;
 
 		std::vector<char> load_bytecode_from_filepath(const std::string& filepath);

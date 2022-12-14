@@ -47,6 +47,7 @@
 #define HP_API
 #endif
 
-#define UNUSED(x) static_cast<void>(x)
+#define hp_unused(x) static_cast<void>(x)
+#define hp_nodiscard [[nodiscard]]
 
 #endif //HYPER_CONFIG_H

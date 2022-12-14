@@ -12,8 +12,8 @@ extern hp::application* hp::create_application(); // NOLINT(readability-redundan
 
 int main(int argc, char** argv) // NOLINT(misc-definitions-in-headers)
 {
-	UNUSED(argc);
-	UNUSED(argv);
+	hp_unused(argc);
+	hp_unused(argv);
 
 	hp::log::initialize();
 

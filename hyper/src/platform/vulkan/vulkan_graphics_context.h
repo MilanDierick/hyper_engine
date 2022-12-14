@@ -6,6 +6,9 @@
 
 #include "hyper/core/config.h"
 #include "hyper/renderer/graphics_context.h"
+#include "platform/vulkan/vk_instance.h"
+#include "platform/vulkan/vk_surface.h"
+#include "platform/vulkan/vk_device.h"
 
 #include <VkBootstrap.h>
 #include <vulkan/vulkan.h>
@@ -26,7 +29,7 @@ namespace hp
 		void init() override;
 		void swap_buffers() override;
 
-		vkb::Device get_device();
+		vk_device& get_device();
 
 		void record_command_buffer(VkCommandBuffer command_buffer, uint32_t image_index);
 		vkb::Swapchain recreate_swapchain();
@@ -35,11 +38,9 @@ namespace hp
 
 	private:
 		GLFWwindow* m_p_window_handle;
-		vkb::Instance m_instance;
-		VkSurfaceKHR m_surface;
-		vkb::Device m_device;
-		VkQueue m_graphics_queue;
-		VkQueue m_present_queue;
+		vk_instance m_instance;
+		vk_surface m_surface;
+		vk_device m_device;
 		vkb::Swapchain m_swapchain;
 		VkPipelineLayout m_pipeline_layout;
 		VkRenderPass m_render_pass;
@@ -52,11 +53,6 @@ namespace hp
 		std::vector<VkFence> m_in_flight_fences;
 		size_t m_current_frame = 0;
 
-		vkb::Instance create_instance();
-		VkSurfaceKHR create_surface();
-		vkb::Device create_device();
-		VkQueue create_graphics_queue();
-		VkQueue create_present_queue();
 		vkb::Swapchain create_swapchain();
 		VkPipeline create_graphics_pipeline();
 		VkRenderPass create_render_pass();

@@ -13,8 +13,6 @@ namespace hp
 	vulkan_graphics_context::vulkan_graphics_context(GLFWwindow* handle) : m_p_window_handle(handle),
 	                                                                       m_instance(),
 	                                                                       m_surface(),
-	                                                                       m_graphics_queue(),
-	                                                                       m_present_queue(),
 	                                                                       m_pipeline_layout(),
 	                                                                       m_render_pass(),
 	                                                                       m_graphics_pipeline(),
@@ -32,33 +30,40 @@ namespace hp
 
 		for (std::size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
-			vkDestroySemaphore(m_device.device, m_image_available_semaphores[i], nullptr);
-			vkDestroySemaphore(m_device.device, m_render_finished_semaphores[i], nullptr);
-			vkDestroyFence(m_device.device, m_in_flight_fences[i], nullptr);
+			vkDestroySemaphore(m_device.get_device(), m_image_available_semaphores[i], nullptr);
+			vkDestroySemaphore(m_device.get_device(), m_render_finished_semaphores[i], nullptr);
+			vkDestroyFence(m_device.get_device(), m_in_flight_fences[i], nullptr);
 		}
 
 		for (const auto& framebuffer: m_swapchain_framebuffers)
 		{
-			vkDestroyFramebuffer(m_device.device, framebuffer, nullptr);
+			vkDestroyFramebuffer(m_device.get_device(), framebuffer, nullptr);
 		}
 
-		vkDestroyPipeline(m_device, m_graphics_pipeline, nullptr);
-		vkDestroyPipelineLayout(m_device, m_pipeline_layout, nullptr);
-		vkDestroyRenderPass(m_device, m_render_pass, nullptr);
+		vkDestroyPipeline(m_device.get_device(), m_graphics_pipeline, nullptr);
+		vkDestroyPipelineLayout(m_device.get_device(), m_pipeline_layout, nullptr);
+		vkDestroyRenderPass(m_device.get_device(), m_render_pass, nullptr);
 		vkb::destroy_swapchain(m_swapchain);
-		vkDestroyCommandPool(m_device, m_command_pool, nullptr);
-		vkb::destroy_device(m_device);
-		vkb::destroy_surface(m_instance, m_surface);
-		vkb::destroy_instance(m_instance);
+		vkDestroyCommandPool(m_device.get_device(), m_command_pool, nullptr);
+		destroy_vk_device(m_device);
+		destroy_vk_surface(m_surface, m_instance);
+		destroy_vk_instance(m_instance);
 	}
 
 	void vulkan_graphics_context::init()
 	{
-		m_instance               = create_instance();
-		m_surface                = create_surface();
-		m_device                 = create_device();
-		m_graphics_queue         = create_graphics_queue();
-		m_present_queue          = create_present_queue();
+		vk_instance_parameters const instance_parameters = {
+		        .application_name          = "Hyper",
+		        .engine_name               = "Hyper",
+		        .application_version       = VK_MAKE_API_VERSION(0, 0, 1, 0),
+		        .engine_version            = VK_MAKE_API_VERSION(0, 0, 1, 0),
+		        .api_version               = VK_MAKE_API_VERSION(0, 1, 0, 0),
+		        .validation_layers_enabled = true,
+		};
+
+		create_vk_instance(m_instance, instance_parameters);
+		create_vk_surface(m_surface, m_instance, m_p_window_handle);
+		create_vk_device(m_device, m_instance, m_surface);
 		m_swapchain              = create_swapchain();
 		m_render_pass            = create_render_pass();
 		m_graphics_pipeline      = create_graphics_pipeline();
@@ -73,7 +78,7 @@ namespace hp
 	{
 	}
 
-	vkb::Device vulkan_graphics_context::get_device()
+	vk_device& vulkan_graphics_context::get_device()
 	{
 		return m_device;
 	}
@@ -130,7 +135,7 @@ namespace hp
 
 	vkb::Swapchain vulkan_graphics_context::recreate_swapchain()
 	{
-		vkDeviceWaitIdle(m_device.device);
+		vkDeviceWaitIdle(m_device.get_device());
 
 		cleanup_swapchain();
 		vkb::destroy_swapchain(m_swapchain);
@@ -146,16 +151,16 @@ namespace hp
 	{
 		for (const auto& framebuffer: m_swapchain_framebuffers)
 		{
-			vkDestroyFramebuffer(m_device.device, framebuffer, nullptr);
+			vkDestroyFramebuffer(m_device.get_device(), framebuffer, nullptr);
 		}
 	}
 
 	void vulkan_graphics_context::draw_frame()
 	{
-		vkWaitForFences(m_device.device, 1, &m_in_flight_fences[m_current_frame], VK_TRUE, UINT64_MAX);
+		vkWaitForFences(m_device.get_device(), 1, &m_in_flight_fences[m_current_frame], VK_TRUE, UINT64_MAX);
 
 		uint32_t imageIndex                  = 0;
-		VkResult const result_next_image_khr = vkAcquireNextImageKHR(m_device, m_swapchain, UINT64_MAX, m_image_available_semaphores[m_current_frame], VK_NULL_HANDLE, &imageIndex);
+		VkResult const result_next_image_khr = vkAcquireNextImageKHR(m_device.get_device(), m_swapchain, UINT64_MAX, m_image_available_semaphores[m_current_frame], VK_NULL_HANDLE, &imageIndex);
 
 		if (result_next_image_khr == VK_ERROR_OUT_OF_DATE_KHR)
 		{
@@ -168,7 +173,7 @@ namespace hp
 			log::error("Failed to acquire swap chain image!");
 		}
 
-		vkResetFences(m_device.device, 1, &m_in_flight_fences[m_current_frame]);
+		vkResetFences(m_device.get_device(), 1, &m_in_flight_fences[m_current_frame]);
 
 		vkResetCommandBuffer(m_command_buffers[m_current_frame], 0);
 		record_command_buffer(m_command_buffers[m_current_frame], imageIndex);
@@ -189,7 +194,7 @@ namespace hp
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores    = signalSemaphores;
 
-		if (vkQueueSubmit(m_graphics_queue, 1, &submitInfo, m_in_flight_fences[m_current_frame]) != VK_SUCCESS)
+		if (vkQueueSubmit(m_device.get_graphics_queue().first, 1, &submitInfo, m_in_flight_fences[m_current_frame]) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to submit draw command buffer!");
 		}
@@ -206,7 +211,7 @@ namespace hp
 
 		presentInfo.pImageIndices = &imageIndex;
 
-		VkResult const result_queue_present = vkQueuePresentKHR(m_present_queue, &presentInfo);
+		VkResult const result_queue_present = vkQueuePresentKHR(m_device.get_present_queue().first, &presentInfo);
 
 		if (result_queue_present == VK_ERROR_OUT_OF_DATE_KHR || result_queue_present == VK_SUBOPTIMAL_KHR)
 		{
@@ -218,97 +223,6 @@ namespace hp
 		}
 
 		m_current_frame = (m_current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
-	}
-
-	vkb::Instance vulkan_graphics_context::create_instance()
-	{
-		// Create the instance builder and set the application info.
-		vkb::InstanceBuilder builder;
-
-		const auto inst_ret = builder.set_app_name("Hyper Engine")
-		                              .request_validation_layers(true)
-		                              .require_api_version(1, 0, 0)
-		                              .use_default_debug_messenger()
-		                              .build();
-
-		// If the instance creation failed, the 'std::optional' will be empty.
-		if (!inst_ret.has_value())
-		{
-			log::error("Failed to create Vulkan instance: {0}", inst_ret.error().message());
-		}
-
-		return inst_ret.value();
-	}
-
-	VkSurfaceKHR vulkan_graphics_context::create_surface()
-	{
-		// Create the surface using the GLFW window handle and the instance.
-		VkSurfaceKHR surface = nullptr;
-
-		if (glfwCreateWindowSurface(m_instance, m_p_window_handle, nullptr, &surface) != VK_SUCCESS)
-		{
-			log::error("Failed to create Vulkan surface");
-		}
-
-		return surface;
-	}
-
-	vkb::Device vulkan_graphics_context::create_device()
-	{
-		// Create the physical device selector and set the physical device features.
-		vkb::PhysicalDeviceSelector selector{m_instance};
-		const auto phys_dev_ret = selector.set_minimum_version(1, 2)
-		                                  .set_surface(m_surface)
-		                                  .require_present()
-		                                  .require_dedicated_transfer_queue()
-		                                  .add_required_extension(VK_KHR_SWAPCHAIN_EXTENSION_NAME)
-		                                  .select();
-
-		// If the physical device selection failed, the 'std::optional' will be empty.
-		if (!phys_dev_ret.has_value())
-		{
-			log::error("Failed to select a physical device: {0}", phys_dev_ret.error().message());
-		}
-
-		// Create the device builder and set the physical device.
-		const vkb::DeviceBuilder device_builder{phys_dev_ret.value()};
-		const auto device_ret = device_builder.build();
-
-		// If the device creation failed, the 'std::optional' will be empty.
-		if (!device_ret.has_value())
-		{
-			log::error("Failed to create logical device: {0}", device_ret.error().message());
-		}
-
-		return device_ret.value();
-	}
-
-	VkQueue vulkan_graphics_context::create_graphics_queue()
-	{
-		// Get the graphics queue from the device.
-		auto queue = m_device.get_queue(vkb::QueueType::graphics);
-
-		// If the return value is empty, the queue type is not supported.
-		if (!queue.has_value())
-		{
-			log::error("Failed to get graphics queue: {0}", queue.error().message());
-		}
-
-		return queue.value();
-	}
-
-	VkQueue vulkan_graphics_context::create_present_queue()
-	{
-		// Get the present queue from the device.
-		auto queue = m_device.get_queue(vkb::QueueType::present);
-
-		// If the return value is empty, the queue type is not supported.
-		if (!queue.has_value())
-		{
-			log::error("Failed to get present queue: {0}", queue.error().message());
-		}
-
-		return queue.value();
 	}
 
 	vkb::Swapchain vulkan_graphics_context::create_swapchain()
@@ -334,8 +248,8 @@ namespace hp
 
 	VkPipeline vulkan_graphics_context::create_graphics_pipeline()
 	{
-		const vulkan_shader vert_shader("assets/shaders/triangle.vert.spv", &m_device);
-		const vulkan_shader frag_shader("assets/shaders/triangle.frag.spv", &m_device);
+		const vulkan_shader vert_shader("assets/shaders/triangle.vert.spv", m_device);
+		const vulkan_shader frag_shader("assets/shaders/triangle.frag.spv", m_device);
 
 		VkPipelineShaderStageCreateInfo vert_shader_stage_info{};
 		vert_shader_stage_info.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -413,7 +327,7 @@ namespace hp
 		layout_info.pushConstantRangeCount = 0;              // Optional. Number of push constant ranges.
 		layout_info.pPushConstantRanges    = VK_NULL_HANDLE; // Optional. Array of push constant ranges.
 
-		if (vkCreatePipelineLayout(m_device, &layout_info, nullptr, &m_pipeline_layout) != VK_SUCCESS)
+		if (vkCreatePipelineLayout(m_device.get_device(), &layout_info, nullptr, &m_pipeline_layout) != VK_SUCCESS)
 		{
 			throw std::runtime_error("Failed to create pipeline layout!");
 		}
@@ -445,7 +359,7 @@ namespace hp
 
 		VkPipeline pipeline = VK_NULL_HANDLE;
 
-		if (vkCreateGraphicsPipelines(m_device, VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &pipeline) != VK_SUCCESS)
+		if (vkCreateGraphicsPipelines(m_device.get_device(), VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &pipeline) != VK_SUCCESS)
 		{
 			throw std::runtime_error("Failed to create graphics pipeline!");
 		}
@@ -493,7 +407,7 @@ namespace hp
 		renderPassInfo.dependencyCount = 1;
 		renderPassInfo.pDependencies   = &dependency;
 
-		if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &render_pass) != VK_SUCCESS)
+		if (vkCreateRenderPass(m_device.get_device(), &renderPassInfo, nullptr, &render_pass) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to create render pass!");
 		}
@@ -518,7 +432,7 @@ namespace hp
 			framebuffer_info.height          = m_swapchain.extent.height;
 			framebuffer_info.layers          = 1;
 
-			if (vkCreateFramebuffer(m_device, &framebuffer_info, nullptr, &framebuffers[i]) != VK_SUCCESS)
+			if (vkCreateFramebuffer(m_device.get_device(), &framebuffer_info, nullptr, &framebuffers[i]) != VK_SUCCESS)
 			{
 				throw std::runtime_error("Failed to create framebuffer!");
 			}
@@ -533,10 +447,10 @@ namespace hp
 
 		VkCommandPoolCreateInfo poolInfo{};
 		poolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		poolInfo.queueFamilyIndex = m_device.get_queue_index(vkb::QueueType::graphics).value();
+		poolInfo.queueFamilyIndex = m_device.get_graphics_queue().second;
 		poolInfo.flags            = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
-		if (vkCreateCommandPool(m_device, &poolInfo, nullptr, &command_pool) != VK_SUCCESS)
+		if (vkCreateCommandPool(m_device.get_device(), &poolInfo, nullptr, &command_pool) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to create command pool!");
 		}
@@ -554,7 +468,7 @@ namespace hp
 		alloc_info.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		alloc_info.commandBufferCount = static_cast<uint32_t>(command_buffers.size());
 
-		if (vkAllocateCommandBuffers(m_device, &alloc_info, command_buffers.data()) != VK_SUCCESS)
+		if (vkAllocateCommandBuffers(m_device.get_device(), &alloc_info, command_buffers.data()) != VK_SUCCESS)
 		{
 			throw std::runtime_error("Failed to allocate command buffers!");
 		}
@@ -627,9 +541,9 @@ namespace hp
 
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
-			if (vkCreateSemaphore(m_device, &semaphore_info, nullptr, &m_image_available_semaphores[i]) != VK_SUCCESS ||
-			    vkCreateSemaphore(m_device, &semaphore_info, nullptr, &m_render_finished_semaphores[i]) != VK_SUCCESS ||
-			    vkCreateFence(m_device, &fence_info, nullptr, &m_in_flight_fences[i]) != VK_SUCCESS)
+			if (vkCreateSemaphore(m_device.get_device(), &semaphore_info, nullptr, &m_image_available_semaphores[i]) != VK_SUCCESS ||
+			    vkCreateSemaphore(m_device.get_device(), &semaphore_info, nullptr, &m_render_finished_semaphores[i]) != VK_SUCCESS ||
+			    vkCreateFence(m_device.get_device(), &fence_info, nullptr, &m_in_flight_fences[i]) != VK_SUCCESS)
 			{
 				throw std::runtime_error("Failed to create synchronization objects for a frame!");
 			}
