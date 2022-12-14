@@ -29,6 +29,8 @@ namespace hp
 		vkb::Device get_device();
 
 		void record_command_buffer(VkCommandBuffer command_buffer, uint32_t image_index);
+		vkb::Swapchain recreate_swapchain();
+		void cleanup_swapchain();
 		void draw_frame();
 
 	private:
@@ -44,10 +46,11 @@ namespace hp
 		VkPipeline m_graphics_pipeline;
 		std::vector<VkFramebuffer> m_swapchain_framebuffers;
 		VkCommandPool m_command_pool;
-		VkCommandBuffer m_command_buffer;
-		VkSemaphore m_image_available_semaphore;
-		VkSemaphore m_render_finished_semaphore;
-		VkFence m_in_flight_fence;
+		std::vector<VkCommandBuffer> m_command_buffers;
+		std::vector<VkSemaphore> m_image_available_semaphores;
+		std::vector<VkSemaphore> m_render_finished_semaphores;
+		std::vector<VkFence> m_in_flight_fences;
+		size_t m_current_frame = 0;
 
 		vkb::Instance create_instance();
 		VkSurfaceKHR create_surface();
@@ -59,7 +62,7 @@ namespace hp
 		VkRenderPass create_render_pass();
 		std::vector<VkFramebuffer> create_framebuffers();
 		VkCommandPool create_command_pool();
-		VkCommandBuffer create_command_buffer();
+		std::vector<VkCommandBuffer> create_command_buffers();
 		void create_sync_objects();
 	};
 } // namespace hp
