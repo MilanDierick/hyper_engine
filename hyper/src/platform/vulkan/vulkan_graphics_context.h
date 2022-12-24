@@ -6,9 +6,11 @@
 
 #include "hyper/core/config.h"
 #include "hyper/renderer/graphics_context.h"
+#include "platform/vulkan/vk_device.h"
 #include "platform/vulkan/vk_instance.h"
 #include "platform/vulkan/vk_surface.h"
-#include "platform/vulkan/vk_device.h"
+#include "platform/vulkan/vk_swapchain.h"
+#include "platform/vulkan/vk_vertex.h"
 
 #include <VkBootstrap.h>
 #include <vulkan/vulkan.h>
@@ -32,7 +34,7 @@ namespace hp
 		vk_device& get_device();
 
 		void record_command_buffer(VkCommandBuffer command_buffer, uint32_t image_index);
-		vkb::Swapchain recreate_swapchain();
+		void recreate_swapchain();
 		void cleanup_swapchain();
 		void draw_frame();
 
@@ -41,7 +43,7 @@ namespace hp
 		vk_instance m_instance;
 		vk_surface m_surface;
 		vk_device m_device;
-		vkb::Swapchain m_swapchain;
+		vk_swapchain m_swapchain;
 		VkPipelineLayout m_pipeline_layout;
 		VkRenderPass m_render_pass;
 		VkPipeline m_graphics_pipeline;
@@ -52,13 +54,16 @@ namespace hp
 		std::vector<VkSemaphore> m_render_finished_semaphores;
 		std::vector<VkFence> m_in_flight_fences;
 		size_t m_current_frame = 0;
+		std::vector<vk_vertex> m_vertices;
+		VkBuffer m_vertex_buffer;
+		VmaAllocation m_vertex_buffer_allocation;
 
-		vkb::Swapchain create_swapchain();
 		VkPipeline create_graphics_pipeline();
 		VkRenderPass create_render_pass();
 		std::vector<VkFramebuffer> create_framebuffers();
 		VkCommandPool create_command_pool();
 		std::vector<VkCommandBuffer> create_command_buffers();
+		void create_vertex_buffer();
 		void create_sync_objects();
 	};
 } // namespace hp

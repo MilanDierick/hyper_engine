@@ -4,29 +4,40 @@
 #include "vulkan_graphics_context.h"
 
 #include "hyper/core/application.h"
+#include "platform/vulkan/vk_vertex.h"
 #include "platform/vulkan/vulkan_shader.h"
+
+#include <vk_mem_alloc.h>
 
 namespace hp
 {
 	const int MAX_FRAMES_IN_FLIGHT = 2;
 
 	vulkan_graphics_context::vulkan_graphics_context(GLFWwindow* handle) : m_p_window_handle(handle),
-	                                                                       m_instance(),
-	                                                                       m_surface(),
 	                                                                       m_pipeline_layout(),
 	                                                                       m_render_pass(),
 	                                                                       m_graphics_pipeline(),
 	                                                                       m_command_pool(),
-	                                                                       m_command_buffers(),
-	                                                                       m_image_available_semaphores(),
-	                                                                       m_render_finished_semaphores(),
-	                                                                       m_in_flight_fences()
+	                                                                       m_current_frame(0),
+	                                                                       m_vertex_buffer(),
+	                                                                       m_vertex_buffer_allocation()
+
 	{
+		m_vertices = {
+		        {{0.0F, -0.5F}, {1.0F, 1.0F, 1.0F}},
+		        {{0.5F, 0.5F}, {0.0F, 1.0F, 0.0F}},
+		        {{-0.5F, 0.5F}, {0.0F, 0.0F, 1.0F}}};
 	}
 
 	vulkan_graphics_context::~vulkan_graphics_context()
 	{
 		cleanup_swapchain();
+
+		vkDestroyPipeline(m_device.get_device(), m_graphics_pipeline, nullptr);
+		vkDestroyPipelineLayout(m_device.get_device(), m_pipeline_layout, nullptr);
+		vkDestroyRenderPass(m_device.get_device(), m_render_pass, nullptr);
+
+		vmaDestroyBuffer(m_device.get_allocator(), m_vertex_buffer, m_vertex_buffer_allocation);
 
 		for (std::size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
@@ -35,15 +46,7 @@ namespace hp
 			vkDestroyFence(m_device.get_device(), m_in_flight_fences[i], nullptr);
 		}
 
-		for (const auto& framebuffer: m_swapchain_framebuffers)
-		{
-			vkDestroyFramebuffer(m_device.get_device(), framebuffer, nullptr);
-		}
-
-		vkDestroyPipeline(m_device.get_device(), m_graphics_pipeline, nullptr);
-		vkDestroyPipelineLayout(m_device.get_device(), m_pipeline_layout, nullptr);
-		vkDestroyRenderPass(m_device.get_device(), m_render_pass, nullptr);
-		vkb::destroy_swapchain(m_swapchain);
+		destroy_vk_swapchain(m_swapchain, m_device);
 		vkDestroyCommandPool(m_device.get_device(), m_command_pool, nullptr);
 		destroy_vk_device(m_device);
 		destroy_vk_surface(m_surface, m_instance);
@@ -61,16 +64,22 @@ namespace hp
 		        .validation_layers_enabled = true,
 		};
 
+		vk_swapchain_parameters const swapchain_parameters = {
+		        .surface_format = {VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR},
+		        .present_mode   = VK_PRESENT_MODE_FIFO_KHR,
+		        .extent         = {1280, 720}, // TODO: Pass in from window
+		};
+
 		create_vk_instance(m_instance, instance_parameters);
 		create_vk_surface(m_surface, m_instance, m_p_window_handle);
 		create_vk_device(m_device, m_instance, m_surface);
-		m_swapchain              = create_swapchain();
+		create_vk_swapchain(m_swapchain, m_device, m_surface, swapchain_parameters);
 		m_render_pass            = create_render_pass();
 		m_graphics_pipeline      = create_graphics_pipeline();
 		m_swapchain_framebuffers = create_framebuffers();
 		m_command_pool           = create_command_pool();
-		m_command_buffers        = create_command_buffers();
-
+		create_vertex_buffer();
+		m_command_buffers = create_command_buffers();
 		create_sync_objects();
 	}
 
@@ -87,7 +96,6 @@ namespace hp
 	{
 		VkCommandBufferBeginInfo begin_info{};
 		begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		begin_info.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
 		if (vkBeginCommandBuffer(command_buffer, &begin_info) != VK_SUCCESS)
 		{
@@ -99,32 +107,34 @@ namespace hp
 		render_pass_info.renderPass        = m_render_pass;
 		render_pass_info.framebuffer       = m_swapchain_framebuffers[image_index];
 		render_pass_info.renderArea.offset = {0, 0};
-		render_pass_info.renderArea.extent = m_swapchain.extent;
+		render_pass_info.renderArea.extent = m_swapchain.get_extent();
 
 		const VkClearValue clear_color   = {};
 		render_pass_info.clearValueCount = 1;
 		render_pass_info.pClearValues    = &clear_color;
 
 		vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
-
 		vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphics_pipeline);
 
 		VkViewport viewport{};
 		viewport.x        = 0.0F;
 		viewport.y        = 0.0F;
-		viewport.width    = static_cast<float>(m_swapchain.extent.width);
-		viewport.height   = static_cast<float>(m_swapchain.extent.height);
+		viewport.width    = static_cast<float>(m_swapchain.get_extent().width);
+		viewport.height   = static_cast<float>(m_swapchain.get_extent().height);
 		viewport.minDepth = 0.0F;
 		viewport.maxDepth = 1.0F;
 		vkCmdSetViewport(command_buffer, 0, 1, &viewport);
 
 		VkRect2D scissor{};
 		scissor.offset = {0, 0};
-		scissor.extent = m_swapchain.extent;
+		scissor.extent = m_swapchain.get_extent();
 		vkCmdSetScissor(command_buffer, 0, 1, &scissor);
 
-		vkCmdDraw(command_buffer, 3, 1, 0, 0);
+		VkBuffer vertex_buffers[] = {m_vertex_buffer};
+		VkDeviceSize offsets[]    = {0};
+		vkCmdBindVertexBuffers(command_buffer, 0, 1, vertex_buffers, offsets);
 
+		vkCmdDraw(command_buffer, static_cast<u32>(m_vertices.size()), 1, 0, 0);
 		vkCmdEndRenderPass(command_buffer);
 
 		if (vkEndCommandBuffer(command_buffer) != VK_SUCCESS)
@@ -133,18 +143,22 @@ namespace hp
 		}
 	}
 
-	vkb::Swapchain vulkan_graphics_context::recreate_swapchain()
+	void vulkan_graphics_context::recreate_swapchain()
 	{
 		vkDeviceWaitIdle(m_device.get_device());
 
 		cleanup_swapchain();
-		vkb::destroy_swapchain(m_swapchain);
+		destroy_vk_swapchain(m_swapchain, m_device);
 
-		m_swapchain              = create_swapchain();
+		vk_swapchain_parameters const swapchain_parameters = {
+		        .surface_format = {VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR},
+		        .present_mode   = VK_PRESENT_MODE_FIFO_KHR,
+		        .extent         = {1280, 720}, // TODO: Pass in from window
+		};
+
+		create_vk_swapchain(m_swapchain, m_device, m_surface, swapchain_parameters);
 		m_swapchain_framebuffers = create_framebuffers();
 		m_command_buffers        = create_command_buffers();
-
-		return m_swapchain;
 	}
 
 	void vulkan_graphics_context::cleanup_swapchain()
@@ -160,7 +174,7 @@ namespace hp
 		vkWaitForFences(m_device.get_device(), 1, &m_in_flight_fences[m_current_frame], VK_TRUE, UINT64_MAX);
 
 		uint32_t imageIndex                  = 0;
-		VkResult const result_next_image_khr = vkAcquireNextImageKHR(m_device.get_device(), m_swapchain, UINT64_MAX, m_image_available_semaphores[m_current_frame], VK_NULL_HANDLE, &imageIndex);
+		VkResult const result_next_image_khr = vkAcquireNextImageKHR(m_device.get_device(), m_swapchain.get_swapchain(), UINT64_MAX, m_image_available_semaphores[m_current_frame], VK_NULL_HANDLE, &imageIndex);
 
 		if (result_next_image_khr == VK_ERROR_OUT_OF_DATE_KHR)
 		{
@@ -174,7 +188,6 @@ namespace hp
 		}
 
 		vkResetFences(m_device.get_device(), 1, &m_in_flight_fences[m_current_frame]);
-
 		vkResetCommandBuffer(m_command_buffers[m_current_frame], 0);
 		record_command_buffer(m_command_buffers[m_current_frame], imageIndex);
 
@@ -205,9 +218,9 @@ namespace hp
 		presentInfo.waitSemaphoreCount = 1;
 		presentInfo.pWaitSemaphores    = signalSemaphores;
 
-		VkSwapchainKHR swapChains[] = {m_swapchain};
+		VkSwapchainKHR swapchains[] = {m_swapchain.get_swapchain()};
 		presentInfo.swapchainCount  = 1;
-		presentInfo.pSwapchains     = swapChains;
+		presentInfo.pSwapchains     = swapchains;
 
 		presentInfo.pImageIndices = &imageIndex;
 
@@ -223,27 +236,6 @@ namespace hp
 		}
 
 		m_current_frame = (m_current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
-	}
-
-	vkb::Swapchain vulkan_graphics_context::create_swapchain()
-	{
-		// Create the swapchain builder and set the surface and present queue.
-		vkb::SwapchainBuilder swapchain_builder{m_device, m_surface};
-		const auto swapchain_ret = swapchain_builder.set_desired_present_mode(VK_PRESENT_MODE_MAILBOX_KHR)
-		                                   .add_fallback_present_mode(VK_PRESENT_MODE_FIFO_KHR)
-		                                   .set_desired_format({VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR})
-		                                   .set_image_usage_flags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
-		                                   .set_composite_alpha_flags(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR)
-		                                   .set_clipped()
-		                                   .build();
-
-		// If the swapchain creation failed, the 'std::optional' will be empty.
-		if (!swapchain_ret.has_value())
-		{
-			log::error("Failed to create swapchain: {0}", swapchain_ret.error().message());
-		}
-
-		return swapchain_ret.value();
 	}
 
 	VkPipeline vulkan_graphics_context::create_graphics_pipeline()
@@ -265,10 +257,15 @@ namespace hp
 
 		VkPipelineShaderStageCreateInfo shader_stages[] = {vert_shader_stage_info, frag_shader_stage_info};
 
+		auto binding_description    = vk_vertex::get_binding_description();
+		auto attribute_descriptions = vk_vertex::get_attribute_descriptions();
+
 		VkPipelineVertexInputStateCreateInfo vertex_input_info{};
 		vertex_input_info.sType                           = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		vertex_input_info.vertexBindingDescriptionCount   = 0;
-		vertex_input_info.vertexAttributeDescriptionCount = 0;
+		vertex_input_info.vertexBindingDescriptionCount   = 1;
+		vertex_input_info.pVertexBindingDescriptions      = &binding_description;
+		vertex_input_info.vertexAttributeDescriptionCount = static_cast<u32>(attribute_descriptions.size());
+		vertex_input_info.pVertexAttributeDescriptions    = attribute_descriptions.data();
 
 		VkPipelineInputAssemblyStateCreateInfo input_assembly_info{};
 		input_assembly_info.sType                  = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -322,10 +319,8 @@ namespace hp
 
 		VkPipelineLayoutCreateInfo layout_info{};
 		layout_info.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		layout_info.setLayoutCount         = 0;              // Optional. Number of descriptor set layouts.
-		layout_info.pSetLayouts            = VK_NULL_HANDLE; // Optional. Array of descriptor set layouts.
-		layout_info.pushConstantRangeCount = 0;              // Optional. Number of push constant ranges.
-		layout_info.pPushConstantRanges    = VK_NULL_HANDLE; // Optional. Array of push constant ranges.
+		layout_info.setLayoutCount         = 0; // Optional. Number of descriptor set layouts.
+		layout_info.pushConstantRangeCount = 0; // Optional. Number of push constant ranges.
 
 		if (vkCreatePipelineLayout(m_device.get_device(), &layout_info, nullptr, &m_pipeline_layout) != VK_SUCCESS)
 		{
@@ -348,14 +343,12 @@ namespace hp
 		pipeline_info.pViewportState      = &viewport_state_info;
 		pipeline_info.pRasterizationState = &rasterizer_info;
 		pipeline_info.pMultisampleState   = &multisampling_info;
-		pipeline_info.pDepthStencilState  = nullptr; // Optional. Depth and stencil testing.
 		pipeline_info.pColorBlendState    = &color_blending_info;
 		pipeline_info.pDynamicState       = &dynamic_state_info;
 		pipeline_info.layout              = m_pipeline_layout;
 		pipeline_info.renderPass          = m_render_pass;
 		pipeline_info.subpass             = 0;              // Index of the subpass where this pipeline will be used.
 		pipeline_info.basePipelineHandle  = VK_NULL_HANDLE; // Optional. Handle to a pipeline to derive from.
-		pipeline_info.basePipelineIndex   = -1;             // Optional. Index of a pipeline to derive from.
 
 		VkPipeline pipeline = VK_NULL_HANDLE;
 
@@ -372,7 +365,7 @@ namespace hp
 		VkRenderPass render_pass = VK_NULL_HANDLE;
 
 		VkAttachmentDescription colorAttachment{};
-		colorAttachment.format         = m_swapchain.image_format;
+		colorAttachment.format         = m_swapchain.get_image_format();
 		colorAttachment.samples        = VK_SAMPLE_COUNT_1_BIT;
 		colorAttachment.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
 		colorAttachment.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
@@ -417,19 +410,19 @@ namespace hp
 
 	std::vector<VkFramebuffer> vulkan_graphics_context::create_framebuffers()
 	{
-		std::vector<VkFramebuffer> framebuffers(m_swapchain.get_image_views().value().size());
+		std::vector<VkFramebuffer> framebuffers(m_swapchain.get_image_views().size());
 
-		for (size_t i = 0; i < m_swapchain.get_image_views().value().size(); i++)
+		for (size_t i = 0; i < m_swapchain.get_image_views().size(); i++)
 		{
-			VkImageView attachments[] = {m_swapchain.get_image_views().value()[i]};
+			VkImageView attachments[] = {m_swapchain.get_image_views()[i]};
 
 			VkFramebufferCreateInfo framebuffer_info{};
 			framebuffer_info.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 			framebuffer_info.renderPass      = m_render_pass;
 			framebuffer_info.attachmentCount = 1;
 			framebuffer_info.pAttachments    = attachments;
-			framebuffer_info.width           = m_swapchain.extent.width;
-			framebuffer_info.height          = m_swapchain.extent.height;
+			framebuffer_info.width           = m_swapchain.get_extent().width;
+			framebuffer_info.height          = m_swapchain.get_extent().height;
 			framebuffer_info.layers          = 1;
 
 			if (vkCreateFramebuffer(m_device.get_device(), &framebuffer_info, nullptr, &framebuffers[i]) != VK_SUCCESS)
@@ -445,10 +438,11 @@ namespace hp
 	{
 		VkCommandPool command_pool = VK_NULL_HANDLE;
 
-		VkCommandPoolCreateInfo poolInfo{};
-		poolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		poolInfo.queueFamilyIndex = m_device.get_graphics_queue().second;
-		poolInfo.flags            = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+		VkCommandPoolCreateInfo const poolInfo{
+		        .sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+		        .flags            = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
+		        .queueFamilyIndex = m_device.get_graphics_queue().second,
+		};
 
 		if (vkCreateCommandPool(m_device.get_device(), &poolInfo, nullptr, &command_pool) != VK_SUCCESS)
 		{
@@ -460,70 +454,48 @@ namespace hp
 
 	std::vector<VkCommandBuffer> vulkan_graphics_context::create_command_buffers()
 	{
-		std::vector<VkCommandBuffer> command_buffers(m_swapchain.get_image_views().value().size());
+		std::vector<VkCommandBuffer> command_buffers = {};
+		command_buffers.resize(MAX_FRAMES_IN_FLIGHT);
 
-		VkCommandBufferAllocateInfo alloc_info{};
-		alloc_info.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		alloc_info.commandPool        = m_command_pool;
-		alloc_info.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		alloc_info.commandBufferCount = static_cast<uint32_t>(command_buffers.size());
+		VkCommandBufferAllocateInfo const alloc_info{
+		        .sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+		        .commandPool        = m_command_pool,
+		        .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+		        .commandBufferCount = static_cast<uint32_t>(command_buffers.size()),
+		};
 
 		if (vkAllocateCommandBuffers(m_device.get_device(), &alloc_info, command_buffers.data()) != VK_SUCCESS)
 		{
 			throw std::runtime_error("Failed to allocate command buffers!");
 		}
 
-		for (size_t i = 0; i < command_buffers.size(); i++)
+		return command_buffers;
+	}
+
+	void vulkan_graphics_context::create_vertex_buffer()
+	{
+		VkBufferCreateInfo const buffer_info = {
+		        .sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+		        .size        = sizeof(m_vertices[0]) * m_vertices.size(),
+		        .usage       = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+		        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+		};
+
+		if (vkCreateBuffer(m_device.get_device(), &buffer_info, nullptr, &m_vertex_buffer) != VK_SUCCESS)
 		{
-			VkCommandBufferBeginInfo begin_info{};
-			begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-			if (vkBeginCommandBuffer(command_buffers[i], &begin_info) != VK_SUCCESS)
-			{
-				throw std::runtime_error("Failed to begin recording command buffer!");
-			}
-
-			VkRenderPassBeginInfo render_pass_info{};
-			render_pass_info.sType             = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-			render_pass_info.renderPass        = m_render_pass;
-			render_pass_info.framebuffer       = m_swapchain_framebuffers[i];
-			render_pass_info.renderArea.offset = {0, 0};
-			render_pass_info.renderArea.extent = m_swapchain.extent;
-
-			VkClearValue const clear_color   = {};
-			render_pass_info.clearValueCount = 1;
-			render_pass_info.pClearValues    = &clear_color;
-
-			VkViewport viewport{};
-			viewport.x        = 0.0F;
-			viewport.y        = 0.0F;
-			viewport.width    = static_cast<float>(m_swapchain.extent.width);
-			viewport.height   = static_cast<float>(m_swapchain.extent.height);
-			viewport.minDepth = 0.0F;
-			viewport.maxDepth = 1.0F;
-
-			vkCmdSetViewport(command_buffers[i], 0, 1, &viewport);
-
-			VkRect2D scissor{};
-			scissor.offset = {0, 0};
-			scissor.extent = m_swapchain.extent;
-
-			vkCmdSetScissor(command_buffers[i], 0, 1, &scissor);
-
-			vkCmdBeginRenderPass(command_buffers[i], &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
-			vkCmdBindPipeline(command_buffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphics_pipeline);
-
-			vkCmdDraw(command_buffers[i], 3, 1, 0, 0);
-
-			vkCmdEndRenderPass(command_buffers[i]);
-
-			if (vkEndCommandBuffer(command_buffers[i]) != VK_SUCCESS)
-			{
-				throw std::runtime_error("Failed to record command buffer!");
-			}
+			throw std::runtime_error("failed to create vertex buffer!");
 		}
 
-		return command_buffers;
+		VmaAllocationCreateInfo const alloc_info = {
+		        .usage = VMA_MEMORY_USAGE_CPU_TO_GPU,
+		};
+
+		vmaCreateBuffer(m_device.get_allocator(), &buffer_info, &alloc_info, &m_vertex_buffer, &m_vertex_buffer_allocation, nullptr);
+
+		void* data = nullptr;
+		vmaMapMemory(m_device.get_allocator(), m_vertex_buffer_allocation, &data);
+		memcpy(data, m_vertices.data(), static_cast<size_t>(buffer_info.size));
+		vmaUnmapMemory(m_device.get_allocator(), m_vertex_buffer_allocation);
 	}
 
 	void vulkan_graphics_context::create_sync_objects()

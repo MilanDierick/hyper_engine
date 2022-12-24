@@ -7,16 +7,18 @@ namespace hp
 {
 	std::shared_ptr<shader> shader::create(const std::string& filepath)
 	{
+		hp_unused(filepath);
+
 		switch (renderer::get_api())
 		{
 			case renderer_api::API::none:
-				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
+				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!")
 				return nullptr;
 			case renderer_api::API::vulkan:
-				return std::make_shared<vulkan_shader>(filepath);
+				return nullptr;
 		}
 
-		HP_CORE_ASSERT(false, "Unknown renderer_api!");
+		HP_CORE_ASSERT(false, "Unknown renderer_api!")
 		return nullptr;
 	}
 
@@ -29,25 +31,25 @@ namespace hp
 		switch (renderer::get_api())
 		{
 			case renderer_api::API::none:
-				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!");
+				HP_CORE_ASSERT(false, "renderer_api::none is currently not supported!")
 				return nullptr;
 			case renderer_api::API::vulkan:
 				break;
 		}
 
-		HP_CORE_ASSERT(false, "Unknown renderer_api!");
+		HP_CORE_ASSERT(false, "Unknown renderer_api!")
 		return nullptr;
 	}
 
 	void ShaderLibrary::add(const std::string& name, const std::shared_ptr<shader>& shader)
 	{
-		HP_CORE_ASSERT(!exists(name), "shader already exists!");
+		HP_CORE_ASSERT(!exists(name), "shader already exists!")
 		m_shaders[name] = shader;
 	}
 
 	void ShaderLibrary::add(const std::shared_ptr<shader>& shader)
 	{
-		auto& name = shader->get_name();
+		const auto& name = shader->get_name();
 		add(name, shader);
 	}
 
@@ -67,7 +69,7 @@ namespace hp
 
 	std::shared_ptr<shader> ShaderLibrary::get(const std::string& name)
 	{
-		HP_CORE_ASSERT(exists(name), "shader not found!");
+		HP_CORE_ASSERT(exists(name), "shader not found!")
 		return m_shaders[name];
 	}
 

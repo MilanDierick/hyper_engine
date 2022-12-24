@@ -16,9 +16,9 @@ namespace hp
 
 	void vulkan_renderer::shutdown()
 	{
-		vkDestroySemaphore(m_context->get_device(), m_image_available_semaphore, nullptr);
-		vkDestroySemaphore(m_context->get_device(), m_render_finished_semaphore, nullptr);
-		vkDestroyFence(m_context->get_device(), m_in_flight_fence, nullptr);
+		vkDestroySemaphore(m_context->get_device().get_device(), m_image_available_semaphore, nullptr);
+		vkDestroySemaphore(m_context->get_device().get_device(), m_render_finished_semaphore, nullptr);
+		vkDestroyFence(m_context->get_device().get_device(), m_in_flight_fence, nullptr);
 
 		delete m_context;
 	}
@@ -32,9 +32,9 @@ namespace hp
 		fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 		fence_info.flags = VK_FENCE_CREATE_SIGNALED_BIT; // Workaround for the first frame
 
-		if (vkCreateSemaphore(m_context->get_device(), &semaphore_info, nullptr, &m_image_available_semaphore) != VK_SUCCESS ||
-		    vkCreateSemaphore(m_context->get_device(), &semaphore_info, nullptr, &m_render_finished_semaphore) != VK_SUCCESS ||
-		    vkCreateFence(m_context->get_device(), &fence_info, nullptr, &m_in_flight_fence) != VK_SUCCESS)
+		if (vkCreateSemaphore(m_context->get_device().get_device(), &semaphore_info, nullptr, &m_image_available_semaphore) != VK_SUCCESS ||
+		    vkCreateSemaphore(m_context->get_device().get_device(), &semaphore_info, nullptr, &m_render_finished_semaphore) != VK_SUCCESS ||
+		    vkCreateFence(m_context->get_device().get_device(), &fence_info, nullptr, &m_in_flight_fence) != VK_SUCCESS)
 		{
 			log::error("Failed to create synchronization objects for a frame!");
 		}

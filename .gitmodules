@@ -2,3 +2,6 @@
 [submodule "hyper/thirdparty/vk-bootstrap"]
 	path = hyper/thirdparty/vk-bootstrap
 	url = https://github.com/charles-lunarg/vk-bootstrap.git
+[submodule "hyper/thirdparty/VulkanMemoryAllocator"]
+	path = hyper/thirdparty/VulkanMemoryAllocator
+	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator

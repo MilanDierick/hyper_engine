@@ -26,11 +26,27 @@ namespace hp
 		                                                             const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 		                                                             void* pUserData)
 		{
-			hp_unused(messageSeverity);
 			hp_unused(messageType);
 			hp_unused(pUserData);
 
-			log::error("Validation layer: {}", pCallbackData->pMessage);
+			switch (messageSeverity)
+			{
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+					log::trace("Vulkan: {}", pCallbackData->pMessage);
+					break;
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+					log::info("Vulkan: {}", pCallbackData->pMessage);
+					break;
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+					log::warning("Vulkan: {}", pCallbackData->pMessage);
+					break;
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+					log::error("Vulkan: {}", pCallbackData->pMessage);
+					break;
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_FLAG_BITS_MAX_ENUM_EXT:
+					break;
+			}
+
 			return VK_FALSE;
 		}
 
@@ -40,7 +56,7 @@ namespace hp
 
 			VkDebugUtilsMessengerCreateInfoEXT create_info = {};
 			create_info.sType                              = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-			create_info.messageSeverity                    = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+			create_info.messageSeverity                    = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
 			create_info.messageType                        = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 			create_info.pfnUserCallback                    = debug_callback;
 
@@ -109,7 +125,7 @@ namespace hp
 
 		VkDebugUtilsMessengerCreateInfoEXT const debug_create_info = {
 		        .sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
-		        .messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
+		        .messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
 		        .messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
 		        .pfnUserCallback = detail::default_debug_callback,
 		};
